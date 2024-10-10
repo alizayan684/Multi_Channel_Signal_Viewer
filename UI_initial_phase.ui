@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>947</width>
-    <height>685</height>
+    <width>982</width>
+    <height>712</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,6 +31,30 @@ Available at: https://github.com/GTRONICK/QSS/blob/master/MaterialDark.qss
 QMainWindow {
 	background-color:#1e1d23;
 }
+QMenuBar {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 5px; /* Padding around the text */
+    border: 1px solid #4C566A; /* Border color */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+}
+
+QMenuBar::item {
+    background-color: transparent; /* Transparent background */
+    padding: 5px 10px; /* Padding around each item */
+}
+
+QMenuBar::item:selected {
+    background-color: #4C566A; /* Background color when selected */
+    color: #ECEFF4; /* Text color when selected */
+}
+
+QMenuBar::item:pressed {
+    background-color: #3B4252; /* Background color when pressed */
+    color: #ECEFF4; /* Text color when pressed */
+}
+
 QDialog {
 	background-color:#1e1d23;
 }
@@ -412,186 +436,769 @@ QSlider::sub-page:horizontal {
 }
 QSlider::sub-page:vertical {
     background: #04b97f;
-}</string>
+}
+QPushButton {
+    background-color: #5E81AC; /* Background color on hover */
+
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 10px 20px; /* Padding around the text */
+    border: 2px solid #2E3440; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+}
+
+QPushButton:hover {
+	background-color: rgb(137, 220, 255);
+	color: rgb(0, 0, 0);
+    border: 2px solid #81A1C1; /* Border color on hover */
+
+    font-size: 16px; /* Font size */
+    padding: 10px 20px; /* Padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+}
+
+QPushButton:pressed {
+    background-color: #3B4252; /* Background color when pressed */
+    border: 2px solid #4C566A; /* Border color when pressed */
+}
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <item row="2" column="4">
+     <widget class="QPushButton" name="pushButton_6">
+      <property name="text">
+       <string>Connnect Online</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="4">
+     <layout class="QVBoxLayout" name="verticalLayout_13">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_13">
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="text">
+         <string>Add File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 2px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;
+}</string>
+        </property>
+        <property name="text">
+         <string>Graph 1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListWidget" name="listWidget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>300</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 5px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+}
+
+QListWidget::item {
+    padding: 5px; /* Padding around each item */
+    border-bottom: 1px solid #4C566A; /* Border between items */
+}
+
+QListWidget::item:selected {
+    background-color: #4C566A; /* Background color for selected item */
+    color: #ECEFF4; /* Text color for selected item */
+}
+</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="styleSheet">
+         <string notr="true">    background-color: #2E3440; /* Dark background */
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_5">
+        <property name="text">
+         <string>Add File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 2px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;
+}</string>
+        </property>
+        <property name="text">
+         <string>Graph 2</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListWidget" name="listWidget_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>300</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 5px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+}
+
+QListWidget::item {
+    padding: 5px; /* Padding around each item */
+    border-bottom: 1px solid #4C566A; /* Border between items */
+}
+
+QListWidget::item:selected {
+    background-color: #4C566A; /* Background color for selected item */
+    color: #ECEFF4; /* Text color for selected item */
+}
+</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
+      <item>
+       <widget class="PlotWidget" name="FirstPlotWidget" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 5px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QScrollBar" name="horizontalScrollBar">
+        <property name="styleSheet">
+         <string notr="true">/* Scrollbar background */
+QScrollBar:horizontal {
+    border: none;
+    background-color: #2E3440; /* Dark background */
+    height: 12px;
+    margin: 0px 0px 0px 0px;
+}
+
+/* Handle */
+QScrollBar::handle:horizontal {
+    background: #888;
+    min-width: 20px;
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+QScrollBar::handle:horizontal:hover {
+    background: #555;
+}
+
+/* Add-line (right arrow) */
+QScrollBar::add-line:horizontal {
+    background: none;
+    width: 0px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+/* Sub-line (left arrow) */
+QScrollBar::sub-line:horizontal {
+    background: none;
+    width: 0px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+/* Add-page and sub-page (scrollbar background to the left and right of the handle) */
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
-         <widget class="QPushButton" name="pushButton_11">
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Link</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_8">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <property name="text">
-           <string>PushButton</string>
+           <string>Clear</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_13">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI,Helvetica Neue,Arial,sans-serif</family>
+            <pointsize>-1</pointsize>
+            <italic>false</italic>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">    font-size: 16px; /* Font size */
+</string>
+          </property>
+          <property name="text">
+           <string>ZoomOut</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_12">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Zoom In</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_16">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Stop</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_7">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Start</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_9">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="text">
-           <string>PushButton</string>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
           </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Color</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>35</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>All Channels</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_12">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item>
-             <widget class="QPushButton" name="pushButton_8">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>PushButton</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_9">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>PushButton</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="PlotWidget" name="widget_2" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border-style: solid;
-	border-top-color: transparent;
-	border-right-color: transparent;
-	border-left-color: transparent;
-	border-bottom-color: transparent;
-	border-width: 1px;
-border-color: rgb(0, 134, 206);</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <property name="spacing">
-             <number>7</number>
-            </property>
-            <item>
-             <widget class="QPushButton" name="pushButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>PushButton</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_10">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>PushButton</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-       </layout>
+       <widget class="PlotWidget" name="SecondPlotWidget" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 5px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_11">
+       <widget class="QScrollBar" name="horizontalScrollBar_2">
+        <property name="styleSheet">
+         <string notr="true">/* Scrollbar background */
+QScrollBar:horizontal {
+    border: none;
+    background-color: #2E3440; /* Dark background */
+    height: 12px;
+    margin: 0px 0px 0px 0px;
+}
+
+/* Handle */
+QScrollBar::handle:horizontal {
+    background: #888;
+    min-width: 20px;
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+QScrollBar::handle:horizontal:hover {
+    background: #555;
+}
+
+/* Add-line (right arrow) */
+QScrollBar::add-line:horizontal {
+    background: none;
+    width: 0px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+/* Sub-line (left arrow) */
+QScrollBar::sub-line:horizontal {
+    background: none;
+    width: 0px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+/* Add-page and sub-page (scrollbar background to the left and right of the handle) */
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <property name="spacing">
+       <number>7</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_15">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Zoom Out</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_14">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Zoom In</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_17">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Stop</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_11">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_10">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Color</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox_2">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>35</height>
+         </size>
+        </property>
         <item>
-         <widget class="QPushButton" name="pushButton_6">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
+         <property name="text">
+          <string>All Channels</string>
+         </property>
         </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_5">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="2">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QScrollBar" name="verticalScrollBar_2">
+        <property name="styleSheet">
+         <string notr="true">/* Scrollbar background */
+QScrollBar:vertical {
+    border: none;
+    background-color: #2E3440; /* Dark background */
+    width: 12px;
+    margin: 0px 0px 0px 0px;
+}
+
+/* Handle */
+QScrollBar::handle:vertical {
+    background: #888;
+    min-height: 20px;
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+QScrollBar::handle:vertical:hover {
+    background: #555;
+}
+
+/* Add-line (down arrow) */
+QScrollBar::add-line:vertical {
+    background: none;
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+/* Sub-line (up arrow) */
+QScrollBar::sub-line:vertical {
+    background: none;
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+/* Add-page and sub-page (scrollbar background above and below the handle) */
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QScrollBar" name="verticalScrollBar">
+        <property name="styleSheet">
+         <string notr="true">/* Scrollbar background */
+QScrollBar:vertical {
+    border: none;
+    background-color: #2E3440; /* Dark background */
+    width: 12px;
+    margin: 0px 0px 0px 0px;
+
+
+}
+
+/* Handle */
+QScrollBar::handle:vertical {
+    background: #888;
+    min-height: 20px;
+    border-radius: 6px;
+
+}
+
+/* Handle on hover */
+QScrollBar::handle:vertical:hover {
+    background: #555;
+
+
+}
+
+/* Add-line (down arrow) */
+QScrollBar::add-line:vertical {
+    background: none;
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+
+}
+
+/* Sub-line (up arrow) */
+QScrollBar::sub-line:vertical {
+    background: none;
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+/* Add-page and sub-page (scrollbar background above and below the handle) */
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>947</width>
-     <height>23</height>
-    </rect>
+  <action name="actionOpen_File">
+   <property name="text">
+    <string>Open</string>
    </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>PlotWidget</class>
    <extends>QWidget</extends>
-   <header location="global">pyqtgraph</header>
+   <header>pyqtgraph</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
