@@ -13,7 +13,7 @@ class MainWindow(Ui_MainWindow):
         self.browsedData_y = []
         self.timer = QtCore.QTimer()
         self.current_index = 0
-        self.chunk_size = 1000  # Number of points to plot at a time
+        self.chunk_size = 0  # initializing number of points to plot at a time
         self.isPaused = False
         
         # Applying button functionalities
@@ -38,6 +38,7 @@ class MainWindow(Ui_MainWindow):
     def startTheSignal(self):
         if self.df is not None and not self.df.empty and not len(self.browsedData_y) and not self.isPaused:
             self.browsedData_y = self.df.to_numpy().flatten()
+            self.chunk_size = int(len(self.browsedData_y)/4.0)
             # print(self.browsedData_y)
             # print(self.browsedData_y.shape)
             data_x = np.arange(len(self.browsedData_y))
