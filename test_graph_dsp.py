@@ -109,7 +109,7 @@ class MainWindow(Ui_MainWindow):
                         self.graphWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
             self.timer.start(100)
             self.timer_2.start(100)
-
+            print("both signals started moving now")
 
     # for updating the first graph for the cine mode.
     def updatePlot_1(self):
@@ -137,7 +137,7 @@ class MainWindow(Ui_MainWindow):
         else:
             self.timer.stop()  # Stop the timer when the end is reached
             self.current_index = 0  # resetting the starting index
-    
+
     
     # for updating the second graph for the cine mode.     
     def updatePlot_2(self):
@@ -215,7 +215,19 @@ class MainWindow(Ui_MainWindow):
             self.isLinked = False
         else:
             self.isLinked = True
-            
+            # at linking if the first is moving and the second is paused, change them to be both moving and from the smaller time frame without needing to press start:
+            if not self.isPaused and self.isPaused_2:
+                self.isPaused_2 = False
+                self.startTheSignal()
+            # same thing if the second is moving and the first is paused:
+            elif not self.isPaused_2 and self.isPaused:
+                self.isPaused = False
+                self.startTheSignal()
+            # if both are moving, let them keep moving but from the same time frame without needing to press the start btn.
+            elif not self.isPaused and not self.isPaused_2:
+                self.timer.stop()
+                self.timer_2.stop()  # we stopped both timers to avoid conflicts between them during updating so when they start again, they timeout at the same time and update the graph at the same time.
+                self.startTheSignal() # start again 
 
 
 
