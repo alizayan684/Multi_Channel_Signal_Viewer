@@ -31,12 +31,22 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.pauseBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.rewindBtn = QtWidgets.QPushButton("rewind", parent=self.centralWidget)
         self.rewindBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.showBtn = QtWidgets.QPushButton("show", parent=self.centralWidget)
+        self.showBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.hideBtn = QtWidgets.QPushButton("hide", parent=self.centralWidget)
+        self.hideBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.labelBtn = QtWidgets.QPushButton("label", parent=self.centralWidget)
+        self.labelBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+
         
         # Add the buttons to the button layout
         self.buttonLayout.addWidget(self.startBtn)
         self.buttonLayout.addWidget(self.pauseBtn)
         self.buttonLayout.addWidget(self.rewindBtn)
         self.buttonLayout.addWidget(self.browseBtn)
+        self.buttonLayout.addWidget(self.showBtn)
+        self.buttonLayout.addWidget(self.hideBtn)
+        self.buttonLayout.addWidget(self.labelBtn)
         
         # Add the button layout to the main layout
         self.layout1.addLayout(self.buttonLayout)

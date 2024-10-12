@@ -22,8 +22,10 @@ class MainWindow(Ui_MainWindow):
         self.timer.timeout.connect(self.updatePlot)
         self.pauseBtn.clicked.connect(self.pauseTheSignal)
         self.rewindBtn.clicked.connect(self.rewindTheSignal)
+        self.showBtn.clicked.connect(self.showTheSignal)
+        self.hideBtn.clicked.connect(self.hideTheSignal)
+        self.labelBtn.clicked.connect(self.labelTheSignal)
         
-
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
             parent=self, caption="Select a CSV file", directory="/D", filter="(*.csv)"
@@ -34,6 +36,7 @@ class MainWindow(Ui_MainWindow):
             self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
             self.isPaused = False
             self.current_index = 0 # to start plotting from the beginning every time I browse a new file.
+            self.startTheSignal()
 
     def startTheSignal(self):
         if self.df is not None and not self.df.empty and not len(self.browsedData_y) and not self.isPaused:
@@ -73,30 +76,32 @@ class MainWindow(Ui_MainWindow):
                 
                 
             self.graphwidget.plotItem.setYRange(-1, 1, padding = 0)
-            
-            
+
+
         else:
             self.timer.stop()  # Stop the timer when the end is reached
             self.current_index = 0  # resetting the starting index
-            
-            
-            
-            
+             
     def pauseTheSignal(self):
-        
         self.timer.stop()   # stop the timer to stop the graph from updating itself
         self.isPaused = True
         
-    
-    
-    
     def rewindTheSignal(self):
         self.current_index = 0
         self.graphwidget.clear()
         self.startTheSignal()
             
+    def showTheSignal(self):
+        if(self.df is not None):
+            self.graphwidget.plotItem.show()
 
+    def hideTheSignal(self):
+        if(self.df is not None):
+            self.graphwidget.plotItem.hide()
 
+    def labelTheSignal(self):
+        if(self.df is not None):
+            self.graphwidget.plotItem.setTitle("Test Title")
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
