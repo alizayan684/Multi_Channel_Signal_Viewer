@@ -1,5 +1,6 @@
 import sys
 from PyQt6 import QtWidgets, QtCore
+from PyQt6.QtWidgets import QColorDialog
 from test_graph_dsp_trans import Ui_MainWindow
 import pyqtgraph as pg
 import numpy as np
@@ -25,6 +26,7 @@ class MainWindow(Ui_MainWindow):
         self.showBtn.clicked.connect(self.showTheSignal)
         self.hideBtn.clicked.connect(self.hideTheSignal)
         self.labelBtn.clicked.connect(self.labelTheSignal)
+        self.colorBtn.clicked.connect(self.colorTheSignal)
         
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -59,7 +61,7 @@ class MainWindow(Ui_MainWindow):
             segment_y = self.browsedData_y[self.current_index:end_index]
 
             # Update the plot with new data
-            self.graphwidget.plot(segment_x, segment_y, pen='b', clear=False)
+            self.plot_curve = self.graphwidget.plot(segment_x, segment_y, pen='b', clear=False)
             
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
             if end_index != len(self.browsedData_y):
@@ -102,6 +104,12 @@ class MainWindow(Ui_MainWindow):
     def labelTheSignal(self):
         if(self.df is not None):
             self.graphwidget.plotItem.setTitle("Test Title")
+
+    def colorTheSignal(self):
+        if(self.df is not None):
+            color = QColorDialog.getColor()
+            if color.isValid():
+                self.plot_curve.setPen(pg.mkPen(color.red(), color.green(), color.blue()))
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])

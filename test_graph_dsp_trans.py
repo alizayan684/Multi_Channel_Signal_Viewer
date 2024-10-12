@@ -37,6 +37,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.hideBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.labelBtn = QtWidgets.QPushButton("label", parent=self.centralWidget)
         self.labelBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.colorBtn = QtWidgets.QPushButton("color", parent=self.centralWidget)
+        self.colorBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
 
         
         # Add the buttons to the button layout
@@ -47,6 +49,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.buttonLayout.addWidget(self.showBtn)
         self.buttonLayout.addWidget(self.hideBtn)
         self.buttonLayout.addWidget(self.labelBtn)
+        self.buttonLayout.addWidget(self.colorBtn)
         
         # Add the button layout to the main layout
         self.layout1.addLayout(self.buttonLayout)
