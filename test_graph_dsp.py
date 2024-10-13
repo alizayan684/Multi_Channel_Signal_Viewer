@@ -1,11 +1,11 @@
 import sys
-from PyQt6 import QtWidgets, QtCore
-from test_graph_dsp_trans import Ui_MainWindow
+from PySide6 import QtWidgets, QtCore
+from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
 import pandas as pd
 
-class MainWindow(Ui_MainWindow):
+class MainWindow(Ui_SignalViewer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -23,28 +23,28 @@ class MainWindow(Ui_MainWindow):
         self.isLinked = False # initializing both graphs not to be linked.
         
         # Applying button functionalities for first graph
-        self.browseBtn.clicked.connect(self.browseTheSignal)
-        self.startBtn.clicked.connect(self.startTheSignal)
+        self.addFileButton.clicked.connect(self.browseTheSignal)
+        self.startButton_1.clicked.connect(self.startTheSignal)
         self.timer.timeout.connect(self.updatePlot_1)
-        self.pauseBtn.clicked.connect(self.pauseTheSignal)
-        self.rewindBtn.clicked.connect(self.rewindTheSignal)
+        self.stopButton_1.clicked.connect(self.pauseTheSignal)
+        self.rewindButton_1.clicked.connect(self.rewindTheSignal)
         # Applying button functionalities for second graph
-        self.browseBtn2.clicked.connect(self.browseTheSignal)
-        self.startBtn2.clicked.connect(self.startTheSignal)
+        self.addFileButton.clicked.connect(self.browseTheSignal) # TODO : change the function of the second graph's add file button
+        self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
-        self.pauseBtn2.clicked.connect(self.pauseTheSignal)
-        self.rewindBtn2.clicked.connect(self.rewindTheSignal)
+        self.stopButton_2.clicked.connect(self.pauseTheSignal)
+        self.rewindButton_2.clicked.connect(self.rewindTheSignal)
         # Applying the linking functionality
-        self.linkBtn.clicked.connect(self.linkGraphs)
+        self.linkButton.clicked.connect(self.linkGraphs)
 
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
-            parent=self, caption="Select a CSV file", directory="/D", filter="(*.csv)"
+            parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
         )
         print(filePath)
         if filePath:
             # check whether the clicked btn is for graph_1 or graph_2
-            if self.sender() == self.browseBtn:
+            if self.sender() == self.addFileButton:
                 self.df_1 = pd.read_csv(filePath, header=None)
                 self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
                 self.isPaused = False
@@ -59,15 +59,15 @@ class MainWindow(Ui_MainWindow):
 
     def startTheSignal(self):
         if not self.isLinked:
-            if self.sender() == self.startBtn or self.sender() == self.rewindBtn:
+            if self.sender() == self.startButton_1 or self.sender() == self.rewindButton_1:
                 if self.df_1 is not None and not self.df_1.empty and not len(self.browsedData_y) and not self.isPaused:
                     self.browsedData_y = self.df_1.to_numpy().flatten()
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.graphWidget.clear()  # Clear the existing plot            
-                    self.graphWidget.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
-                    self.graphWidget.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_1.clear()  # Clear the existing plot            
+                    self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
+                    self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer.start(100)  # Start the timer with a 100 ms interval (Note: the timer times out every 100ms(as given in the argument) and starts another 100ms, which leads to invoking the "updatePlot" every timeout until the timer stops "self.timer.stop()")
             
             else:
@@ -76,9 +76,9 @@ class MainWindow(Ui_MainWindow):
                     self.chunk_size = int(len(self.browsedData_y_2)/3.0)
                     data_x_2 = np.arange(len(self.browsedData_y_2))
                     self.data_x_2 = data_x_2
-                    self.graphWidget_2.clear()  # Clear the existing plot            
-                    self.graphWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
-                    self.graphWidget_2.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_2.clear()  # Clear the existing plot            
+                    self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
+                    self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer_2.start(100)
         
         # graphs are linked:  
@@ -95,18 +95,18 @@ class MainWindow(Ui_MainWindow):
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.graphWidget.clear()  # Clear the existing plot            
-                    self.graphWidget.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
-                    self.graphWidget.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_1.clear()  # Clear the existing plot            
+                    self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
+                    self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
                 if self.df_2 is not None and not self.df_2.empty:  # if dataframe of first graph contains data:
                     if not len(self.browsedData_y_2) and not self.isPaused_2:
                         self.browsedData_y_2 = self.df_2.to_numpy().flatten()
                     
                         data_x_2 = np.arange(len(self.browsedData_y_2))
                         self.data_x_2 = data_x_2
-                        self.graphWidget_2.clear()  # Clear the existing plot            
-                        self.graphWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
-                        self.graphWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
+                        self.plotWidget_2.clear()  # Clear the existing plot            
+                        self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
+                        self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
             self.timer.start(100)
             self.timer_2.start(100)
             print("both signals started moving now")
@@ -119,10 +119,10 @@ class MainWindow(Ui_MainWindow):
             segment_x = self.data_x[self.current_index:end_index]
             segment_y = self.browsedData_y[self.current_index:end_index]
             # Update the plot with new data
-            self.graphWidget.plot(segment_x, segment_y, pen='b', clear=False)
+            self.plotWidget_1.plot(segment_x, segment_y, pen='b', clear=False)
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
             if end_index != len(self.browsedData_y):
-                self.graphWidget.plotItem.setXRange(
+                self.plotWidget_1.plotItem.setXRange(
                     self.current_index,
                     end_index,
                     padding=0
@@ -132,7 +132,7 @@ class MainWindow(Ui_MainWindow):
             else:
                 self.timer.stop()
                 self.current_index = 0    
-            self.graphWidget.plotItem.setYRange(-1, 1, padding = 0)
+            self.plotWidget_1.plotItem.setYRange(-1, 1, padding = 0)
         
         else:
             self.timer.stop()  # Stop the timer when the end is reached
@@ -147,10 +147,10 @@ class MainWindow(Ui_MainWindow):
             segment_x_2 = self.data_x_2[self.current_index_2:end_index_2]
             segment_y_2 = self.browsedData_y_2[self.current_index_2:end_index_2]
             # Update the plot with new data
-            self.graphWidget_2.plot(segment_x_2, segment_y_2, pen='b', clear=False)
+            self.plotWidget_2.plot(segment_x_2, segment_y_2, pen='b', clear=False)
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
             if end_index_2 != len(self.browsedData_y_2):
-                self.graphWidget_2.plotItem.setXRange(
+                self.plotWidget_2.plotItem.setXRange(
                     self.current_index_2,
                     end_index_2,
                     padding=0
@@ -160,7 +160,7 @@ class MainWindow(Ui_MainWindow):
             else:
                 self.timer_2.stop()
                 self.current_index_2 = 0    
-                self.graphWidget_2.plotItem.setYRange(-1, 1, padding = 0)
+                self.plotWidget_2.plotItem.setYRange(-1, 1, padding = 0)
         
         else:
             self.timer_2.stop()  # Stop the timer when the end is reached
@@ -193,20 +193,20 @@ class MainWindow(Ui_MainWindow):
         # graphs not linked:
         if not self.isLinked:
             #checking the pressed btn(first or second graph)
-            if self.sender() == self.rewindBtn:
+            if self.sender() == self.rewindButton_1:
                 self.current_index = 0
-                self.graphWidget.clear()
+                self.plotWidget_1.clear()
                 self.startTheSignal()
             else:
                 self.current_index_2 = 0
-                self.graphWidget_2.clear()
+                self.plotWidget_2.clear()
                 self.startTheSignal()
         # graphs linked:
         else:
             self.current_index = 0
             self.current_index_2 = 0
-            self.graphWidget.clear()
-            self.graphWidget_2.clear()
+            self.plotWidget_1.clear()
+            self.plotWidget_2.clear()
             self.startTheSignal()
             
             
