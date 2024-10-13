@@ -131,10 +131,6 @@ class MainWindow(Ui_MainWindow):
         if self.current_index < maxLength:
             # Determine the range of data to plot in this frame
             end_index = min(self.current_index + self.chunk_size, maxLength) # always end at finishing the signal with the maximum length.
-            # segment_x = self.pastSignalsX_1[maxLengthIdx][self.current_index:end_index]
-            # segment_y = self.pastSignalsY_1[maxLengthIdx][self.current_index:end_index]
-            # # Update the plot with new data
-            # self.graphWidget.plot(segment_x, segment_y, pen='b', clear=False)
             
             for signalIdx in range (len(self.pastSignalsY_1)):  # plotting all stored signals on the graph
                 segment_x = self.pastSignalsX_1[signalIdx][self.current_index:end_index]
