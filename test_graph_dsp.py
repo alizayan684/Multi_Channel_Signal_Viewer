@@ -1,5 +1,5 @@
 import sys
-from PySide6 import QtWidgets, QtCore
+from   PyQt6 import QtWidgets, QtCore
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
@@ -44,7 +44,7 @@ class MainWindow(Ui_SignalViewer):
 
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
-            parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
+            parent=self, caption="Select a CSV file", directory="/D", filter="(*.csv)"
         )
         print(filePath)
         if filePath:
@@ -168,11 +168,11 @@ class MainWindow(Ui_SignalViewer):
             for signalIdx in range (len(self.pastSignalsY_2)):  # plotting all stored signals on the graph
                 segment_x = self.pastSignalsX_2[signalIdx][self.current_index_2:end_index_2]
                 segment_y = self.pastSignalsY_2[signalIdx][self.current_index_2:end_index_2]
-                self.graphWidget_2.plot(segment_x, segment_y, pen='b', clear=False)
+                self.plotWidget_2.plot(segment_x, segment_y, pen='b', clear=False)
             
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
             if end_index_2 != maxLength:
-                self.graphWidget_2.plotItem.setXRange(
+                self.plotWidget_2.plotItem.setXRange(
                     self.current_index_2,
                     end_index_2,
                     padding=0
@@ -196,7 +196,7 @@ class MainWindow(Ui_SignalViewer):
     def pauseTheSignal(self):
         # graphs not linked:
         if not self.isLinked:
-            if self.sender() == self.pauseBtn:
+            if self.sender() == self.stopButton_1:
                 self.timer.stop()   # stop the timer to stop the graph from updating itself
                 self.isPaused = True
             else:
