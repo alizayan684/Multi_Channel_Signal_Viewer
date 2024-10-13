@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>731</height>
+    <width>1057</width>
+    <height>754</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -467,477 +467,13 @@ QPushButton:pressed {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="8">
-     <layout class="QVBoxLayout" name="verticalLayout_13">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="sizeConstraint">
-       <enum>QLayout::SetMinimumSize</enum>
-      </property>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QLabel {
-    background-color: #2E3440; /* Dark background */
-    color: #D8DEE9; /* Light text color */
-    font-size: 16px; /* Font size */
-    padding: 2px; /* Padding around the text */
-    border: 2px solid #4C566A; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    font-family: &quot;Segoe UI&quot;
-}</string>
-        </property>
-        <property name="text">
-         <string>Graph 1</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="comboBox_5">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"> font-size: 16px; /* Font size */
-    padding: 2px; /* Padding around the text */
-    border: 2px solid; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    font-family: &quot;Segoe UI&quot;</string>
-        </property>
-        <item>
-         <property name="text">
-          <string>All Channels</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_12">
-        <item>
-         <widget class="QLabel" name="label_6">
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QLabel {
-    background-color: #2E3440; /* Dark background */
-    color: #D8DEE9; /* Light text color */
-    font-size: 16px; /* Font size */
-    padding: 2px; /* Padding around the text */
-    border: 2px solid #4C566A; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    font-family: &quot;Segoe UI&quot;
-}</string>
-          </property>
-          <property name="text">
-           <string>Title</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">border-color: rgb(0, 255, 0);</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QListWidget" name="listWidget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>300</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QListWidget {
-    background-color: #2E3440; /* Dark background */
-    color: #D8DEE9; /* Light text color */
-    font-size: 16px; /* Font size */
-    padding: 5px; /* Padding around the text */
-    border: 2px solid #4C566A; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
-}
-
-QListWidget::item {
-    padding: 5px; /* Padding around each item */
-    border-bottom: 1px solid #4C566A; /* Border between items */
-}
-
-QListWidget::item:selected {
-    background-color: #4C566A; /* Background color for selected item */
-    color: #ECEFF4; /* Text color for selected item */
-}
-</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line_2">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(4, 3, 3);</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Link</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QLabel {
-    background-color: #2E3440; /* Dark background */
-    color: #D8DEE9; /* Light text color */
-    font-size: 16px; /* Font size */
-    padding: 2px; /* Padding around the text */
-    border: 2px solid #4C566A; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    font-family: &quot;Segoe UI&quot;
-}</string>
-        </property>
-        <property name="text">
-         <string>Graph 2</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="comboBox_2">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"> font-size: 16px; /* Font size */
-    padding: 2px; /* Padding around the text */
-    border: 2px solid; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    font-family: &quot;Segoe UI&quot;</string>
-        </property>
-        <item>
-         <property name="text">
-          <string>All Channels</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetDefaultConstraint</enum>
-          </property>
-          <item>
-           <widget class="QLabel" name="label_3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QLabel {
-    background-color: #2E3440; /* Dark background */
-    color: #D8DEE9; /* Light text color */
-    font-size: 16px; /* Font size */
-    padding: 2px; /* Padding around the text */
-    border: 2px solid #4C566A; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    font-family: &quot;Segoe UI&quot;
-}</string>
-            </property>
-            <property name="text">
-             <string>Title</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border-color: rgb(0, 255, 0);</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QListWidget" name="listWidget_2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>300</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QListWidget {
-    background-color: #2E3440; /* Dark background */
-    color: #D8DEE9; /* Light text color */
-    font-size: 16px; /* Font size */
-    padding: 5px; /* Padding around the text */
-    border: 2px solid #4C566A; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
-}
-
-QListWidget::item {
-    padding: 5px; /* Padding around each item */
-    border-bottom: 1px solid #4C566A; /* Border between items */
-}
-
-QListWidget::item:selected {
-    background-color: #4C566A; /* Background color for selected item */
-    color: #ECEFF4; /* Text color for selected item */
-}
-</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="3" column="6">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QScrollBar" name="verticalScrollBar_2">
-        <property name="styleSheet">
-         <string notr="true">/* Scrollbar background */
-QScrollBar:vertical {
-    border: none;
-    background-color: #2E3440; /* Dark background */
-    width: 12px;
-    margin: 0px 0px 0px 0px;
-}
-
-/* Handle */
-QScrollBar::handle:vertical {
-    background: #888;
-    min-height: 20px;
-    border-radius: 6px;
-}
-
-/* Handle on hover */
-QScrollBar::handle:vertical:hover {
-    background: #555;
-}
-
-/* Add-line (down arrow) */
-QScrollBar::add-line:vertical {
-    background: none;
-    height: 0px;
-    subcontrol-position: bottom;
-    subcontrol-origin: margin;
-}
-
-/* Sub-line (up arrow) */
-QScrollBar::sub-line:vertical {
-    background: none;
-    height: 0px;
-    subcontrol-position: top;
-    subcontrol-origin: margin;
-}
-
-/* Add-page and sub-page (scrollbar background above and below the handle) */
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-    background: none;
-}
-</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QScrollBar" name="verticalScrollBar">
-        <property name="styleSheet">
-         <string notr="true">/* Scrollbar background */
-QScrollBar:vertical {
-    border: none;
-    background-color: #2E3440; /* Dark background */
-    width: 12px;
-    margin: 0px 0px 0px 0px;
-
-
-}
-
-/* Handle */
-QScrollBar::handle:vertical {
-    background: #888;
-    min-height: 20px;
-    border-radius: 6px;
-
-}
-
-/* Handle on hover */
-QScrollBar::handle:vertical:hover {
-    background: #555;
-
-
-}
-
-/* Add-line (down arrow) */
-QScrollBar::add-line:vertical {
-    background: none;
-    height: 0px;
-    subcontrol-position: bottom;
-    subcontrol-origin: margin;
-
-}
-
-/* Sub-line (up arrow) */
-QScrollBar::sub-line:vertical {
-    background: none;
-    height: 0px;
-    subcontrol-position: top;
-    subcontrol-origin: margin;
-}
-
-/* Add-page and sub-page (scrollbar background above and below the handle) */
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-    background: none;
-}
-</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="2" column="8">
-     <widget class="QPushButton" name="pushButton_5">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Glue</string>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="1">
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="sizeConstraint">
        <enum>QLayout::SetNoConstraint</enum>
       </property>
       <item>
-       <widget class="PlotWidget" name="FirstPlotWidget" native="true">
+       <widget class="PlotWidget" name="plotWidget_1" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -945,7 +481,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string notr="true">    background-color: #2E3440; /* Dark background */
+         <string notr="true">    background-color: #000000; /* Dark background */
     color: #D8DEE9; /* Light text color */
     font-size: 16px; /* Font size */
     padding: 5px; /* Padding around the text */
@@ -957,7 +493,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
        </widget>
       </item>
       <item>
-       <widget class="QScrollBar" name="horizontalScrollBar">
+       <widget class="QScrollBar" name="horizontalScrollBar_1">
         <property name="styleSheet">
          <string notr="true">/* Scrollbar background */
 QScrollBar:horizontal {
@@ -1009,7 +545,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
-         <widget class="QLabel" name="label_5">
+         <widget class="QLabel" name="speedLabel_1">
           <property name="styleSheet">
            <string notr="true">QLabel {
     background-color: #2E3440; /* Dark background */
@@ -1027,7 +563,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </widget>
         </item>
         <item>
-         <widget class="QSlider" name="horizontalSlider">
+         <widget class="QSlider" name="speedSlider_1">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -1040,7 +576,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QPushButton" name="pushButton_10">
+           <widget class="QPushButton" name="colorButton_1">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1062,7 +598,26 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QPushButton" name="moveBox_1">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Move</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="colorMoveBox_1">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1099,7 +654,17 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_8">
+         <widget class="Line" name="line_3">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 170, 0);</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="rewindButton_1">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -1121,7 +686,13 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_13">
+         <widget class="QPushButton" name="zoomOutButton_1">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="maximumSize">
            <size>
             <width>200</width>
@@ -1150,7 +721,13 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_12">
+         <widget class="QPushButton" name="zoomInButton_1">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="maximumSize">
            <size>
             <width>200</width>
@@ -1163,7 +740,13 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_16">
+         <widget class="QPushButton" name="stopButton_1">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="maximumSize">
            <size>
             <width>200</width>
@@ -1176,7 +759,13 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_7">
+         <widget class="QPushButton" name="startButton_1">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="maximumSize">
            <size>
             <width>200</width>
@@ -1191,7 +780,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </layout>
       </item>
       <item>
-       <widget class="PlotWidget" name="SecondPlotWidget" native="true">
+       <widget class="PlotWidget" name="plotWidget_2" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -1199,7 +788,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string notr="true">    background-color: #2E3440; /* Dark background */
+         <string notr="true">    background-color: #000000; /* Dark background */
     color: #D8DEE9; /* Light text color */
     font-size: 16px; /* Font size */
     padding: 5px; /* Padding around the text */
@@ -1263,7 +852,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_8">
         <item>
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="speedLabel_2">
           <property name="styleSheet">
            <string notr="true">QLabel {
     background-color: #2E3440; /* Dark background */
@@ -1281,7 +870,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </widget>
         </item>
         <item>
-         <widget class="QSlider" name="horizontalSlider_2">
+         <widget class="QSlider" name="speedSlider_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -1291,6 +880,472 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
       </item>
      </layout>
     </item>
+    <item row="3" column="6">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QScrollBar" name="verticalScrollBar_1">
+        <property name="styleSheet">
+         <string notr="true">/* Scrollbar background */
+QScrollBar:vertical {
+    border: none;
+    background-color: #2E3440; /* Dark background */
+    width: 12px;
+    margin: 0px 0px 0px 0px;
+}
+
+/* Handle */
+QScrollBar::handle:vertical {
+    background: #888;
+    min-height: 20px;
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+QScrollBar::handle:vertical:hover {
+    background: #555;
+}
+
+/* Add-line (down arrow) */
+QScrollBar::add-line:vertical {
+    background: none;
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+/* Sub-line (up arrow) */
+QScrollBar::sub-line:vertical {
+    background: none;
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+/* Add-page and sub-page (scrollbar background above and below the handle) */
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QScrollBar" name="verticalScrollBar_2">
+        <property name="styleSheet">
+         <string notr="true">/* Scrollbar background */
+QScrollBar:vertical {
+    border: none;
+    background-color: #2E3440; /* Dark background */
+    width: 12px;
+    margin: 0px 0px 0px 0px;
+
+
+}
+
+/* Handle */
+QScrollBar::handle:vertical {
+    background: #888;
+    min-height: 20px;
+    border-radius: 6px;
+
+}
+
+/* Handle on hover */
+QScrollBar::handle:vertical:hover {
+    background: #555;
+
+
+}
+
+/* Add-line (down arrow) */
+QScrollBar::add-line:vertical {
+    background: none;
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+
+}
+
+/* Sub-line (up arrow) */
+QScrollBar::sub-line:vertical {
+    background: none;
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+/* Add-page and sub-page (scrollbar background above and below the handle) */
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="3" column="8">
+     <layout class="QVBoxLayout" name="verticalLayout_13">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
+      <item>
+       <widget class="QLabel" name="graphLabel_1">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 2px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;
+}</string>
+        </property>
+        <property name="text">
+         <string>Graph 1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="titleChannelBox_1">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QComboBox{
+ font-size: 16px; /* Font size */
+   padding: 2px; /* Padding around the text */
+    border: 2px solid; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;
+}</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>All Channels</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_12">
+        <item>
+         <widget class="QLabel" name="titileLabel_1">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLabel {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 2px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;
+}</string>
+          </property>
+          <property name="text">
+           <string>Title</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="titleEdit_1">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-color: rgb(0, 255, 0);</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QListWidget" name="listChannelsWidget_1">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>300</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 5px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+}
+
+QListWidget::item {
+    padding: 5px; /* Padding around each item */
+    border-bottom: 1px solid #4C566A; /* Border between items */
+}
+
+QListWidget::item:selected {
+    background-color: #4C566A; /* Background color for selected item */
+    color: #ECEFF4; /* Text color for selected item */
+}
+</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(4, 3, 3);</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="linkButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Link</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="graphLabel_2">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 2px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;
+}</string>
+        </property>
+        <property name="text">
+         <string>Graph 2</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="titleChannelBox_2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"> font-size: 16px; /* Font size */
+    padding: 2px; /* Padding around the text */
+    border: 2px solid; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>All Channels</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
+          <item>
+           <widget class="QLabel" name="titleLabel_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 2px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;
+}</string>
+            </property>
+            <property name="text">
+             <string>Title</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="titleEdit_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border-color: rgb(0, 255, 0);</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QListWidget" name="listChannelsWidget_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>300</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget {
+    background-color: #2E3440; /* Dark background */
+    color: #D8DEE9; /* Light text color */
+    font-size: 16px; /* Font size */
+    padding: 5px; /* Padding around the text */
+    border: 2px solid #4C566A; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Arial&quot;, sans-serif; /* Font family */
+}
+
+QListWidget::item {
+    padding: 5px; /* Padding around each item */
+    border-bottom: 1px solid #4C566A; /* Border between items */
+}
+
+QListWidget::item:selected {
+    background-color: #4C566A; /* Background color for selected item */
+    color: #ECEFF4; /* Text color for selected item */
+}
+</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="8">
+     <widget class="QPushButton" name="glueButton">
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Glue</string>
+      </property>
+     </widget>
+    </item>
     <item row="4" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_7">
       <property name="spacing">
@@ -1299,7 +1354,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_11">
         <item>
-         <widget class="QPushButton" name="pushButton_9">
+         <widget class="QPushButton" name="colorButton_2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -1321,7 +1376,26 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_4">
+         <widget class="QPushButton" name="moveButton_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Move</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="colorMoveBox_2">
           <property name="maximumSize">
            <size>
             <width>200</width>
@@ -1345,7 +1419,17 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="Line" name="line">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(0, 170, 0);</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="rewindButton_2">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -1358,7 +1442,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_15">
+       <widget class="QPushButton" name="zoomOutButton_2">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -1371,7 +1455,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_14">
+       <widget class="QPushButton" name="zoomInButton_2">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -1384,7 +1468,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_17">
+       <widget class="QPushButton" name="stopButton_2">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -1397,7 +1481,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_11">
+       <widget class="QPushButton" name="startButton_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -1420,7 +1504,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     <item row="2" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_6">
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="addFileButton">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -1433,7 +1517,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_6">
+       <widget class="QPushButton" name="connectOnlineButton">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -1446,7 +1530,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_18">
+       <widget class="QPushButton" name="screenShotButton">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -1459,7 +1543,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox_3">
+       <widget class="QComboBox" name="graphSelectBox">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -1488,12 +1572,12 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
      </layout>
     </item>
     <item row="4" column="8">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="nonRectGraphButton">
       <property name="styleSheet">
        <string notr="true">QPushButton {
-    background-color: #000000; /* Background color on hover */
+    background-color: #ffffff; /* Background color on hover */
 
-    color: #D8DEE9; /* Light text color */
+    color: #000000; /* Light text color */
     font-size: 16px; /* Font size */
     padding: 10px 20px; /* Padding around the text */
     border: 2px solid #2E3440; /* Border color */
@@ -1502,9 +1586,9 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 }
 
 QPushButton:hover {
-	background-color: #000000;
-	color: rgb(255, 255, 255);
-    border: 2px solid #81A1C1; /* Border color on hover */
+	background-color: #ffffff;
+	color: rgb(0, 0, 0);
+    border: 3px solid #81A1C1; /* Border color on hover */
 
     font-size: 16px; /* Font size */
     padding: 10px 20px; /* Padding around the text */
@@ -1540,7 +1624,7 @@ QPushButton:pressed {
   <customwidget>
    <class>PlotWidget</class>
    <extends>QWidget</extends>
-   <header>pyqtgraph</header>
+   <header location="global">pyqtgraph</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
