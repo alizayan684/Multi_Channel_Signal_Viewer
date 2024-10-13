@@ -13,6 +13,10 @@ class MainWindow(Ui_MainWindow):
         self.df_2 = None
         self.browsedData_y = []
         self.browsedData_y_2 = []
+        self.pastSignalsY_1 = []
+        self.pastSignalsY_2 = []
+        self.pastSignalsX_1 = []
+        self.pastSignalsX_2 = []
         self.timer = QtCore.QTimer()
         self.timer_2 = QtCore.QTimer()
         self.current_index = 0   # the current index in the graph
@@ -28,12 +32,14 @@ class MainWindow(Ui_MainWindow):
         self.timer.timeout.connect(self.updatePlot_1)
         self.pauseBtn.clicked.connect(self.pauseTheSignal)
         self.rewindBtn.clicked.connect(self.rewindTheSignal)
+        
         # Applying button functionalities for second graph
         self.browseBtn2.clicked.connect(self.browseTheSignal)
         self.startBtn2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.pauseBtn2.clicked.connect(self.pauseTheSignal)
         self.rewindBtn2.clicked.connect(self.rewindTheSignal)
+        
         # Applying the linking functionality
         self.linkBtn.clicked.connect(self.linkGraphs)
 
@@ -51,8 +57,8 @@ class MainWindow(Ui_MainWindow):
                 self.current_index = 0 # to start plotting from the beginning every time I browse a new file.
             else:
                 self.df_2 = pd.read_csv(filePath, header=None)
-                self.browsedData_y2 = [] 
-                self.isPaused2 = False
+                self.browsedData_y_2 = [] 
+                self.isPaused_2 = False
                 self.current_index_2 = 0
                 
                 
@@ -60,23 +66,25 @@ class MainWindow(Ui_MainWindow):
     def startTheSignal(self):
         if not self.isLinked:
             if self.sender() == self.startBtn or self.sender() == self.rewindBtn:
-                if self.df_1 is not None and not self.df_1.empty and not len(self.browsedData_y) and not self.isPaused:
+                if self.df_1 is not None and not self.df_1.empty and len(self.browsedData_y) == 0 and not self.isPaused:
                     self.browsedData_y = self.df_1.to_numpy().flatten()
+                    self.pastSignalsY_1.append(self.browsedData_y)
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.graphWidget.clear()  # Clear the existing plot            
+                    self.pastSignalsX_1.append(self.data_x)           
                     self.graphWidget.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.graphWidget.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer.start(100)  # Start the timer with a 100 ms interval (Note: the timer times out every 100ms(as given in the argument) and starts another 100ms, which leads to invoking the "updatePlot" every timeout until the timer stops "self.timer.stop()")
             
             else:
-                if self.df_2 is not None and not self.df_2.empty and not len(self.browsedData_y_2) and not self.isPaused_2:
+                if self.df_2 is not None and not self.df_2.empty and len(self.browsedData_y_2) == 0 and not self.isPaused_2:
                     self.browsedData_y_2 = self.df_2.to_numpy().flatten()
+                    self.pastSignalsY_2.append(self.browsedData_y_2)
                     self.chunk_size = int(len(self.browsedData_y_2)/3.0)
                     data_x_2 = np.arange(len(self.browsedData_y_2))
-                    self.data_x_2 = data_x_2
-                    self.graphWidget_2.clear()  # Clear the existing plot            
+                    self.data_x_2 = data_x_2         
+                    self.pastSignalsX_2.append(self.data_x_2)  
                     self.graphWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.graphWidget_2.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer_2.start(100)
@@ -90,21 +98,22 @@ class MainWindow(Ui_MainWindow):
                 self.current_index_2 = self.current_index
                 
             if self.df_1 is not None and not self.df_1.empty:  # if dataframe of first graph contains data:
-                if not len(self.browsedData_y) and not self.isPaused:
+                if len(self.browsedData_y) == 0 and not self.isPaused:
                     self.browsedData_y = self.df_1.to_numpy().flatten()
+                    self.pastSignalsY_1.append(self.browsedData_y)
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
-                    self.data_x = data_x
-                    self.graphWidget.clear()  # Clear the existing plot            
+                    self.data_x = data_x    
+                    self.pastSignalsX_1.append(self.data_x)       
                     self.graphWidget.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.graphWidget.plotItem.setYRange(-2, 2, padding = 0)
                 if self.df_2 is not None and not self.df_2.empty:  # if dataframe of first graph contains data:
                     if not len(self.browsedData_y_2) and not self.isPaused_2:
                         self.browsedData_y_2 = self.df_2.to_numpy().flatten()
-                    
+                        self.pastSignalsY_2.append(self.browsedData_y_2)
                         data_x_2 = np.arange(len(self.browsedData_y_2))
-                        self.data_x_2 = data_x_2
-                        self.graphWidget_2.clear()  # Clear the existing plot            
+                        self.data_x_2 = data_x_2   
+                        self.pastSignalsX_2.append(self.data_x_2)         
                         self.graphWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
                         self.graphWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
             self.timer.start(100)
@@ -113,15 +122,27 @@ class MainWindow(Ui_MainWindow):
 
     # for updating the first graph for the cine mode.
     def updatePlot_1(self):
-        if self.current_index < len(self.browsedData_y):
+        maxLength = len(self.browsedData_y) # initializing length of the longest signal to move until its end if there are more than one signal plotted
+        for signalIdx in range (len(self.pastSignalsY_1)):   # getting the longest signal in the plotted signals and its idx.
+            maxLength = max(len(self.pastSignalsY_1[signalIdx]), maxLength)
+            if len(self.pastSignalsY_1[signalIdx]) >= maxLength:
+                maxLengthIdx = signalIdx  
+            
+        if self.current_index < maxLength:
             # Determine the range of data to plot in this frame
-            end_index = min(self.current_index + self.chunk_size, len(self.browsedData_y))
-            segment_x = self.data_x[self.current_index:end_index]
-            segment_y = self.browsedData_y[self.current_index:end_index]
-            # Update the plot with new data
-            self.graphWidget.plot(segment_x, segment_y, pen='b', clear=False)
+            end_index = min(self.current_index + self.chunk_size, maxLength) # always end at finishing the signal with the maximum length.
+            # segment_x = self.pastSignalsX_1[maxLengthIdx][self.current_index:end_index]
+            # segment_y = self.pastSignalsY_1[maxLengthIdx][self.current_index:end_index]
+            # # Update the plot with new data
+            # self.graphWidget.plot(segment_x, segment_y, pen='b', clear=False)
+            
+            for signalIdx in range (len(self.pastSignalsY_1)):  # plotting all stored signals on the graph
+                segment_x = self.pastSignalsX_1[signalIdx][self.current_index:end_index]
+                segment_y = self.pastSignalsY_1[signalIdx][self.current_index:end_index]
+                self.graphWidget.plot(segment_x, segment_y, pen='b', clear=False)
+            
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
-            if end_index != len(self.browsedData_y):
+            if end_index != maxLength:
                 self.graphWidget.plotItem.setXRange(
                     self.current_index,
                     end_index,
@@ -141,15 +162,23 @@ class MainWindow(Ui_MainWindow):
     
     # for updating the second graph for the cine mode.     
     def updatePlot_2(self):
-        if self.current_index_2 < len(self.browsedData_y_2):
+        maxLength = len(self.browsedData_y_2) # initializing length of the longest signal to move until its end if there are more than one signal plotted
+        for signalIdx in range (len(self.pastSignalsY_2)):   # getting the longest signal in the plotted signals and its idx.
+            maxLength = max(len(self.pastSignalsY_2[signalIdx]), maxLength)
+            if len(self.pastSignalsY_2[signalIdx]) >= maxLength:
+                maxLengthIdx = signalIdx  # we will use it to in plotting to use the y-coordinates of the longest signal with its correct x-coordinates.
+                
+        if self.current_index_2 < maxLength:
             # Determine the range of data to plot in this frame
-            end_index_2 = min(self.current_index_2 + self.chunk_size, len(self.browsedData_y_2))
-            segment_x_2 = self.data_x_2[self.current_index_2:end_index_2]
-            segment_y_2 = self.browsedData_y_2[self.current_index_2:end_index_2]
-            # Update the plot with new data
-            self.graphWidget_2.plot(segment_x_2, segment_y_2, pen='b', clear=False)
+            end_index_2 = min(self.current_index_2 + self.chunk_size, maxLength)
+            
+            for signalIdx in range (len(self.pastSignalsY_2)):  # plotting all stored signals on the graph
+                segment_x = self.pastSignalsX_2[signalIdx][self.current_index_2:end_index_2]
+                segment_y = self.pastSignalsY_2[signalIdx][self.current_index_2:end_index_2]
+                self.graphWidget_2.plot(segment_x, segment_y, pen='b', clear=False)
+            
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
-            if end_index_2 != len(self.browsedData_y_2):
+            if end_index_2 != maxLength:
                 self.graphWidget_2.plotItem.setXRange(
                     self.current_index_2,
                     end_index_2,
