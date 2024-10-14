@@ -8,8 +8,12 @@ import pandas as pd
 from pathlib import Path
 
 class CheckableLabelItem(QtWidgets.QWidget):
-    def __init__(self, text, color, parent=None):
+    def __init__(self, index, text, color, graphObj, graphNum, parent=None):
         super().__init__(parent)
+        # Initial variables needed for updating the new label onto the choice boxes and the signal names
+        self.index = index
+        self.graphObj = graphObj
+        self.graphNum = graphNum
 
         # Create a checkbox for showing and hiding the signal
         self.checkbox = QtWidgets.QCheckBox()
@@ -28,7 +32,7 @@ class CheckableLabelItem(QtWidgets.QWidget):
         self.setLayout(layout)
 
         # Set height for our object to allow the label's text to be completely visible
-        self.setFixedHeight(35)
+        self.setFixedHeight(38)
 
         # Enable edit text by double clicking
         self.label.mouseDoubleClickEvent = self.editText
@@ -59,6 +63,14 @@ class CheckableLabelItem(QtWidgets.QWidget):
         new_text, ok = QtWidgets.QInputDialog.getText(self, "Edit Signal Label", f"Enter New Label For {self.label.text()}:", text=self.label.text())
         if ok and new_text:
             self.label.setText(new_text)
+            if(self.graphNum == 1):
+                self.graphObj.signalNames_1[self.index] = new_text
+                self.graphObj.titleChannelBox_1.setItemText(self.index + 1, new_text)
+                self.graphObj.colorMoveBox_1.setItemText(self.index + 1, new_text)
+            else:
+                self.graphObj.signalNames_2[self.index] = new_text
+                self.graphObj.titleChannelBox_2.setItemText(self.index + 1, new_text)
+                self.graphObj.colorMoveBox_2.setItemText(self.index + 1, new_text)
 
 class MainWindow(Ui_SignalViewer):
     def __init__(self):
@@ -133,7 +145,7 @@ class MainWindow(Ui_SignalViewer):
                 self.current_index = 0 # to start plotting from the beginning every time I browse a new file.
                 
                 # Adding Signal Name To Our Labels List
-                labelItem = CheckableLabelItem(currSignalName, currColor)
+                labelItem = CheckableLabelItem(len(self.labelItems_1), currSignalName, currColor, self, 1)
                 self.labelItems_1.append(labelItem)
                 listWidgetItem = QtWidgets.QListWidgetItem()
                 listWidgetItem.setSizeHint(labelItem.sizeHint())  # Set the size hint
@@ -154,7 +166,7 @@ class MainWindow(Ui_SignalViewer):
                 self.current_index_2 = 0
 
                 # Adding Signal Name To Our Labels List
-                labelItem = CheckableLabelItem(currSignalName, currColor)
+                labelItem = CheckableLabelItem(len(self.labelItems_2), currSignalName, currColor, self, 2)
                 self.labelItems_2.append(labelItem)
                 listWidgetItem = QtWidgets.QListWidgetItem()
                 listWidgetItem.setSizeHint(labelItem.sizeHint())  # Set the size hint
