@@ -1,5 +1,6 @@
 import sys
 from   PySide6 import QtWidgets, QtCore
+from   PySide6.QtWidgets import QColorDialog
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
@@ -58,7 +59,7 @@ class MainWindow(Ui_SignalViewer):
         if filePath:
             self.signalName = Path(filePath).name[0 : -4]
             # check whether the clicked btn is for graph_1 or graph_2
-            if self.sender() == self.addFileButton:
+            if self.graphSelectBox.currentIndex() == 0:
                 self.df_1 = pd.read_csv(filePath, header=None)
                 self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
                 self.isPaused = False
@@ -143,7 +144,7 @@ class MainWindow(Ui_SignalViewer):
             segment_x = self.data_x[self.current_index:end_index]
             segment_y = self.browsedData_y[self.current_index:end_index]
             # Update the plot with new data
-            self.graphwidget.clear()
+            self.plotWidget_1.clear()
             if not self.hidden:
                 self.plotCurve = self.plotWidget_1.plot(segment_x, segment_y, pen=self.plotColor , clear=False, name=self.signalName)
             
