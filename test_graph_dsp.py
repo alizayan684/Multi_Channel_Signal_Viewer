@@ -4,6 +4,7 @@ from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
 class MainWindow(Ui_SignalViewer):
     def __init__(self):
@@ -17,6 +18,9 @@ class MainWindow(Ui_SignalViewer):
         self.pastSignalsY_2 = []
         self.pastSignalsX_1 = []
         self.pastSignalsX_2 = []
+        self.signalName = ""
+        self.plotCurve = self.graphwidget.plotItem.plot()
+        self.plotColor = "b"
         self.timer = QtCore.QTimer()
         self.timer_2 = QtCore.QTimer()
         self.current_index = 0   # the current index in the graph
@@ -25,6 +29,7 @@ class MainWindow(Ui_SignalViewer):
         self.isPaused = False
         self.isPaused_2 = False
         self.isLinked = False # initializing both graphs not to be linked.
+        self.hidden = False
         
         # Applying button functionalities for first graph
         self.addFileButton.clicked.connect(self.browseTheSignal)
@@ -32,6 +37,10 @@ class MainWindow(Ui_SignalViewer):
         self.timer.timeout.connect(self.updatePlot_1)
         self.stopButton_1.clicked.connect(self.pauseTheSignal)
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
+        self.showBtn.clicked.connect(self.showTheSignal)
+        self.hideBtn.clicked.connect(self.hideTheSignal)
+        self.labelBtn.clicked.connect(self.labelTheSignal)
+        self.colorBtn.clicked.connect(self.colorTheSignal)
         
         # Applying button functionalities for second graph
         self.startButton_2.clicked.connect(self.startTheSignal)
@@ -47,8 +56,9 @@ class MainWindow(Ui_SignalViewer):
         )
         print(filePath)
         if filePath:
-            # check whether the combo box is for graph_1 or graph_2
-            if self.graphSelectBox.currentIndex() == 0:
+            self.signalName = Path(filePath).name[0 : -4]
+            # check whether the clicked btn is for graph_1 or graph_2
+            if self.sender() == self.addFileButton:
                 self.df_1 = pd.read_csv(filePath, header=None)
                 self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
                 self.isPaused = False
@@ -58,6 +68,7 @@ class MainWindow(Ui_SignalViewer):
                 self.browsedData_y_2 = [] 
                 self.isPaused_2 = False
                 self.current_index_2 = 0
+            self.startTheSignal()
                 
                 
 
@@ -132,7 +143,10 @@ class MainWindow(Ui_SignalViewer):
             segment_x = self.data_x[self.current_index:end_index]
             segment_y = self.browsedData_y[self.current_index:end_index]
             # Update the plot with new data
-            self.plotWidget_1.plot(segment_x, segment_y, pen='b', clear=False)
+            self.graphwidget.clear()
+            if not self.hidden:
+                self.plotCurve = self.plotWidget_1.plot(segment_x, segment_y, pen=self.plotColor , clear=False, name=self.signalName)
+            
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
             if end_index != maxLength:
                 self.plotWidget_1.plotItem.setXRange(
@@ -145,7 +159,6 @@ class MainWindow(Ui_SignalViewer):
             else:
                 self.timer.stop()
                 self.current_index = 0    
-            self.plotWidget_1.plotItem.setYRange(-1, 1, padding = 0)
         
         else:
             self.timer.stop()  # Stop the timer when the end is reached
@@ -208,8 +221,6 @@ class MainWindow(Ui_SignalViewer):
             self.isPaused = True
             self.isPaused_2 = True
     
-    
-    
     def rewindTheSignal(self):
         # graphs not linked:
         if not self.isLinked:
@@ -249,8 +260,26 @@ class MainWindow(Ui_SignalViewer):
                 self.timer.stop()
                 self.timer_2.stop()  # we stopped both timers to avoid conflicts between them during updating so when they start again, they timeout at the same time and update the graph at the same time.
                 self.startTheSignal() # start again 
+    def showTheSignal(self):
+        if(self.df is not None):
+            self.plotCurve.setVisible(True)
+            self.hidden = False
 
+    def hideTheSignal(self):
+        if(self.df is not None):
+            self.plotCurve.setVisible(False)
+            self.hidden = True
+            
+    def labelTheSignal(self):
+        if(self.df is not None):
+            self.signalName = "New Label"
 
+    def colorTheSignal(self):
+        if(self.df is not None):
+            color = QColorDialog.getColor()
+            if color.isValid():
+                self.plotColor = pg.mkPen(color.name())
+                self.plotCurve.setPen(self.plotColor)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
