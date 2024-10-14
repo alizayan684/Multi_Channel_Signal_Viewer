@@ -6,6 +6,7 @@ from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 from PyQt6.QtWidgets import QPushButton, QColorDialog, QFileDialog
 from PyQt6.QtWidgets import QHBoxLayout
+import pandas as pd
 
 class PolarPlotCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
@@ -131,11 +132,17 @@ class MainWindow(QMainWindow):
         color = QColorDialog.getColor()
         if color.isValid():
             print(color.name())
+        pass
     
     def browse_file(self):
-        file, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
-        if file:
-            print(file)
+        # find csv file
+        file_name = QFileDialog.getOpenFileName(self, "Open CSV File", "", "CSV Files (*.csv)")
+        df = pd.read_csv(file_name[0])
+        print(df.head())
+        pass
+        
+            
+        
     
     def start_animation(self):
         self.anim.event_source.start()
