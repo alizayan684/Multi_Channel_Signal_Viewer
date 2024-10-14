@@ -79,14 +79,14 @@ class MainWindow(Ui_SignalViewer):
     #####################################################################################
     def startTheSignal(self):
         if not self.isLinked:
-            if self.graphSelectBox.currentIndex() == 0:
+            if self.graphSelectBox.currentIndex() == 0 or self.sender() == self.startButton_1 or self.sender() == self.rewindButton_1:
                 if self.df_1 is not None and not self.df_1.empty and not len(self.browsedData_y) and not self.isPaused:
                     self.browsedData_y = self.df_1.to_numpy().flatten()
                     self.pastSignalsY_1.append(self.browsedData_y)
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.plotWidget_1.clear()  # Clear the existing plot            
+                    self.pastSignalsX_1.append(self.data_x)            
                     self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer.start(100)  # Start the timer with a 100 ms interval (Note: the timer times out every 100ms(as given in the argument) and starts another 100ms, which leads to invoking the "updatePlot" every timeout until the timer stops "self.timer.stop()")
@@ -98,7 +98,7 @@ class MainWindow(Ui_SignalViewer):
                     self.chunk_size = int(len(self.browsedData_y_2)/3.0)
                     data_x_2 = np.arange(len(self.browsedData_y_2))
                     self.data_x_2 = data_x_2
-                    self.plotWidget_2.clear()  # Clear the existing plot            
+                    self.pastSignalsX_2.append(self.data_x_2)            
                     self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer_2.start(100)
@@ -118,7 +118,7 @@ class MainWindow(Ui_SignalViewer):
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.plotWidget_1.clear()  # Clear the existing plot            
+                    self.pastSignalsX_1.append(self.data_x)             
                     self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
                 if self.df_2 is not None and not self.df_2.empty:  # if dataframe of first graph contains data:
@@ -127,7 +127,7 @@ class MainWindow(Ui_SignalViewer):
                         self.pastSignalsY_2.append(self.browsedData_y_2)
                         data_x_2 = np.arange(len(self.browsedData_y_2))
                         self.data_x_2 = data_x_2
-                        self.plotWidget_2.clear()  # Clear the existing plot            
+                        self.pastSignalsX_2.append(self.data_x_2)            
                         self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
                         self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
             self.timer.start(100)
@@ -144,13 +144,17 @@ class MainWindow(Ui_SignalViewer):
             
         if self.current_index < maxLength:
             # Determine the range of data to plot in this frame
-            end_index = min(self.current_index + self.chunk_size, len(self.browsedData_y))
-            segment_x = self.data_x[self.current_index:end_index]
-            segment_y = self.browsedData_y[self.current_index:end_index]
+            end_index = min(self.current_index + self.chunk_size, maxLength)
+            
+            for signalIdx in range (len(self.pastSignalsY_1)):  # plotting all stored signals on the graph
+                segment_x = self.pastSignalsX_1[signalIdx][self.current_index:end_index]
+                segment_y = self.pastSignalsY_1[signalIdx][self.current_index:end_index]
+                self.plotWidget_1.plot(segment_x, segment_y, pen='b', clear=False)
+                
             # Update the plot with new data
-            self.plotWidget_1.clear()
-            if not self.hidden:
-                self.plotCurve = self.plotWidget_1.plot(segment_x, segment_y, pen=self.plotColor , clear=False, name=self.signalName)
+            #self.plotWidget_1.clear()
+            # if not self.hidden:
+            #     self.plotCurve = self.plotWidget_1.plot(segment_x, segment_y, pen=self.plotColor , clear=False, name=self.signalName)
             
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
             if end_index != maxLength:
