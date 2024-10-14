@@ -1,13 +1,12 @@
 import sys
 import numpy as np
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
-from PyQt6.QtWidgets import QPushButton, QColorDialog, QFileDialog
-from PyQt6.QtWidgets import QHBoxLayout
+from PySide6.QtWidgets import QPushButton, QColorDialog, QFileDialog
+from PySide6.QtWidgets import QHBoxLayout
 import pandas as pd
-
 class PolarPlotCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -31,13 +30,14 @@ class PolarPlotCanvas(FigureCanvas):
         self.line.set_data(theta, r)
         return self.line,
 
-class MainWindow(QMainWindow):
-    def __init__(self):
+class Window(QMainWindow):
+    def __init__(self, main_window):
         super().__init__()
 
         self.setWindowTitle("Polar Plot in Cine Mode with PyQt6")
         self.setGeometry(100, 100, 800, 600)
         self.ylim = 1
+        self.main_window = main_window
         self.setStyleSheet("QPushButton {\n"
 "    background-color: #5E81AC; /* Background color on hover */\n"
 "\n"
@@ -169,13 +169,9 @@ class MainWindow(QMainWindow):
     def slow_down(self):
         self.anim.event_source.interval *= 2
     
+    def closeEvent(self, event):
+        # show the main window again
+        self.main_window.show()
+        event.accept()
 
 
-def main():
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
-
-if __name__ == '__main__':
-    main()

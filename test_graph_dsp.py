@@ -1,18 +1,19 @@
 import sys
 from   PySide6 import QtWidgets, QtCore
-from   PySide6.QtWidgets import QColorDialog
+from   PySide6.QtWidgets import QColorDialog, QApplication
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
 import pandas as pd
 from pathlib import Path
-
+from non_rectangular import Window
 class MainWindow(Ui_SignalViewer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.df_1 = None  # No data initially
         self.df_2 = None
+        self.non_rect_window = None
         self.browsedData_y = []
         self.browsedData_y_2 = []
         self.pastSignalsY_1 = []
@@ -36,7 +37,7 @@ class MainWindow(Ui_SignalViewer):
         self.zoom_level_2 = 0
         self.min_zoom_level = 0
         self.max_zoom_level = 100  # Maximum zoom level
-        
+        self.nonRectGraphButton.clicked.connect(self.openNonRectGraph)
         # Applying button functionalities for first graph #############################
         self.addFileButton.clicked.connect(self.browseTheSignal)
         self.startButton_1.clicked.connect(self.startTheSignal)
@@ -337,7 +338,6 @@ class MainWindow(Ui_SignalViewer):
         if self.zoom_level < self.max_zoom_level:
             self.zoom_level += 10  # Increase zoom level by 10%
             self.plotWidget_1.getViewBox().scaleBy((0.9, 0.9))
-            self.update_zoom_label()
     #################################################################################################
     
     def zoom_2(self):
@@ -345,7 +345,6 @@ class MainWindow(Ui_SignalViewer):
         if self.zoom_level_2 < self.max_zoom_level:
             self.zoom_level_2 += 10  # Increase zoom level by 10%
             self.plotWidget_2.getViewBox().scaleBy((0.9, 0.9))
-            self.update_zoom_label()
     #################################################################################################
     def zoom_out_1(self):
         """ Zoom out of the plot by 10%. """
@@ -358,6 +357,12 @@ class MainWindow(Ui_SignalViewer):
         if self.zoom_level_2 > self.min_zoom_level:
             self.zoom_level_2 -= 10  # Decrease zoom level by 10%
             self.plotWidget_2.getViewBox().scaleBy((1.1, 1.1))  # Scale the plot by 110%
+    #################################################################################################
+    def openNonRectGraph(self):
+        self.hide()
+        if self.non_rect_window is None:
+            self.non_rect_window = Window(self)
+        self.non_rect_window.show()
     #################################################################################################
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
