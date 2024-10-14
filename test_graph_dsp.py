@@ -5,6 +5,7 @@ from test_graph_dsp_trans import Ui_MainWindow
 import pyqtgraph as pg
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
 class MainWindow(Ui_MainWindow):
     def __init__(self):
@@ -12,10 +13,14 @@ class MainWindow(Ui_MainWindow):
         self.setupUi(self)
         self.df = None  # No data initially
         self.browsedData_y = []
+        self.signalName = ""
+        self.plotCurve = self.graphwidget.plotItem.plot()
+        self.plotColor = "b"
         self.timer = QtCore.QTimer()
         self.current_index = 0
         self.chunk_size = 0  # initializing number of points to plot at a time
         self.isPaused = False
+        self.hidden = False
         
         # Applying button functionalities
         self.browseBtn.clicked.connect(self.browseTheSignal)
@@ -34,6 +39,7 @@ class MainWindow(Ui_MainWindow):
         )
         print(filePath)
         if filePath:
+            self.signalName = Path(filePath).name[0 : -4]
             self.df = pd.read_csv(filePath, header=None)
             self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
             self.isPaused = False
@@ -44,8 +50,6 @@ class MainWindow(Ui_MainWindow):
         if self.df is not None and not self.df.empty and not len(self.browsedData_y) and not self.isPaused:
             self.browsedData_y = self.df.to_numpy().flatten()
             self.chunk_size = int(len(self.browsedData_y)/4.0)
-            # print(self.browsedData_y)
-            # print(self.browsedData_y.shape)
             data_x = np.arange(len(self.browsedData_y))
             self.data_x = data_x
             self.graphwidget.clear()  # Clear the existing plot            
@@ -61,7 +65,9 @@ class MainWindow(Ui_MainWindow):
             segment_y = self.browsedData_y[self.current_index:end_index]
 
             # Update the plot with new data
-            self.plot_curve = self.graphwidget.plot(segment_x, segment_y, pen='b', clear=False)
+            self.graphwidget.clear()
+            if not self.hidden:
+                self.plotCurve = self.graphwidget.plot(segment_x, segment_y, pen=self.plotColor , clear=False, name=self.signalName)
             
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
             if end_index != len(self.browsedData_y):
@@ -76,9 +82,7 @@ class MainWindow(Ui_MainWindow):
                 self.timer.stop()
                 self.current_index = 0
                 
-                
-            self.graphwidget.plotItem.setYRange(-1, 1, padding = 0)
-
+            #self.graphwidget.plotItem.setYRange(-1, 1, padding = 0)
 
         else:
             self.timer.stop()  # Stop the timer when the end is reached
@@ -95,21 +99,24 @@ class MainWindow(Ui_MainWindow):
             
     def showTheSignal(self):
         if(self.df is not None):
-            self.graphwidget.plotItem.show()
+            self.plotCurve.setVisible(True)
+            self.hidden = False
 
     def hideTheSignal(self):
         if(self.df is not None):
-            self.graphwidget.plotItem.hide()
-
+            self.plotCurve.setVisible(False)
+            self.hidden = True
+            
     def labelTheSignal(self):
         if(self.df is not None):
-            self.graphwidget.plotItem.setTitle("Test Title")
+            self.signalName = "New Label"
 
     def colorTheSignal(self):
         if(self.df is not None):
             color = QColorDialog.getColor()
             if color.isValid():
-                self.plot_curve.setPen(pg.mkPen(color.red(), color.green(), color.blue()))
+                self.plotColor = pg.mkPen(color.name())
+                self.plotCurve.setPen(self.plotColor)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
