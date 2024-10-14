@@ -32,7 +32,7 @@ class MainWindow(Ui_SignalViewer):
         self.isLinked = False # initializing both graphs not to be linked.
         self.hidden = False
         
-        # Applying button functionalities for first graph
+        # Applying button functionalities for first graph #############################
         self.addFileButton.clicked.connect(self.browseTheSignal)
         self.startButton_1.clicked.connect(self.startTheSignal)
         self.timer.timeout.connect(self.updatePlot_1)
@@ -43,14 +43,14 @@ class MainWindow(Ui_SignalViewer):
         self.titleButton_1.clicked.connect(self.labelTheSignal)
         self.colorButton_1.clicked.connect(self.colorTheSignal)
         
-        # Applying button functionalities for second graph
+        # Applying button functionalities for second graph ###############################
         self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.stopButton_2.clicked.connect(self.pauseTheSignal)
         self.rewindButton_2.clicked.connect(self.rewindTheSignal)
         # Applying the linking functionality
         self.linkButton.clicked.connect(self.linkGraphs)
-
+    ######################################################################################
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
             parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
@@ -76,7 +76,7 @@ class MainWindow(Ui_SignalViewer):
             self.startTheSignal()
                 
                 
-
+    #####################################################################################
     def startTheSignal(self):
         if not self.isLinked:
             if self.graphSelectBox.currentIndex() == 0:
@@ -133,7 +133,7 @@ class MainWindow(Ui_SignalViewer):
             self.timer.start(100)
             self.timer_2.start(100)
             print("both signals started moving now")
-
+    ####################################################################################################
     # for updating the first graph for the cine mode.
     def updatePlot_1(self):
         maxLength = len(self.browsedData_y) # initializing length of the longest signal to move until its end if there are more than one signal plotted
@@ -169,7 +169,7 @@ class MainWindow(Ui_SignalViewer):
             self.timer.stop()  # Stop the timer when the end is reached
             self.current_index = 0  # resetting the starting index
 
-    
+    ############################################################################################################33    
     # for updating the second graph for the cine mode.     
     def updatePlot_2(self):
         maxLength = len(self.browsedData_y_2) # initializing length of the longest signal to move until its end if there are more than one signal plotted
@@ -209,7 +209,7 @@ class MainWindow(Ui_SignalViewer):
             
     
             
-            
+    ###########################################################################################################333        
     def pauseTheSignal(self):
         # graphs not linked:
         if not self.isLinked:
@@ -225,7 +225,7 @@ class MainWindow(Ui_SignalViewer):
             self.timer_2.stop()
             self.isPaused = True
             self.isPaused_2 = True
-    
+    #############################################################################################################33
     def rewindTheSignal(self):
         # graphs not linked:
         if not self.isLinked:
@@ -246,7 +246,7 @@ class MainWindow(Ui_SignalViewer):
             self.plotWidget_2.clear()
             self.startTheSignal()
             
-            
+    #####################################################################################################        
     def linkGraphs(self):
         if self.isLinked == True:
             self.isLinked = False
@@ -265,27 +265,28 @@ class MainWindow(Ui_SignalViewer):
                 self.timer.stop()
                 self.timer_2.stop()  # we stopped both timers to avoid conflicts between them during updating so when they start again, they timeout at the same time and update the graph at the same time.
                 self.startTheSignal() # start again 
+    ###################################################################################################
     def showTheSignal(self):
         if(self.df is not None):
             self.plotCurve.setVisible(True)
             self.hidden = False
-
+    ###################################################################################################
     def hideTheSignal(self):
         if(self.df is not None):
             self.plotCurve.setVisible(False)
             self.hidden = True
-            
+    ##################################################################################################
     def labelTheSignal(self):
         if(self.df_1 is not None):
             self.signalName = "New Label"
-
+    ##################################################################################################
     def colorTheSignal(self):
         if(self.df is not None):
             color = QColorDialog.getColor()
             if color.isValid():
                 self.plotColor = pg.mkPen(color.name())
                 self.plotCurve.setPen(self.plotColor)
-
+    #################################################################################################
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     window = MainWindow()
