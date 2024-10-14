@@ -31,6 +31,15 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.pauseBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.rewindBtn = QtWidgets.QPushButton("rewind", parent=self.centralWidget)
         self.rewindBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.showBtn = QtWidgets.QPushButton("show", parent=self.centralWidget)
+        self.showBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.hideBtn = QtWidgets.QPushButton("hide", parent=self.centralWidget)
+        self.hideBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.labelBtn = QtWidgets.QPushButton("label", parent=self.centralWidget)
+        self.labelBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.colorBtn = QtWidgets.QPushButton("color", parent=self.centralWidget)
+        self.colorBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+
         
         self.linkBtn = QtWidgets.QPushButton("link", parent = self.centralWidget)
         self.linkBtn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
@@ -40,6 +49,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.buttonLayout.addWidget(self.pauseBtn)
         self.buttonLayout.addWidget(self.rewindBtn)
         self.buttonLayout.addWidget(self.browseBtn)
+        self.buttonLayout.addWidget(self.showBtn)
+        self.buttonLayout.addWidget(self.hideBtn)
+        self.buttonLayout.addWidget(self.labelBtn)
+        self.buttonLayout.addWidget(self.colorBtn)
         
         self.buttonLayout.addWidget(self.linkBtn)
         
