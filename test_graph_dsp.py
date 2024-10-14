@@ -36,6 +36,8 @@ class CheckableLabelItem(QtWidgets.QWidget):
 
         # Enable edit text by double clicking
         self.label.mouseDoubleClickEvent = self.editText
+
+        self.checkbox.stateChanged.connect(self.onToggle)
     
     def setCheckboxColor(self, color):
         formattedColor = f"#{color[0]:02X}{color[1]:02X}{color[2]:02X}" # Format the rgb tuple into a hex string so that stylesheet can read their properties
@@ -71,6 +73,18 @@ class CheckableLabelItem(QtWidgets.QWidget):
                 self.graphObj.signalNames_2[self.index] = new_text
                 self.graphObj.titleChannelBox_2.setItemText(self.index + 1, new_text)
                 self.graphObj.colorMoveBox_2.setItemText(self.index + 1, new_text)
+    
+    def onToggle(self):
+        if(self.graphNum == 1):
+            if(self.checkbox.isChecked()):
+                self.graphObj.showTheSignal_1(self.index)
+            else:
+                self.graphObj.hideTheSignal_1(self.index)
+        else:
+            if(self.checkbox.isChecked()):
+                self.graphObj.showTheSignal_2(self.index)
+            else:
+                self.graphObj.hideTheSignal_2(self.index)
 
 class MainWindow(Ui_SignalViewer):
     def __init__(self):
@@ -111,7 +125,6 @@ class MainWindow(Ui_SignalViewer):
         self.timer.timeout.connect(self.updatePlot_1)
         self.stopButton_1.clicked.connect(self.pauseTheSignal)
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
-        self.titleButton_1.clicked.connect(self.labelTheSignal)
         self.colorButton_1.clicked.connect(self.colorTheSignal_1)
         
         # Applying button functionalities for second graph ###############################
@@ -119,7 +132,6 @@ class MainWindow(Ui_SignalViewer):
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.stopButton_2.clicked.connect(self.pauseTheSignal)
         self.rewindButton_2.clicked.connect(self.rewindTheSignal)
-        self.titleButton_2.clicked.connect(self.labelTheSignal)
         self.colorButton_2.clicked.connect(self.colorTheSignal_2)
 
     ######################################################################################
@@ -362,19 +374,25 @@ class MainWindow(Ui_SignalViewer):
                 self.timer_2.stop()  # we stopped both timers to avoid conflicts between them during updating so when they start again, they timeout at the same time and update the graph at the same time.
                 self.startTheSignal() # start again 
 
-    def showTheSignal(self):
-        if(self.df is not None):
-            self.plotCurve.setVisible(True)
-            self.hidden = False
-
-    def hideTheSignal(self):
-        if(self.df is not None):
-            self.plotCurve.setVisible(False)
-            self.hidden = True
-
-    def labelTheSignal(self):
+    def showTheSignal_1(self, index):
         if(self.df_1 is not None):
-            return
+            self.hidden_1[index] = False
+            self.plotCurves_1[index].setVisible(True)
+
+    def hideTheSignal_1(self, index):
+        if(self.df_1 is not None):
+            self.hidden_1[index] = True
+            self.plotCurves_1[index].setVisible(False)
+    
+    def showTheSignal_2(self, index):
+        if(self.df_2 is not None):
+            self.hidden_2[index] = False
+            self.plotCurves_2[index].setVisible(True)
+
+    def hideTheSignal_2(self, index):
+        if(self.df_2 is not None):
+            self.hidden_2[index] = True
+            self.plotCurves_2[index].setVisible(False)
 
     def colorTheSignal_1(self):
         if(self.df_1 is not None):
