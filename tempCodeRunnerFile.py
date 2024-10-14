@@ -1,1 +1,1 @@
-        pass
+elf.graphwidget.clear()
