@@ -21,6 +21,7 @@ class MainWindow(Ui_SignalViewer):
         self.pastSignalsX_2 = []
         self.signalName = ""
         self.plotCurve = self.plotWidget_1.plotItem.plot()
+        self.plotCurve_2 = self.plotWidget_2.plotItem.plot()
         self.plotColor = "b"
         self.timer = QtCore.QTimer()
         self.timer_2 = QtCore.QTimer()
@@ -31,6 +32,10 @@ class MainWindow(Ui_SignalViewer):
         self.isPaused_2 = False
         self.isLinked = False # initializing both graphs not to be linked.
         self.hidden = False
+        self.zoom_level = 0  # Default zoom level
+        self.zoom_level_2 = 0
+        self.min_zoom_level = 0
+        self.max_zoom_level = 100  # Maximum zoom level
         
         # Applying button functionalities for first graph #############################
         self.addFileButton.clicked.connect(self.browseTheSignal)
@@ -38,22 +43,34 @@ class MainWindow(Ui_SignalViewer):
         self.timer.timeout.connect(self.updatePlot_1)
         self.stopButton_1.clicked.connect(self.pauseTheSignal)
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
+        self.speedSlider_1.valueChanged.connect(self.updateSpeed_1)
         # self.showBtn.clicked.connect(self.showTheSignal) TODO : needs modifications
         #self.hideBtn.clicked.connect(self.hideTheSignal)  TODO : needs modifications
         self.titleButton_1.clicked.connect(self.labelTheSignal)
-        self.colorButton_1.clicked.connect(self.colorTheSignal)
-        
+        self.colorButton_1.clicked.connect(self.colorSignal_1)
+        self.zoomInButton_1.clicked.connect(self.zoom_1)
+        self.zoomOutButton_1.clicked.connect(self.zoom_out_1)
+        self.titleButton_1.clicked.connect(self.labelSignal_1)
         # Applying button functionalities for second graph ###############################
         self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.stopButton_2.clicked.connect(self.pauseTheSignal)
+        self.colorButton_2.clicked.connect(self.colorSignal_2)
         self.rewindButton_2.clicked.connect(self.rewindTheSignal)
+        self.speedSlider_2.valueChanged.connect(self.updateSpeed_2)
+        self.zoomInButton_2.clicked.connect(self.zoom_2)
+        self.zoomOutButton_2.clicked.connect(self.zoom_out_2)
+        self.titleButton_2.clicked.connect(self.labelSignal_2)
+
+
+
+
         # Applying the linking functionality
         self.linkButton.clicked.connect(self.linkGraphs)
     ######################################################################################
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
-            parent=self, caption="Select a CSV file", directory="/D", filter="(*.csv)"
+            parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
         )
         print(filePath)
         if filePath:
@@ -276,16 +293,72 @@ class MainWindow(Ui_SignalViewer):
             self.plotCurve.setVisible(False)
             self.hidden = True
     ##################################################################################################
-    def labelTheSignal(self):
+    def labelSignal_1(self): # TODO : not finished 
         if(self.df_1 is not None):
-            self.signalName = "New Label"
+            self.signalName = self.titleEdit_1.text()
     ##################################################################################################
-    def colorTheSignal(self):
-        if(self.df is not None):
+    
+    def labelSignal_2(self): # TODO : not finished 
+        if(self.df_2 is not None):
+            self.signalName = self.titleEdit_2.text()
+    ##################################################################################################
+    def colorSignal_1(self):
+        if(self.df_1 is not None):
             color = QColorDialog.getColor()
             if color.isValid():
                 self.plotColor = pg.mkPen(color.name())
                 self.plotCurve.setPen(self.plotColor)
+    #################################################################################################
+    
+    def colorSignal_2(self):
+        if(self.df_2 is not None):
+            color = QColorDialog.getColor()
+            if color.isValid():
+                self.plotColor = pg.mkPen(color.name())
+                self.plotCurve_2.setPen(self.plotColor)
+    #################################################################################################
+    def updateSpeed_1(self):
+        """ Adjust the speed of the signal based on the slider value and update the label. """
+        speed = self.speedSlider_1.value()
+     
+        # Adjust the timer interval based on the slider value
+        self.timer.start(101 - speed)  # Reverse the speed so a higher slider value means faster updates
+    #################################################################################################
+    
+    def updateSpeed_2(self):
+        """ Adjust the speed of the signal based on the slider value and update the label. """
+        speed = self.speedSlider_2.value()
+     
+        # Adjust the timer interval based on the slider value
+        self.timer_2.start(101 - speed)  # Reverse the speed so a higher slider value means faster updates
+    #################################################################################################
+    
+    def zoom_1(self):
+        """ Zoom in on the plot by 10%."""
+        if self.zoom_level < self.max_zoom_level:
+            self.zoom_level += 10  # Increase zoom level by 10%
+            self.plotWidget_1.getViewBox().scaleBy((0.9, 0.9))
+            self.update_zoom_label()
+    #################################################################################################
+    
+    def zoom_2(self):
+        """ Zoom in on the plot by 10%."""
+        if self.zoom_level_2 < self.max_zoom_level:
+            self.zoom_level_2 += 10  # Increase zoom level by 10%
+            self.plotWidget_2.getViewBox().scaleBy((0.9, 0.9))
+            self.update_zoom_label()
+    #################################################################################################
+    def zoom_out_1(self):
+        """ Zoom out of the plot by 10%. """
+        if self.zoom_level > self.min_zoom_level:
+            self.zoom_level -= 10  # Decrease zoom level by 10%
+            self.plotWidget_1.getViewBox().scaleBy((1.1, 1.1))  # Scale the plot by 110%
+    #################################################################################################
+    def zoom_out_2(self):
+        """ Zoom out of the plot by 10%. """
+        if self.zoom_level_2 > self.min_zoom_level:
+            self.zoom_level_2 -= 10  # Decrease zoom level by 10%
+            self.plotWidget_2.getViewBox().scaleBy((1.1, 1.1))  # Scale the plot by 110%
     #################################################################################################
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
