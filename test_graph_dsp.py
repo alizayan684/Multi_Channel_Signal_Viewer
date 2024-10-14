@@ -58,17 +58,21 @@ class MainWindow(Ui_SignalViewer):
         print(filePath)
         if filePath:
             self.signalName = Path(filePath).name[0 : -4]
+            # add the signal name to the list wiget of the first graph
             # check whether the clicked btn is for graph_1 or graph_2
             if self.graphSelectBox.currentIndex() == 0:
                 self.df_1 = pd.read_csv(filePath, header=None)
                 self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
                 self.isPaused = False
                 self.current_index = 0 # to start plotting from the beginning every time I browse a new file.
+                self.listChannelsWidget_1.addItem(self.signalName)
+
             else:
                 self.df_2 = pd.read_csv(filePath, header=None)
                 self.browsedData_y_2 = [] 
                 self.isPaused_2 = False
                 self.current_index_2 = 0
+                self.listChannelsWidget_2.addItem(self.signalName)
             self.startTheSignal()
                 
                 
@@ -272,7 +276,7 @@ class MainWindow(Ui_SignalViewer):
             self.hidden = True
             
     def labelTheSignal(self):
-        if(self.df is not None):
+        if(self.df_1 is not None):
             self.signalName = "New Label"
 
     def colorTheSignal(self):
