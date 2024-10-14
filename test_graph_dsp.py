@@ -46,7 +46,6 @@ class MainWindow(Ui_SignalViewer):
         self.speedSlider_1.valueChanged.connect(self.updateSpeed_1)
         # self.showBtn.clicked.connect(self.showTheSignal) TODO : needs modifications
         #self.hideBtn.clicked.connect(self.hideTheSignal)  TODO : needs modifications
-        self.titleButton_1.clicked.connect(self.labelTheSignal)
         self.colorButton_1.clicked.connect(self.colorSignal_1)
         self.zoomInButton_1.clicked.connect(self.zoom_1)
         self.zoomOutButton_1.clicked.connect(self.zoom_out_1)
