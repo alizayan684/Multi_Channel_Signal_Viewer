@@ -8,32 +8,31 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PyQt6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PyQt6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QCursor, QFont, QFontDatabase, QGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PyQt6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
+from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
     QListWidget, QListWidgetItem, QMainWindow, QPushButton,
     QScrollBar, QSizePolicy, QSlider, QVBoxLayout,
-    QWidget, QMainWindow)
+    QWidget)
 
 from pyqtgraph import PlotWidget
 
 class Ui_SignalViewer(QMainWindow):
     def setupUi(self, SignalViewer):
-        SignalViewer.setObjectName(u"SignalViewer")
-        SignalViewer.resize(1000, 800)
+        if not SignalViewer.objectName():
+            SignalViewer.setObjectName(u"SignalViewer")
+        SignalViewer.resize(1057, 754)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(SignalViewer.sizePolicy().hasHeightForWidth())
-        # enable resizing of the window
-        SignalViewer.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         SignalViewer.setSizePolicy(sizePolicy)
         SignalViewer.setStyleSheet(u"/*\n"
 "Material Dark Style Sheet for QT Applications\n"
@@ -931,10 +930,10 @@ class Ui_SignalViewer(QMainWindow):
 
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.titileLabel_1 = QLabel(self.centralwidget)
-        self.titileLabel_1.setObjectName(u"titileLabel_1")
-        self.titileLabel_1.setMaximumSize(QSize(50, 50))
-        self.titileLabel_1.setStyleSheet(u"QLabel {\n"
+        self.titleButton_1 = QPushButton(self.centralwidget)
+        self.titleButton_1.setObjectName(u"title")
+        self.titleButton_1.setMaximumSize(QSize(100, 100))
+        self.titleButton_1.setStyleSheet(u"QLabel {\n"
 "    background-color: #2E3440; /* Dark background */\n"
 "    color: #D8DEE9; /* Light text color */\n"
 "    font-size: 16px; /* Font size */\n"
@@ -944,7 +943,7 @@ class Ui_SignalViewer(QMainWindow):
 "    font-family: \"Segoe UI\"\n"
 "}")
 
-        self.horizontalLayout_12.addWidget(self.titileLabel_1)
+        self.horizontalLayout_12.addWidget(self.titleButton_1)
 
         self.titleEdit_1 = QLineEdit(self.centralwidget)
         self.titleEdit_1.setObjectName(u"titleEdit_1")
@@ -1038,12 +1037,12 @@ class Ui_SignalViewer(QMainWindow):
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.titleLabel_2 = QLabel(self.centralwidget)
-        self.titleLabel_2.setObjectName(u"titleLabel_2")
-        sizePolicy2.setHeightForWidth(self.titleLabel_2.sizePolicy().hasHeightForWidth())
-        self.titleLabel_2.setSizePolicy(sizePolicy2)
-        self.titleLabel_2.setMaximumSize(QSize(50, 50))
-        self.titleLabel_2.setStyleSheet(u"QLabel {\n"
+        self.titleButton_2 = QPushButton(self.centralwidget)
+        self.titleButton_2.setObjectName(u"title")
+        sizePolicy2.setHeightForWidth(self.titleButton_2.sizePolicy().hasHeightForWidth())
+        self.titleButton_2.setSizePolicy(sizePolicy2)
+        self.titleButton_2.setMaximumSize(QSize(100, 100))
+        self.titleButton_2.setStyleSheet(u"QLabel {\n"
 "    background-color: #2E3440; /* Dark background */\n"
 "    color: #D8DEE9; /* Light text color */\n"
 "    font-size: 16px; /* Font size */\n"
@@ -1053,7 +1052,7 @@ class Ui_SignalViewer(QMainWindow):
 "    font-family: \"Segoe UI\"\n"
 "}")
 
-        self.horizontalLayout_4.addWidget(self.titleLabel_2)
+        self.horizontalLayout_4.addWidget(self.titleButton_2)
 
         self.titleEdit_2 = QLineEdit(self.centralwidget)
         self.titleEdit_2.setObjectName(u"titleEdit_2")
@@ -1280,12 +1279,12 @@ class Ui_SignalViewer(QMainWindow):
         self.graphLabel_1.setText(QCoreApplication.translate("SignalViewer", u"Graph 1", None))
         self.titleChannelBox_1.setItemText(0, QCoreApplication.translate("SignalViewer", u"All Channels", None))
 
-        self.titileLabel_1.setText(QCoreApplication.translate("SignalViewer", u"Title", None))
+        self.titleButton_1.setText(QCoreApplication.translate("SignalViewer", u"Title", None))
         self.linkButton.setText(QCoreApplication.translate("SignalViewer", u"Link", None))
         self.graphLabel_2.setText(QCoreApplication.translate("SignalViewer", u"Graph 2", None))
         self.titleChannelBox_2.setItemText(0, QCoreApplication.translate("SignalViewer", u"All Channels", None))
 
-        self.titleLabel_2.setText(QCoreApplication.translate("SignalViewer", u"Title", None))
+        self.titleButton_2.setText(QCoreApplication.translate("SignalViewer", u"Title", None))
         self.glueButton.setText(QCoreApplication.translate("SignalViewer", u"Glue", None))
         self.colorButton_2.setText(QCoreApplication.translate("SignalViewer", u"Color", None))
         self.moveButton_2.setText(QCoreApplication.translate("SignalViewer", u"Move", None))

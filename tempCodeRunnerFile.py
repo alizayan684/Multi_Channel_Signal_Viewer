@@ -1,1 +1,1 @@
-elf.graphwidget.clear()
+self.plotWidget_1.clear()

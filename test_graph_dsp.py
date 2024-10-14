@@ -1,7 +1,6 @@
 import sys
-from PyQt6 import QtWidgets, QtCore
-from PyQt6.QtWidgets import QColorDialog
-from test_graph_dsp_trans import Ui_MainWindow
+from   PySide6 import QtWidgets, QtCore
+from   PySide6.QtWidgets import QColorDialog
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
@@ -21,7 +20,7 @@ class MainWindow(Ui_SignalViewer):
         self.pastSignalsX_1 = []
         self.pastSignalsX_2 = []
         self.signalName = ""
-        self.plotCurve = self.graphwidget.plotItem.plot()
+        self.plotCurve = self.plotWidget_1.plotItem.plot()
         self.plotColor = "b"
         self.timer = QtCore.QTimer()
         self.timer_2 = QtCore.QTimer()
@@ -33,58 +32,61 @@ class MainWindow(Ui_SignalViewer):
         self.isLinked = False # initializing both graphs not to be linked.
         self.hidden = False
         
-        # Applying button functionalities for first graph
+        # Applying button functionalities for first graph #############################
         self.addFileButton.clicked.connect(self.browseTheSignal)
         self.startButton_1.clicked.connect(self.startTheSignal)
         self.timer.timeout.connect(self.updatePlot_1)
         self.stopButton_1.clicked.connect(self.pauseTheSignal)
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
-        self.showBtn.clicked.connect(self.showTheSignal)
-        self.hideBtn.clicked.connect(self.hideTheSignal)
-        self.labelBtn.clicked.connect(self.labelTheSignal)
-        self.colorBtn.clicked.connect(self.colorTheSignal)
+        # self.showBtn.clicked.connect(self.showTheSignal) TODO : needs modifications
+        #self.hideBtn.clicked.connect(self.hideTheSignal)  TODO : needs modifications
+        self.titleButton_1.clicked.connect(self.labelTheSignal)
+        self.colorButton_1.clicked.connect(self.colorTheSignal)
         
-        # Applying button functionalities for second graph
-        self.addFileButton.clicked.connect(self.browseTheSignal) # TODO : change the function of the second graph's add file button
+        # Applying button functionalities for second graph ###############################
         self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.stopButton_2.clicked.connect(self.pauseTheSignal)
         self.rewindButton_2.clicked.connect(self.rewindTheSignal)
         # Applying the linking functionality
         self.linkButton.clicked.connect(self.linkGraphs)
-
+    ######################################################################################
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
-            parent=self, caption="Select a CSV file", directory="/D", filter="(*.csv)"
+            parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
         )
         print(filePath)
         if filePath:
             self.signalName = Path(filePath).name[0 : -4]
+            # add the signal name to the list wiget of the first graph
             # check whether the clicked btn is for graph_1 or graph_2
-            if self.sender() == self.addFileButton:
+            if self.graphSelectBox.currentIndex() == 0:
                 self.df_1 = pd.read_csv(filePath, header=None)
                 self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
                 self.isPaused = False
                 self.current_index = 0 # to start plotting from the beginning every time I browse a new file.
+                self.listChannelsWidget_1.addItem(self.signalName)
+
             else:
                 self.df_2 = pd.read_csv(filePath, header=None)
                 self.browsedData_y_2 = [] 
                 self.isPaused_2 = False
                 self.current_index_2 = 0
+                self.listChannelsWidget_2.addItem(self.signalName)
             self.startTheSignal()
                 
                 
-
+    #####################################################################################
     def startTheSignal(self):
         if not self.isLinked:
-            if self.sender() == self.startButton_1 or self.sender() == self.rewindButton_1:
+            if self.graphSelectBox.currentIndex() == 0 or self.sender() == self.startButton_1 or self.sender() == self.rewindButton_1:
                 if self.df_1 is not None and not self.df_1.empty and not len(self.browsedData_y) and not self.isPaused:
                     self.browsedData_y = self.df_1.to_numpy().flatten()
                     self.pastSignalsY_1.append(self.browsedData_y)
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.plotWidget_1.clear()  # Clear the existing plot            
+                    self.pastSignalsX_1.append(self.data_x)            
                     self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer.start(100)  # Start the timer with a 100 ms interval (Note: the timer times out every 100ms(as given in the argument) and starts another 100ms, which leads to invoking the "updatePlot" every timeout until the timer stops "self.timer.stop()")
@@ -96,7 +98,7 @@ class MainWindow(Ui_SignalViewer):
                     self.chunk_size = int(len(self.browsedData_y_2)/3.0)
                     data_x_2 = np.arange(len(self.browsedData_y_2))
                     self.data_x_2 = data_x_2
-                    self.plotWidget_2.clear()  # Clear the existing plot            
+                    self.pastSignalsX_2.append(self.data_x_2)            
                     self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer_2.start(100)
@@ -116,7 +118,7 @@ class MainWindow(Ui_SignalViewer):
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.plotWidget_1.clear()  # Clear the existing plot            
+                    self.pastSignalsX_1.append(self.data_x)             
                     self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
                 if self.df_2 is not None and not self.df_2.empty:  # if dataframe of first graph contains data:
@@ -125,13 +127,13 @@ class MainWindow(Ui_SignalViewer):
                         self.pastSignalsY_2.append(self.browsedData_y_2)
                         data_x_2 = np.arange(len(self.browsedData_y_2))
                         self.data_x_2 = data_x_2
-                        self.plotWidget_2.clear()  # Clear the existing plot            
+                        self.pastSignalsX_2.append(self.data_x_2)            
                         self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
                         self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
             self.timer.start(100)
             self.timer_2.start(100)
             print("both signals started moving now")
-
+    ####################################################################################################
     # for updating the first graph for the cine mode.
     def updatePlot_1(self):
         maxLength = len(self.browsedData_y) # initializing length of the longest signal to move until its end if there are more than one signal plotted
@@ -142,13 +144,17 @@ class MainWindow(Ui_SignalViewer):
             
         if self.current_index < maxLength:
             # Determine the range of data to plot in this frame
-            end_index = min(self.current_index + self.chunk_size, len(self.browsedData_y))
-            segment_x = self.data_x[self.current_index:end_index]
-            segment_y = self.browsedData_y[self.current_index:end_index]
+            end_index = min(self.current_index + self.chunk_size, maxLength)
+            
+            for signalIdx in range (len(self.pastSignalsY_1)):  # plotting all stored signals on the graph
+                segment_x = self.pastSignalsX_1[signalIdx][self.current_index:end_index]
+                segment_y = self.pastSignalsY_1[signalIdx][self.current_index:end_index]
+                self.plotWidget_1.plot(segment_x, segment_y, pen='b', clear=False)
+                
             # Update the plot with new data
-            self.graphwidget.clear()
-            if not self.hidden:
-                self.plotCurve = self.plotWidget_1.plot(segment_x, segment_y, pen=self.plotColor , clear=False, name=self.signalName)
+            #self.plotWidget_1.clear()
+            # if not self.hidden:
+            #     self.plotCurve = self.plotWidget_1.plot(segment_x, segment_y, pen=self.plotColor , clear=False, name=self.signalName)
             
             # updating the view to follow the signal until reaching the end of the signal so the graph wouldn't expand
             if end_index != maxLength:
@@ -167,7 +173,7 @@ class MainWindow(Ui_SignalViewer):
             self.timer.stop()  # Stop the timer when the end is reached
             self.current_index = 0  # resetting the starting index
 
-    
+    ############################################################################################################33    
     # for updating the second graph for the cine mode.     
     def updatePlot_2(self):
         maxLength = len(self.browsedData_y_2) # initializing length of the longest signal to move until its end if there are more than one signal plotted
@@ -207,7 +213,7 @@ class MainWindow(Ui_SignalViewer):
             
     
             
-            
+    ###########################################################################################################333        
     def pauseTheSignal(self):
         # graphs not linked:
         if not self.isLinked:
@@ -223,7 +229,7 @@ class MainWindow(Ui_SignalViewer):
             self.timer_2.stop()
             self.isPaused = True
             self.isPaused_2 = True
-    
+    #############################################################################################################33
     def rewindTheSignal(self):
         # graphs not linked:
         if not self.isLinked:
@@ -244,7 +250,7 @@ class MainWindow(Ui_SignalViewer):
             self.plotWidget_2.clear()
             self.startTheSignal()
             
-            
+    #####################################################################################################        
     def linkGraphs(self):
         if self.isLinked == True:
             self.isLinked = False
@@ -263,27 +269,28 @@ class MainWindow(Ui_SignalViewer):
                 self.timer.stop()
                 self.timer_2.stop()  # we stopped both timers to avoid conflicts between them during updating so when they start again, they timeout at the same time and update the graph at the same time.
                 self.startTheSignal() # start again 
+    ###################################################################################################
     def showTheSignal(self):
         if(self.df is not None):
             self.plotCurve.setVisible(True)
             self.hidden = False
-
+    ###################################################################################################
     def hideTheSignal(self):
         if(self.df is not None):
             self.plotCurve.setVisible(False)
             self.hidden = True
-            
+    ##################################################################################################
     def labelTheSignal(self):
-        if(self.df is not None):
+        if(self.df_1 is not None):
             self.signalName = "New Label"
-
+    ##################################################################################################
     def colorTheSignal(self):
         if(self.df is not None):
             color = QColorDialog.getColor()
             if color.isValid():
                 self.plotColor = pg.mkPen(color.name())
                 self.plotCurve.setPen(self.plotColor)
-
+    #################################################################################################
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     window = MainWindow()
