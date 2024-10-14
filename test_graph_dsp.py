@@ -38,8 +38,8 @@ class MainWindow(Ui_SignalViewer):
         self.timer.timeout.connect(self.updatePlot_1)
         self.stopButton_1.clicked.connect(self.pauseTheSignal)
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
-        # self.showBtn.clicked.connect(self.showTheSignal)
-        #self.hideBtn.clicked.connect(self.hideTheSignal)
+        # self.showBtn.clicked.connect(self.showTheSignal) TODO : needs modifications
+        #self.hideBtn.clicked.connect(self.hideTheSignal)  TODO : needs modifications
         self.titleButton_1.clicked.connect(self.labelTheSignal)
         self.colorButton_1.clicked.connect(self.colorTheSignal)
         

@@ -931,8 +931,8 @@ class Ui_SignalViewer(QMainWindow):
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
         self.titleButton_1 = QPushButton(self.centralwidget)
-        self.titleButton_1.setObjectName(u"titleButton_1")
-        self.titleButton_1.setMaximumSize(QSize(50, 50))
+        self.titleButton_1.setObjectName(u"title")
+        self.titleButton_1.setMaximumSize(QSize(100, 100))
         self.titleButton_1.setStyleSheet(u"QLabel {\n"
 "    background-color: #2E3440; /* Dark background */\n"
 "    color: #D8DEE9; /* Light text color */\n"
@@ -1038,10 +1038,10 @@ class Ui_SignalViewer(QMainWindow):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.titleButton_2 = QPushButton(self.centralwidget)
-        self.titleButton_2.setObjectName(u"titleButton_2")
+        self.titleButton_2.setObjectName(u"title")
         sizePolicy2.setHeightForWidth(self.titleButton_2.sizePolicy().hasHeightForWidth())
         self.titleButton_2.setSizePolicy(sizePolicy2)
-        self.titleButton_2.setMaximumSize(QSize(50, 50))
+        self.titleButton_2.setMaximumSize(QSize(100, 100))
         self.titleButton_2.setStyleSheet(u"QLabel {\n"
 "    background-color: #2E3440; /* Dark background */\n"
 "    color: #D8DEE9; /* Light text color */\n"
