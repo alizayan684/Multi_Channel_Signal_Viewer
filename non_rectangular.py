@@ -125,7 +125,7 @@ class MainWindow(QMainWindow):
         hlayout.addWidget(button)
     
     def change_name(self):
-        print("Change the name of the signal")
+        pass
     
     def change_color(self):
         color = QColorDialog.getColor()

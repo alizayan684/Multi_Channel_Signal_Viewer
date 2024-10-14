@@ -53,7 +53,7 @@ class MainWindow(Ui_SignalViewer):
     ######################################################################################
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
-            parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
+            parent=self, caption="Select a CSV file", directory="/D", filter="(*.csv)"
         )
         print(filePath)
         if filePath:
