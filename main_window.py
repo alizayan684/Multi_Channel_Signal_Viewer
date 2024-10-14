@@ -8,32 +8,31 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PyQt6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PyQt6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QCursor, QFont, QFontDatabase, QGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PyQt6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
+from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
     QListWidget, QListWidgetItem, QMainWindow, QPushButton,
     QScrollBar, QSizePolicy, QSlider, QVBoxLayout,
-    QWidget, QMainWindow)
+    QWidget)
 
 from pyqtgraph import PlotWidget
 
 class Ui_SignalViewer(QMainWindow):
     def setupUi(self, SignalViewer):
-        SignalViewer.setObjectName(u"SignalViewer")
-        SignalViewer.resize(1000, 800)
+        if not SignalViewer.objectName():
+            SignalViewer.setObjectName(u"SignalViewer")
+        SignalViewer.resize(1057, 754)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(SignalViewer.sizePolicy().hasHeightForWidth())
-        # enable resizing of the window
-        SignalViewer.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         SignalViewer.setSizePolicy(sizePolicy)
         SignalViewer.setStyleSheet(u"/*\n"
 "Material Dark Style Sheet for QT Applications\n"

@@ -1,5 +1,5 @@
 import sys
-from   PyQt6 import QtWidgets, QtCore
+from   PySide6 import QtWidgets, QtCore
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
@@ -34,7 +34,6 @@ class MainWindow(Ui_SignalViewer):
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
         
         # Applying button functionalities for second graph
-        self.addFileButton.clicked.connect(self.browseTheSignal) # TODO : change the function of the second graph's add file button
         self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.stopButton_2.clicked.connect(self.pauseTheSignal)
@@ -44,12 +43,12 @@ class MainWindow(Ui_SignalViewer):
 
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
-            parent=self, caption="Select a CSV file", directory="/D", filter="(*.csv)"
+            parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
         )
         print(filePath)
         if filePath:
-            # check whether the clicked btn is for graph_1 or graph_2
-            if self.sender() == self.addFileButton:
+            # check whether the combo box is for graph_1 or graph_2
+            if self.graphSelectBox.currentIndex() == 0:
                 self.df_1 = pd.read_csv(filePath, header=None)
                 self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
                 self.isPaused = False
@@ -64,7 +63,7 @@ class MainWindow(Ui_SignalViewer):
 
     def startTheSignal(self):
         if not self.isLinked:
-            if self.sender() == self.startButton_1 or self.sender() == self.rewindButton_1:
+            if self.graphSelectBox.currentIndex() == 0:
                 if self.df_1 is not None and not self.df_1.empty and not len(self.browsedData_y) and not self.isPaused:
                     self.browsedData_y = self.df_1.to_numpy().flatten()
                     self.pastSignalsY_1.append(self.browsedData_y)
