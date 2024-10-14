@@ -36,6 +36,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Polar Plot in Cine Mode with PyQt6")
         self.setGeometry(100, 100, 800, 600)
+        self.ylim = 1
         self.setStyleSheet("QPushButton {\n"
 "    background-color: #5E81AC; /* Background color on hover */\n"
 "\n"
@@ -143,11 +144,13 @@ class MainWindow(QMainWindow):
         self.anim.event_source.stop()
     
     def zoom_in(self):
-        self.canvas.ax.set_ylim(0, 1)
+        self.canvas.ax.set_ylim(0, self.ylim - 0.1)
+        self.ylim -= 0.1
         self.canvas.draw()
     
     def zoom_out(self):
-        self.canvas.ax.set_ylim(0, 2)
+        self.canvas.ax.set_ylim(0,  self.ylim + 0.1)
+        self.ylim += 0.1
         self.canvas.draw()
     
     def rewind(self):
