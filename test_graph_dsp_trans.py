@@ -1,5 +1,5 @@
 import sys
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 import pyqtgraph as pg
 
 class Ui_MainWindow(QtWidgets.QMainWindow):

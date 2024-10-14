@@ -19,7 +19,7 @@ class MainWindow(Ui_SignalViewer):
         self.pastSignalsX_1 = []
         self.pastSignalsX_2 = []
         self.signalName = ""
-        self.plotCurve = self.graphwidget.plotItem.plot()
+        self.plotCurve = self.plotWidget_1.plotItem.plot()
         self.plotColor = "b"
         self.timer = QtCore.QTimer()
         self.timer_2 = QtCore.QTimer()
@@ -37,10 +37,10 @@ class MainWindow(Ui_SignalViewer):
         self.timer.timeout.connect(self.updatePlot_1)
         self.stopButton_1.clicked.connect(self.pauseTheSignal)
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
-        self.showBtn.clicked.connect(self.showTheSignal)
-        self.hideBtn.clicked.connect(self.hideTheSignal)
-        self.labelBtn.clicked.connect(self.labelTheSignal)
-        self.colorBtn.clicked.connect(self.colorTheSignal)
+        # self.showBtn.clicked.connect(self.showTheSignal)
+        #self.hideBtn.clicked.connect(self.hideTheSignal)
+        self.titleButton_1.clicked.connect(self.labelTheSignal)
+        self.colorButton_1.clicked.connect(self.colorTheSignal)
         
         # Applying button functionalities for second graph
         self.startButton_2.clicked.connect(self.startTheSignal)
