@@ -1,6 +1,6 @@
 import sys
-from PySide6 import QtWidgets, QtCore
-from PySide6.QtWidgets import QColorDialog
+from   PySide6 import QtWidgets, QtCore
+from   PySide6.QtWidgets import QColorDialog, QApplication
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
@@ -90,6 +90,7 @@ class CheckableLabelItem(QtWidgets.QWidget):
     def updateIndex(self, newIndex):
         self.index = newIndex
 
+from non_rectangular import Window
 class MainWindow(Ui_SignalViewer):
     def __init__(self):
         super().__init__()
@@ -98,6 +99,7 @@ class MainWindow(Ui_SignalViewer):
         self.df_2 = None
         self.filePaths_1 = []
         self.filePaths_2 = []
+        self.non_rect_window = None
         self.browsedData_y = []
         self.browsedData_y_2 = []
         self.pastSignalsY_1 = []
@@ -125,6 +127,13 @@ class MainWindow(Ui_SignalViewer):
         self.hidden_1 = []
         self.hidden_2 = []
         
+        self.hidden = False
+        self.zoom_level = 0  # Default zoom level
+        self.zoom_level_2 = 0
+        self.min_zoom_level = 0
+        self.max_zoom_level = 100  # Maximum zoom level
+        self.nonRectGraphButton.clicked.connect(self.openNonRectGraph)
+        # Applying button functionalities for first graph #############################
         self.addFileButton.clicked.connect(self.browseTheSignal)
         self.linkButton.clicked.connect(self.linkGraphs)
 
@@ -133,17 +142,36 @@ class MainWindow(Ui_SignalViewer):
         self.timer.timeout.connect(self.updatePlot_1)
         self.stopButton_1.clicked.connect(self.pauseTheSignal)
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
-        self.colorButton_1.clicked.connect(self.colorTheSignal_1)
         self.moveButton_1.clicked.connect(self.moveTheSignal_1)
         
         # Applying button functionalities for second graph
+        self.speedSlider_1.valueChanged.connect(self.updateSpeed_1)
+        # self.showBtn.clicked.connect(self.showTheSignal) TODO : needs modifications
+        #self.hideBtn.clicked.connect(self.hideTheSignal)  TODO : needs modifications
+        self.colorButton_1.clicked.connect(self.colorSignal_1)
+        self.zoomInButton_1.clicked.connect(self.zoom_1)
+        self.zoomOutButton_1.clicked.connect(self.zoom_out_1)
+        self.titleButton_1.clicked.connect(self.labelSignal_1)
+        # Applying button functionalities for second graph ###############################
         self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.stopButton_2.clicked.connect(self.pauseTheSignal)
+        self.colorButton_2.clicked.connect(self.colorSignal_2)
         self.rewindButton_2.clicked.connect(self.rewindTheSignal)
         self.colorButton_2.clicked.connect(self.colorTheSignal_2)
         self.moveButton_2.clicked.connect(self.moveTheSignal_2)
 
+        self.speedSlider_2.valueChanged.connect(self.updateSpeed_2)
+        self.zoomInButton_2.clicked.connect(self.zoom_2)
+        self.zoomOutButton_2.clicked.connect(self.zoom_out_2)
+        self.titleButton_2.clicked.connect(self.labelSignal_2)
+
+
+
+
+        # Applying the linking functionality
+        self.linkButton.clicked.connect(self.linkGraphs)
+    ######################################################################################
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
             parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
@@ -655,6 +683,88 @@ class MainWindow(Ui_SignalViewer):
         b = np.random.randint(0, 256)
         return (r, g, b)
     
+    ###################################################################################################
+    def showTheSignal(self):
+        if(self.df is not None):
+            self.plotCurve.setVisible(True)
+            self.hidden = False
+    ###################################################################################################
+    def hideTheSignal(self):
+        if(self.df is not None):
+            self.plotCurve.setVisible(False)
+            self.hidden = True
+    ##################################################################################################
+    def labelSignal_1(self): # TODO : not finished 
+        if(self.df_1 is not None):
+            self.signalName = self.titleEdit_1.text()
+    ##################################################################################################
+    
+    def labelSignal_2(self): # TODO : not finished 
+        if(self.df_2 is not None):
+            self.signalName = self.titleEdit_2.text()
+    ##################################################################################################
+    def colorSignal_1(self):
+        if(self.df_1 is not None):
+            color = QColorDialog.getColor()
+            if color.isValid():
+                self.plotColor = pg.mkPen(color.name())
+                self.plotCurve.setPen(self.plotColor)
+    #################################################################################################
+    
+    def colorSignal_2(self):
+        if(self.df_2 is not None):
+            color = QColorDialog.getColor()
+            if color.isValid():
+                self.plotColor = pg.mkPen(color.name())
+                self.plotCurve_2.setPen(self.plotColor)
+    #################################################################################################
+    def updateSpeed_1(self):
+        """ Adjust the speed of the signal based on the slider value and update the label. """
+        speed = self.speedSlider_1.value()
+     
+        # Adjust the timer interval based on the slider value
+        self.timer.start(101 - speed)  # Reverse the speed so a higher slider value means faster updates
+    #################################################################################################
+    
+    def updateSpeed_2(self):
+        """ Adjust the speed of the signal based on the slider value and update the label. """
+        speed = self.speedSlider_2.value()
+     
+        # Adjust the timer interval based on the slider value
+        self.timer_2.start(101 - speed)  # Reverse the speed so a higher slider value means faster updates
+    #################################################################################################
+    
+    def zoom_1(self):
+        """ Zoom in on the plot by 10%."""
+        if self.zoom_level < self.max_zoom_level:
+            self.zoom_level += 10  # Increase zoom level by 10%
+            self.plotWidget_1.getViewBox().scaleBy((0.9, 0.9))
+    #################################################################################################
+    
+    def zoom_2(self):
+        """ Zoom in on the plot by 10%."""
+        if self.zoom_level_2 < self.max_zoom_level:
+            self.zoom_level_2 += 10  # Increase zoom level by 10%
+            self.plotWidget_2.getViewBox().scaleBy((0.9, 0.9))
+    #################################################################################################
+    def zoom_out_1(self):
+        """ Zoom out of the plot by 10%. """
+        if self.zoom_level > self.min_zoom_level:
+            self.zoom_level -= 10  # Decrease zoom level by 10%
+            self.plotWidget_1.getViewBox().scaleBy((1.1, 1.1))  # Scale the plot by 110%
+    #################################################################################################
+    def zoom_out_2(self):
+        """ Zoom out of the plot by 10%. """
+        if self.zoom_level_2 > self.min_zoom_level:
+            self.zoom_level_2 -= 10  # Decrease zoom level by 10%
+            self.plotWidget_2.getViewBox().scaleBy((1.1, 1.1))  # Scale the plot by 110%
+    #################################################################################################
+    def openNonRectGraph(self):
+        self.hide()
+        if self.non_rect_window is None:
+            self.non_rect_window = Window(self)
+        self.non_rect_window.show()
+    #################################################################################################
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     window = MainWindow()
