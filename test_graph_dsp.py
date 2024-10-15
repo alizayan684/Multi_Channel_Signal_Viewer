@@ -17,7 +17,10 @@ class CheckableLabelItem(QtWidgets.QWidget):
 
         # Create a checkbox for showing and hiding the signal
         self.checkbox = QtWidgets.QCheckBox()
-        self.checkbox.setChecked(True)
+        if(self.graphNum == 1):
+            self.checkbox.setChecked(not self.graphObj.hidden_1[self.index])
+        else:
+            self.checkbox.setChecked(not self.graphObj.hidden_2[self.index])
         self.setCheckboxColor(color)
         self.checkbox.setFixedWidth(16)
         self.checkbox.setFixedHeight(16)
