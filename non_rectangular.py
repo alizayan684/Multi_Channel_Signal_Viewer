@@ -1,4 +1,4 @@
-import sys
+import csv
 import numpy as np
 from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -7,6 +7,24 @@ from matplotlib.animation import FuncAnimation
 from PySide6.QtWidgets import QPushButton, QColorDialog, QFileDialog, QComboBox
 from PySide6.QtWidgets import QHBoxLayout
 import pandas as pd
+
+def read_csv(file_name):
+    """this module is used to read and prepare the  ECG signal"""
+    signal = {}
+    with open('normal_ecg.csv', 'r') as file:
+        reader = csv.reader(file)
+        magnitudes = list(reader)[0]
+        magnitude_values = [float(magnitude) for magnitude in magnitudes]
+        time = list(range(1, len(magnitude_values)+1))
+        signal['time'] = time
+        signal['magnitude'] = magnitude_values
+    return signal
+def transform_signal(signal):
+    """this function is used to transform the ECG signal to polar coordinates"""
+    r =  np.sqrt(np.array(signal['magnitude'])**2 + np.array(signal['time'])**2)
+    theta = np.arctan(np.array(signal['magnitude'])/np.array(signal['time']))
+    return r, theta
+    
 class PolarPlotCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -17,6 +35,7 @@ class PolarPlotCanvas(FigureCanvas):
         # Initialize polar plot line
         self.line, = self.ax.plot([], [], lw=2)
         self.ax.set_ylim(0, 2)  # Set radius limits
+        self.signal = [None, None]
 
     def init_plot(self):
         """Initialize plot settings"""
@@ -25,9 +44,9 @@ class PolarPlotCanvas(FigureCanvas):
 
     def update_plot(self, frame):
         """Update the polar plot data for each frame"""
-        theta = np.linspace(0, 2 * np.pi, 100)
-        r = 1 + np.sin(2 * theta + 0.1 * frame)  # Example function
-        self.line.set_data(theta, r)
+        if not self.signal:
+            return
+        self.line.set_data(self.signal[0][:frame], self.signal[1][:frame])
         return self.line,
 
 class Window(QMainWindow):
@@ -79,10 +98,7 @@ class Window(QMainWindow):
         hlayout = QHBoxLayout()
         layout.addLayout(hlayout)
 
-        # Start animation
-        self.anim = FuncAnimation(self.canvas.figure, self.canvas.update_plot, 
-                                  init_func=self.canvas.init_plot, frames=200, 
-                                  interval=50, blit=True)
+
         # add start, stop, zoom in, zoom out, rewind, speed up , slow down , change color , browse button , change signal name
         # add a button to change the signal name
         nameButton = QPushButton("Name", self)
@@ -129,6 +145,11 @@ class Window(QMainWindow):
         self.signalComboBox.addItem("Select Signal")
         self.signalComboBox.addItem("Signal 1")
         hlayout.addWidget(self.signalComboBox)
+    def run_animation(self):
+        # Start animation
+        self.anim = FuncAnimation(self.canvas.figure, self.canvas.update_plot, 
+                                  init_func=self.canvas.init_plot, frames=200, 
+                                  interval=50, blit=True)
 
     def change_name(self):
         pass
@@ -140,9 +161,10 @@ class Window(QMainWindow):
     def browse_file(self):
         # find csv file
         file_name = QFileDialog.getOpenFileName(self, "Open CSV File", "", "CSV Files (*.csv)")
-        df = pd.read_csv(file_name[0])
-        print(df.head())
-        pass
+        signal = read_csv(file_name[0])
+        r, theta =  transform_signal(signal)
+        self.canvas.signal = [r, theta]
+        self.run_animation()
         
             
         
@@ -176,5 +198,4 @@ class Window(QMainWindow):
         # show the main window again
         self.main_window.show()
         event.accept()
-
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'UI_initial_phase.ui'
+## Form generated from reading UI file 'Ui_initial_phase.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.3
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -493,6 +493,8 @@ class Ui_SignalViewer(QMainWindow):
         self.actionOpen_File.setObjectName(u"actionOpen_File")
         self.actionDelete = QAction(SignalViewer)
         self.actionDelete.setObjectName(u"actionDelete")
+        self.titleChannelBox_1 = QComboBox()
+        self.titleChannelBox_2 = QComboBox()
         self.centralwidget = QWidget(SignalViewer)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
@@ -510,6 +512,7 @@ class Ui_SignalViewer(QMainWindow):
         self.plotWidget_1.setStyleSheet(u"    background-color: #000000; /* Dark background */\n"
 "    color: #D8DEE9; /* Light text color */\n"
 "    font-size: 16px; /* Font size */\n"
+"    padding: 5px; /* Padding around the text */\n"
 "    border: 2px solid #4C566A; /* Border color */\n"
 "    border-radius: 5px; /* Rounded corners */\n"
 "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
@@ -698,6 +701,7 @@ class Ui_SignalViewer(QMainWindow):
         self.plotWidget_2.setStyleSheet(u"    background-color: #000000; /* Dark background */\n"
 "    color: #D8DEE9; /* Light text color */\n"
 "    font-size: 16px; /* Font size */\n"
+"    padding: 5px; /* Padding around the text */\n"
 "    border: 2px solid #4C566A; /* Border color */\n"
 "    border-radius: 5px; /* Rounded corners */\n"
 "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
@@ -911,16 +915,10 @@ class Ui_SignalViewer(QMainWindow):
 
         self.verticalLayout_13.addWidget(self.graphLabel_1)
 
-
+        
 
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        
-
-
-       
-
-
         self.verticalLayout_13.addLayout(self.horizontalLayout_12)
 
         self.listChannelsWidget_1 = QListWidget(self.centralwidget)
@@ -984,10 +982,6 @@ class Ui_SignalViewer(QMainWindow):
 "}")
 
         self.verticalLayout_13.addWidget(self.graphLabel_2)
-
-       
-
-
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout_4 = QHBoxLayout()
@@ -995,8 +989,6 @@ class Ui_SignalViewer(QMainWindow):
         self.horizontalLayout_4.setSizeConstraint(QLayout.SetDefaultConstraint)
         
 
-
-        
 
 
 

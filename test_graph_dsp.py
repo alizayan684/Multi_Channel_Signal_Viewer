@@ -1,5 +1,5 @@
 import sys
-from   PySide6 import QtWidgets, QtCore
+from   PySide6 import QtWidgets, QtCore, QtGui
 from   PySide6.QtWidgets import QColorDialog, QApplication
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
@@ -43,6 +43,11 @@ class CheckableLabelItem(QtWidgets.QWidget):
         self.checkbox.stateChanged.connect(self.onToggle)
     
     def setCheckboxColor(self, color):
+        if isinstance(color, QtGui.QPen):
+            color = color.color()
+        if isinstance(color, QtGui.QColor):
+            color = color.getRgb()[:3]
+
         formattedColor = f"#{color[0]:02X}{color[1]:02X}{color[2]:02X}" # Format the rgb tuple into a hex string so that stylesheet can read their properties
         self.checkbox.setStyleSheet(f"""
             QCheckBox {{
