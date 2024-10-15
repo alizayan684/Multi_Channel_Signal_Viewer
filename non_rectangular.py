@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
-from PySide6.QtWidgets import QPushButton, QColorDialog, QFileDialog
+from PySide6.QtWidgets import QPushButton, QColorDialog, QFileDialog, QComboBox
 from PySide6.QtWidgets import QHBoxLayout
 import pandas as pd
 class PolarPlotCanvas(FigureCanvas):
@@ -85,53 +85,56 @@ class Window(QMainWindow):
                                   interval=50, blit=True)
         # add start, stop, zoom in, zoom out, rewind, speed up , slow down , change color , browse button , change signal name
         # add a button to change the signal name
-        button = QPushButton("Name", self)
-        button.clicked.connect(self.change_name)
-        hlayout.addWidget(button)
+        nameButton = QPushButton("Name", self)
+        nameButton.clicked.connect(self.change_name)
+        hlayout.addWidget(nameButton)
         # add a button to change the color of the signal
-        button = QPushButton("Color", self)
-        button.clicked.connect(self.change_color)
-        hlayout.addWidget(button)
+        self.colorButton = QPushButton("Color", self)
+        self.colorButton.clicked.connect(self.change_color)
+        hlayout.addWidget(self.colorButton)
         # add a button to browse the file
-        button = QPushButton("Browse", self)
-        button.clicked.connect(self.browse_file)
-        hlayout.addWidget(button)
+        self.browseButton = QPushButton("Browse", self)
+        self.browseButton.clicked.connect(self.browse_file)
+        hlayout.addWidget(self.browseButton)
         # add a button to start the animation
-        button = QPushButton("Start", self)
-        button.clicked.connect(self.start_animation)
-        hlayout.addWidget(button)
+        self.startButton = QPushButton("Start", self)
+        self.startButton.clicked.connect(self.start_animation)
+        hlayout.addWidget(self.startButton)
         # add a button to stop the animation
-        button = QPushButton("Stop", self)
-        button.clicked.connect(self.stop_animation)
-        hlayout.addWidget(button)
+        self.stopButton = QPushButton("Stop", self)
+        self.stopButton.clicked.connect(self.stop_animation)
+        hlayout.addWidget(self.stopButton)
         # add a button to zoom in the plot
-        button = QPushButton("Zoom In", self)
-        button.clicked.connect(self.zoom_in)
-        hlayout.addWidget(button)
+        self.zoomInButton = QPushButton("Zoom In", self)
+        self.zoomInButton.clicked.connect(self.zoom_in)
+        hlayout.addWidget(self.zoomInButton)
         # add a button to zoom out the plot
-        button = QPushButton("Zoom Out", self)
-        button.clicked.connect(self.zoom_out)
-        hlayout.addWidget(button)
+        self.zoomOutButton = QPushButton("Zoom Out", self)
+        self.zoomOutButton.clicked.connect(self.zoom_out)
+        hlayout.addWidget(self.zoomOutButton)
         # add a button to rewind the animation
-        button = QPushButton("Rewind", self)
-        button.clicked.connect(self.rewind)
-        hlayout.addWidget(button)
+        self.rewindButton = QPushButton("Rewind", self)
+        self.rewindButton.clicked.connect(self.rewind)
+        hlayout.addWidget(self.rewindButton)
         # add a button to speed up the animation
-        button = QPushButton("Speed Up", self)
-        button.clicked.connect(self.speed_up)
-        hlayout.addWidget(button)
+        self.speedUpButton = QPushButton("Speed Up", self)
+        self.speedUpButton.clicked.connect(self.speed_up)
+        hlayout.addWidget(self.speedUpButton)
         # add a button to slow down the animation
-        button = QPushButton("Slow Down", self)
-        button.clicked.connect(self.slow_down)
-        hlayout.addWidget(button)
-    
+        self.slowDownButton = QPushButton("Slow Down", self)
+        self.slowDownButton.clicked.connect(self.slow_down)
+        hlayout.addWidget(self.slowDownButton)
+        # add a combo box to select the signal to change its name or color
+        self.signalComboBox = QComboBox(self)
+        self.signalComboBox.addItem("Select Signal")
+        self.signalComboBox.addItem("Signal 1")
+        hlayout.addWidget(self.signalComboBox)
+
     def change_name(self):
         pass
     
     def change_color(self):
         color = QColorDialog.getColor()
-        if color.isValid():
-            print(color.name())
         pass
     
     def browse_file(self):
