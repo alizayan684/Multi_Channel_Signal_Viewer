@@ -607,13 +607,13 @@ class Ui_SignalViewer(QMainWindow):
 
         self.horizontalLayout_5.addWidget(self.colorButton_1)
 
-        self.moveBox_1 = QPushButton(self.centralwidget)
-        self.moveBox_1.setObjectName(u"moveBox_1")
-        sizePolicy2.setHeightForWidth(self.moveBox_1.sizePolicy().hasHeightForWidth())
-        self.moveBox_1.setSizePolicy(sizePolicy2)
-        self.moveBox_1.setMaximumSize(QSize(200, 40))
+        self.moveButton_1 = QPushButton(self.centralwidget)
+        self.moveButton_1.setObjectName(u"moveButton_1")
+        sizePolicy2.setHeightForWidth(self.moveButton_1.sizePolicy().hasHeightForWidth())
+        self.moveButton_1.setSizePolicy(sizePolicy2)
+        self.moveButton_1.setMaximumSize(QSize(200, 40))
 
-        self.horizontalLayout_5.addWidget(self.moveBox_1)
+        self.horizontalLayout_5.addWidget(self.moveButton_1)
 
         self.colorMoveBox_1 = QComboBox(self.centralwidget)
         self.colorMoveBox_1.addItem("")
@@ -1267,7 +1267,7 @@ class Ui_SignalViewer(QMainWindow):
         self.actionDelete.setText(QCoreApplication.translate("SignalViewer", u"Delete", None))
         self.speedLabel_1.setText(QCoreApplication.translate("SignalViewer", u"Speed", None))
         self.colorButton_1.setText(QCoreApplication.translate("SignalViewer", u"Color", None))
-        self.moveBox_1.setText(QCoreApplication.translate("SignalViewer", u"Move", None))
+        self.moveButton_1.setText(QCoreApplication.translate("SignalViewer", u"Move", None))
         self.colorMoveBox_1.setItemText(0, QCoreApplication.translate("SignalViewer", u"All Channels", None))
 
         self.rewindButton_1.setText(QCoreApplication.translate("SignalViewer", u"Rewind", None))
