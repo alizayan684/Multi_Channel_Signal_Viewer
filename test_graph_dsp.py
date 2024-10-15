@@ -129,6 +129,10 @@ class MainWindow(Ui_SignalViewer):
         self.isLinked = False # initializing both graphs not to be linked.
         self.hidden_1 = []
         self.hidden_2 = []
+        self.maxPanningValue_1 = 0
+        self.maxPanningValue_2 = 0
+        self.minY = -2
+        self.maxY = 2
         
         self.hidden = False
         self.zoom_level = 0  # Default zoom level
@@ -149,12 +153,21 @@ class MainWindow(Ui_SignalViewer):
         
         # Applying button functionalities for second graph
         self.speedSlider_1.valueChanged.connect(self.updateSpeed_1)
-        # self.showBtn.clicked.connect(self.showTheSignal) TODO : needs modifications
-        #self.hideBtn.clicked.connect(self.hideTheSignal)  TODO : needs modifications
         self.colorButton_1.clicked.connect(self.colorSignal_1)
         self.zoomInButton_1.clicked.connect(self.zoom_1)
         self.zoomOutButton_1.clicked.connect(self.zoom_out_1)
         self.titleButton_1.clicked.connect(self.labelSignal_1)
+
+        self.horizontalScrollBar_1.setRange(0, self.maxPanningValue_1)  # Scroll range based on data
+        self.horizontalScrollBar_1.setValue(0)  # Start at the beginning
+        # Connect the scrollbar's valueChanged signal to the update function
+        self.horizontalScrollBar_1.valueChanged.connect(self.updateHorizontalScroll_1)
+
+        self.verticalScrollBar_1.setRange(-2, 2)  # Scroll range based on data
+        self.verticalScrollBar_1.setValue(0)  # Start at the beginning
+        # Connect the scrollbar's valueChanged signal to the update function
+        self.verticalScrollBar_1.valueChanged.connect(self.updateVerticalScroll_1)
+
         # Applying button functionalities for second graph ###############################
         self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
@@ -169,12 +182,19 @@ class MainWindow(Ui_SignalViewer):
         self.zoomOutButton_2.clicked.connect(self.zoom_out_2)
         self.titleButton_2.clicked.connect(self.labelSignal_2)
 
+        self.horizontalScrollBar_2.setRange(0, self.maxPanningValue_2)  # Scroll range based on data
+        self.horizontalScrollBar_2.setValue(0)  # Start at the beginning
+        # Connect the scrollbar's valueChanged signal to the update function
+        self.horizontalScrollBar_2.valueChanged.connect(self.updateHorizontalScroll_2)
 
-
+        self.verticalScrollBar_2.setRange(-2, 2)  # Scroll range based on data
+        self.verticalScrollBar_2.setValue(0)  # Start at the beginning
+        # Connect the scrollbar's valueChanged signal to the update function
+        self.verticalScrollBar_2.valueChanged.connect(self.updateVerticalScroll_2)
 
         # Applying the linking functionality
         self.linkButton.clicked.connect(self.linkGraphs)
-    ######################################################################################
+
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
             parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
@@ -242,6 +262,7 @@ class MainWindow(Ui_SignalViewer):
                     self.data_x = data_x
                     self.pastSignalsX_1.append(self.data_x)            
                     self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
+                    self.maxPanningValue_1 = max(self.current_index + self.chunk_size, self.maxPanningValue_1)
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
                 # Start the timer with a 100 ms interval (Note: the timer times out every 100ms(as given in the argument) and starts another 100ms, which leads to invoking the "updatePlot" every timeout until the timer stops "self.timer.stop()")
                 self.timer.start(100)
@@ -255,6 +276,7 @@ class MainWindow(Ui_SignalViewer):
                     self.data_x_2 = data_x_2
                     self.pastSignalsX_2.append(self.data_x_2)            
                     self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
+                    self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2)
                     self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)
                 self.timer_2.start(100)
         
@@ -275,6 +297,7 @@ class MainWindow(Ui_SignalViewer):
                     self.data_x = data_x
                     self.pastSignalsX_1.append(self.data_x)             
                     self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
+                    self.maxPanningValue_1 = max(self.current_index + self.chunk_size, self.maxPanningValue_1)
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
                 if self.df_2 is not None and not self.df_2.empty:  # if dataframe of first graph contains data:
                     if not len(self.browsedData_y_2) and not self.isPaused_2:
@@ -284,6 +307,7 @@ class MainWindow(Ui_SignalViewer):
                         self.data_x_2 = data_x_2
                         self.pastSignalsX_2.append(self.data_x_2)            
                         self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
+                        self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2)
                         self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
             self.timer.start(100)
             self.timer_2.start(100)
@@ -298,6 +322,7 @@ class MainWindow(Ui_SignalViewer):
             
         if self.current_index < maxLength:
             end_index = min(self.current_index + self.chunk_size, maxLength) # Determine the range of data to plot in this frame
+            self.maxPanningValue_1 = max(end_index, self.maxPanningValue_1)  
             self.plotWidget_1.clear() # Clear the graph first so that the widget only contains the latest plots (needed for show and hide functionality)
 
             for signalIdx in range (len(self.pastSignalsY_1)):  # Plotting all stored signals on the graph
@@ -319,11 +344,14 @@ class MainWindow(Ui_SignalViewer):
                 self.current_index+= updateViewStep
             else:
                 self.timer.stop()
-                self.current_index = 0    
-        
+                self.current_index = 0  
+
         else:
             self.timer.stop()  # Stop the timer when the end is reached
             self.current_index = 0  # resetting the starting index
+            self.maxPanningValue_1 = max(maxLength, self.maxPanningValue_1)  
+
+        self.horizontalScrollBar_1.setRange(0, self.maxPanningValue_1)  # Scroll range based on data
 
     # for updating the second graph for the cine mode.     
     def updatePlot_2(self):
@@ -336,6 +364,7 @@ class MainWindow(Ui_SignalViewer):
         if self.current_index_2 < maxLength:
             # Determine the range of data to plot in this frame
             end_index_2 = min(self.current_index_2 + self.chunk_size, maxLength)
+            self.maxPanningValue_2 = max(end_index_2, self.maxPanningValue_2)
             self.plotWidget_2.clear()
             
             for signalIdx in range (len(self.pastSignalsY_2)):  # plotting all stored signals on the graph
@@ -362,6 +391,9 @@ class MainWindow(Ui_SignalViewer):
         else:
             self.timer_2.stop()  # Stop the timer when the end is reached
             self.current_index_2 = 0
+            self.maxPanningValue_2 = max(maxLength, self.maxPanningValue_2)
+        
+        self.horizontalScrollBar_2.setRange(0, self.maxPanningValue_2)  # Scroll range based on data
                   
     def pauseTheSignal(self):
         # graphs not linked:
@@ -387,16 +419,20 @@ class MainWindow(Ui_SignalViewer):
                 self.current_index = 0
                 self.plotWidget_1.clear()
                 self.startTheSignal()
+                self.maxPanningValue_1 = 0
             else:
                 self.current_index_2 = 0
                 self.plotWidget_2.clear()
                 self.startTheSignal()
+                self.maxPanningValue_2 = 0
         # graphs linked:
         else:
             self.current_index = 0
             self.current_index_2 = 0
             self.plotWidget_1.clear()
             self.plotWidget_2.clear()
+            self.maxPanningValue_1 = 0
+            self.maxPanningValue_2 = 0
             self.startTheSignal()
             
     def linkGraphs(self):
@@ -768,6 +804,27 @@ class MainWindow(Ui_SignalViewer):
             self.non_rect_window = Window(self)
         self.non_rect_window.show()
     #################################################################################################
+    # Functions to update the view based on the scrollbar value
+    def updateHorizontalScroll_1(self):
+        offset = self.horizontalScrollBar_1.value()
+        if(offset + 550 < self.maxPanningValue_1):
+            self.plotWidget_1.setXRange(offset, offset + 650, padding=0)
+
+    def updateHorizontalScroll_2(self):
+        offset = self.horizontalScrollBar_2.value()
+        if(offset + 550 < self.maxPanningValue_2):
+            self.plotWidget_2.setXRange(offset, offset + 650, padding=0)
+
+    def updateVerticalScroll_1(self):
+        offset = self.verticalScrollBar_1.value()
+        if(offset + 1 < 2):
+            self.plotWidget_1.setYRange(offset, offset + 3, padding=0)
+    
+    def updateVerticalScroll_2(self):
+        offset = self.verticalScrollBar_2.value()
+        if(offset + 1 < 2):
+            self.plotWidget_2.setYRange(offset, offset + 3, padding=0)
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     window = MainWindow()
