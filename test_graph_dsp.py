@@ -172,7 +172,6 @@ class MainWindow(Ui_SignalViewer):
         self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.stopButton_2.clicked.connect(self.pauseTheSignal)
-        self.colorButton_2.clicked.connect(self.colorSignal_2)
         self.rewindButton_2.clicked.connect(self.rewindTheSignal)
         self.colorButton_2.clicked.connect(self.colorTheSignal_2)
         self.moveButton_2.clicked.connect(self.moveTheSignal_2)
@@ -180,7 +179,6 @@ class MainWindow(Ui_SignalViewer):
         self.speedSlider_2.valueChanged.connect(self.updateSpeed_2)
         self.zoomInButton_2.clicked.connect(self.zoom_2)
         self.zoomOutButton_2.clicked.connect(self.zoom_out_2)
-        self.titleButton_2.clicked.connect(self.labelSignal_2)
 
         self.horizontalScrollBar_2.setRange(0, self.maxPanningValue_2)  # Scroll range based on data
         self.horizontalScrollBar_2.setValue(0)  # Start at the beginning
@@ -742,21 +740,6 @@ class MainWindow(Ui_SignalViewer):
         if(self.df_2 is not None):
             self.signalName = self.titleEdit_2.text()
     ##################################################################################################
-    def colorSignal_1(self):
-        if(self.df_1 is not None):
-            color = QColorDialog.getColor()
-            if color.isValid():
-                self.plotColor = pg.mkPen(color.name())
-                self.plotCurve.setPen(self.plotColor)
-    #################################################################################################
-    
-    def colorSignal_2(self):
-        if(self.df_2 is not None):
-            color = QColorDialog.getColor()
-            if color.isValid():
-                self.plotColor = pg.mkPen(color.name())
-                self.plotCurve_2.setPen(self.plotColor)
-    #################################################################################################
     def updateSpeed_1(self):
         """ Adjust the speed of the signal based on the slider value and update the label. """
         speed = self.speedSlider_1.value()
