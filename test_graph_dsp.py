@@ -155,7 +155,6 @@ class MainWindow(Ui_SignalViewer):
         self.colorButton_1.clicked.connect(self.colorTheSignal_1)
         self.zoomInButton_1.clicked.connect(self.zoom_1)
         self.zoomOutButton_1.clicked.connect(self.zoom_out_1)
-        self.titleButton_1.clicked.connect(self.labelSignal_1)
 
         self.horizontalScrollBar_1.setRange(0, self.maxPanningValue_1)  # Scroll range based on data
         self.horizontalScrollBar_1.setValue(0)  # Start at the beginning
@@ -178,7 +177,6 @@ class MainWindow(Ui_SignalViewer):
         self.speedSlider_2.valueChanged.connect(self.updateSpeed_2)
         self.zoomInButton_2.clicked.connect(self.zoom_2)
         self.zoomOutButton_2.clicked.connect(self.zoom_out_2)
-        self.titleButton_2.clicked.connect(self.labelSignal_2)
 
         self.horizontalScrollBar_2.setRange(0, self.maxPanningValue_2)  # Scroll range based on data
         self.horizontalScrollBar_2.setValue(0)  # Start at the beginning
@@ -720,27 +718,6 @@ class MainWindow(Ui_SignalViewer):
         b = np.random.randint(0, 256)
         return (r, g, b)
     
-    ###################################################################################################
-    def showTheSignal(self):
-        if(self.df is not None):
-            self.plotCurve.setVisible(True)
-            self.hidden = False
-    ###################################################################################################
-    def hideTheSignal(self):
-        if(self.df is not None):
-            self.plotCurve.setVisible(False)
-            self.hidden = True
-    ##################################################################################################
-    def labelSignal_1(self): # TODO : not finished 
-        if(self.df_1 is not None):
-            self.signalName = self.titleEdit_1.text()
-    ##################################################################################################
-    
-    def labelSignal_2(self): # TODO : not finished 
-        if(self.df_2 is not None):
-            self.signalName = self.titleEdit_2.text()
-
-    #################################################################################################
     def updateSpeed_1(self):
         """ Adjust the speed of the signal based on the slider value and update the label. """
         speed = self.speedSlider_1.value()
