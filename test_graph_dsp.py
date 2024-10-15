@@ -86,12 +86,18 @@ class CheckableLabelItem(QtWidgets.QWidget):
             else:
                 self.graphObj.hideTheSignal_2(self.index)
 
+    # Needed for the case of moving some signals to a new graph, the old signals count will change and thus some of them will have their index decremented by 1
+    def updateIndex(self, newIndex):
+        self.index = newIndex
+
 class MainWindow(Ui_SignalViewer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.df_1 = None  # No data initially
         self.df_2 = None
+        self.filePaths_1 = []
+        self.filePaths_2 = []
         self.browsedData_y = []
         self.browsedData_y_2 = []
         self.pastSignalsY_1 = []
@@ -106,6 +112,8 @@ class MainWindow(Ui_SignalViewer):
         self.plotColors_2 = []
         self.labelItems_1 = []
         self.labelItems_2 = []
+        self.widgetItems_1 = []
+        self.widgetItems_2 = []
         self.timer = QtCore.QTimer()
         self.timer_2 = QtCore.QTimer()
         self.current_index = 0   # the current index in the graph
@@ -120,21 +128,22 @@ class MainWindow(Ui_SignalViewer):
         self.addFileButton.clicked.connect(self.browseTheSignal)
         self.linkButton.clicked.connect(self.linkGraphs)
 
-        # Applying button functionalities for first graph #############################
+        # Applying button functionalities for first graph
         self.startButton_1.clicked.connect(self.startTheSignal)
         self.timer.timeout.connect(self.updatePlot_1)
         self.stopButton_1.clicked.connect(self.pauseTheSignal)
         self.rewindButton_1.clicked.connect(self.rewindTheSignal)
         self.colorButton_1.clicked.connect(self.colorTheSignal_1)
+        self.moveButton_1.clicked.connect(self.moveTheSignal_1)
         
-        # Applying button functionalities for second graph ###############################
+        # Applying button functionalities for second graph
         self.startButton_2.clicked.connect(self.startTheSignal)
         self.timer_2.timeout.connect(self.updatePlot_2)
         self.stopButton_2.clicked.connect(self.pauseTheSignal)
         self.rewindButton_2.clicked.connect(self.rewindTheSignal)
         self.colorButton_2.clicked.connect(self.colorTheSignal_2)
+        self.moveButton_2.clicked.connect(self.moveTheSignal_2)
 
-    ######################################################################################
     def browseTheSignal(self):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(
             parent=self, caption="Select a CSV file", dir="/D", filter="(*.csv)"
@@ -150,7 +159,8 @@ class MainWindow(Ui_SignalViewer):
                 self.hidden_1.append(False)
                 self.titleChannelBox_1.addItem(currSignalName)
                 self.colorMoveBox_1.addItem(currSignalName)
-
+                
+                self.filePaths_1.append(filePath)
                 self.df_1 = pd.read_csv(filePath, header=None)
                 self.browsedData_y = [] # clearing the self.browsedData_y to use the new data of a newly browsed file
                 self.isPaused = False
@@ -163,6 +173,7 @@ class MainWindow(Ui_SignalViewer):
                 listWidgetItem.setSizeHint(labelItem.sizeHint())  # Set the size hint
                 self.listChannelsWidget_1.addItem(listWidgetItem)
                 self.listChannelsWidget_1.setItemWidget(listWidgetItem, labelItem)  # Set the widget
+                self.widgetItems_1.append(listWidgetItem)
 
             else:   
                 self.signalNames_2.append(currSignalName)
@@ -172,6 +183,7 @@ class MainWindow(Ui_SignalViewer):
                 self.titleChannelBox_2.addItem(currSignalName)
                 self.colorMoveBox_2.addItem(currSignalName)
 
+                self.filePaths_2.append(filePath)
                 self.df_2 = pd.read_csv(filePath, header=None)
                 self.browsedData_y_2 = [] 
                 self.isPaused_2 = False
@@ -184,6 +196,7 @@ class MainWindow(Ui_SignalViewer):
                 listWidgetItem.setSizeHint(labelItem.sizeHint())  # Set the size hint
                 self.listChannelsWidget_2.addItem(listWidgetItem)
                 self.listChannelsWidget_2.setItemWidget(listWidgetItem, labelItem)  # Set the widget
+                self.widgetItems_2.append(listWidgetItem)
 
             self.startTheSignal()
                 
@@ -425,6 +438,216 @@ class MainWindow(Ui_SignalViewer):
                     self.plotColors_2[currIdx] = currColor
                     self.plotCurves_2[currIdx].setPen(currColor)
                     self.labelItems_2[currIdx].setCheckboxColor((color.red(), color.green(), color.blue()))
+
+    def moveTheSignal_1(self):
+        if(self.df_1 is not None):
+            self.graphSelectBox.setCurrentIndex(1) # Needed so that when we call start the signal later in the function it starts the second graph
+            currIdx = self.colorMoveBox_1.currentIndex() - 1
+            if(currIdx == -1):
+                for signalIdx in range(len(self.pastSignalsY_1)):
+                    self.signalNames_2.append(self.signalNames_1[signalIdx])
+                    self.plotCurves_2.append(self.plotWidget_2.plotItem.plot())
+                    self.plotColors_2.append(self.plotColors_1[signalIdx])
+                    self.hidden_2.append(self.hidden_1[signalIdx])
+                    self.titleChannelBox_2.addItem(self.signalNames_1[signalIdx])
+                    self.colorMoveBox_2.addItem(self.signalNames_1[signalIdx])
+
+                    self.filePaths_2.append(self.filePaths_1[signalIdx])
+                    self.df_2 = pd.read_csv(self.filePaths_1[signalIdx], header=None)
+                    self.browsedData_y_2 = [] 
+                    self.isPaused_2 = False
+                    self.current_index_2 = 0
+
+                    # Adding Signal Name To Our Labels List
+                    labelItem = CheckableLabelItem(len(self.labelItems_2), self.signalNames_2[-1], self.plotColors_2[-1], self, 2)
+                    self.labelItems_2.append(labelItem)
+                    listWidgetItem = QtWidgets.QListWidgetItem()
+                    listWidgetItem.setSizeHint(labelItem.sizeHint())  # Set the size hint
+                    self.listChannelsWidget_2.addItem(listWidgetItem)
+                    self.listChannelsWidget_2.setItemWidget(listWidgetItem, labelItem)  # Set the widget
+                    self.widgetItems_2.append(listWidgetItem)
+
+                    self.startTheSignal()
+
+                self.plotWidget_1.plotItem.clear()
+                self.df_1 = None
+                self.browsedData_y = []
+                self.pastSignalsY_1 = []
+                self.pastSignalsX_1 = []
+                self.current_index = 0
+                self.signalNames_1 = []
+                self.plotColors_1 = []
+                self.plotCurves_1 = []
+                self.hidden_1 = []
+                self.filePaths_1 = []
+                self.labelItems_1 = []
+                self.listChannelsWidget_1.clear()
+                self.titleChannelBox_1.clear()
+                self.titleChannelBox_1.addItem("All Channels")
+                self.colorMoveBox_1.clear()
+                self.colorMoveBox_1.addItem("All Channels")
+
+            else:
+                self.signalNames_2.append(self.signalNames_1[currIdx])
+                self.plotCurves_2.append(self.plotWidget_2.plotItem.plot())
+                self.plotColors_2.append(self.plotColors_1[currIdx])
+                self.hidden_2.append(self.hidden_1[currIdx])
+                self.titleChannelBox_2.addItem(self.signalNames_1[currIdx])
+                self.colorMoveBox_2.addItem(self.signalNames_1[currIdx])
+
+                self.filePaths_2.append(self.filePaths_1[currIdx])
+                self.df_2 = pd.read_csv(self.filePaths_1[currIdx], header=None)
+                self.browsedData_y_2 = [] 
+                self.isPaused_2 = False
+                self.current_index_2 = 0
+
+                # Adding Signal Name To Our Labels List
+                labelItem = CheckableLabelItem(len(self.labelItems_2), self.signalNames_2[-1], self.plotColors_2[-1], self, 2)
+                self.labelItems_2.append(labelItem)
+                listWidgetItem = QtWidgets.QListWidgetItem()
+                listWidgetItem.setSizeHint(labelItem.sizeHint())  # Set the size hint
+                self.listChannelsWidget_2.addItem(listWidgetItem)
+                self.listChannelsWidget_2.setItemWidget(listWidgetItem, labelItem)  # Set the widget
+                self.widgetItems_2.append(listWidgetItem)
+
+                self.plotWidget_1.plotItem.removeItem(self.plotCurves_1[currIdx])
+                self.listChannelsWidget_1.takeItem(self.listChannelsWidget_1.row(self.widgetItems_1[currIdx]))  # Remove it
+                self.titleChannelBox_1.removeItem(currIdx + 1)
+                self.colorMoveBox_1.removeItem(currIdx + 1)
+                
+                for signalIdx in range(currIdx, len(self.pastSignalsY_1) - 1):
+                    self.pastSignalsY_1[signalIdx] = self.pastSignalsY_1[signalIdx + 1]
+                    self.pastSignalsX_1[signalIdx] = self.pastSignalsX_1[signalIdx + 1]
+                    self.signalNames_1[signalIdx] = self.signalNames_1[signalIdx + 1]
+                    self.plotColors_1[signalIdx] = self.plotColors_1[signalIdx + 1]
+                    self.plotCurves_1[signalIdx] = self.plotCurves_1[signalIdx + 1]
+                    self.hidden_1[signalIdx] = self.hidden_1[signalIdx + 1]
+                    self.filePaths_1[signalIdx] = self.filePaths_1[signalIdx + 1]
+                    self.widgetItems_1[signalIdx] = self.widgetItems_1[signalIdx + 1]
+                    self.labelItems_1[signalIdx] = self.labelItems_1[signalIdx + 1]
+                    self.labelItems_1[signalIdx].updateIndex(signalIdx)
+                
+                self.pastSignalsY_1.pop()
+                self.pastSignalsX_1.pop()
+                self.signalNames_1.pop()
+                self.plotColors_1.pop()
+                self.plotCurves_1.pop()
+                self.hidden_1.pop()
+                self.filePaths_1.pop()
+                self.widgetItems_1.pop()
+                self.labelItems_1.pop()
+
+                if(len(self.pastSignalsY_1) == 0):
+                    self.df_1 = None
+                    self.browsedData_y = []
+                    self.current_index = 0
+
+                self.startTheSignal()
+
+    def moveTheSignal_2(self):
+        if(self.df_2 is not None):
+            self.graphSelectBox.setCurrentIndex(0) # Needed so that when we call start the signal later in the function it starts the first graph
+            currIdx = self.colorMoveBox_2.currentIndex() - 1
+            if(currIdx == -1):
+                for signalIdx in range(len(self.pastSignalsY_2)):
+                    self.signalNames_1.append(self.signalNames_2[signalIdx])
+                    self.plotCurves_1.append(self.plotWidget_1.plotItem.plot())
+                    self.plotColors_1.append(self.plotColors_2[signalIdx])
+                    self.hidden_1.append(self.hidden_2[signalIdx])
+                    self.titleChannelBox_1.addItem(self.signalNames_2[signalIdx])
+                    self.colorMoveBox_1.addItem(self.signalNames_2[signalIdx])
+
+                    self.filePaths_1.append(self.filePaths_2[signalIdx])
+                    self.df_1 = pd.read_csv(self.filePaths_2[signalIdx], header=None)
+                    self.browsedData_y = [] 
+                    self.isPaused_1 = False
+                    self.current_index = 0
+
+                    # Adding Signal Name To Our Labels List
+                    labelItem = CheckableLabelItem(len(self.labelItems_1), self.signalNames_1[-1], self.plotColors_1[-1], self, 1)
+                    self.labelItems_1.append(labelItem)
+                    listWidgetItem = QtWidgets.QListWidgetItem()
+                    listWidgetItem.setSizeHint(labelItem.sizeHint())  # Set the size hint
+                    self.listChannelsWidget_1.addItem(listWidgetItem)
+                    self.listChannelsWidget_1.setItemWidget(listWidgetItem, labelItem)  # Set the widget
+                    self.widgetItems_1.append(listWidgetItem)
+
+                    self.startTheSignal()
+
+                self.plotWidget_2.plotItem.clear()
+                self.df_2 = None
+                self.browsedData_y_2 = []
+                self.pastSignalsY_2 = []
+                self.pastSignalsX_2 = []
+                self.current_index_2 = 0
+                self.signalNames_2 = []
+                self.plotColors_2 = []
+                self.plotCurves_2 = []
+                self.hidden_2 = []
+                self.filePaths_2 = []
+                self.labelItems_2 = []
+                self.listChannelsWidget_2.clear()
+                self.titleChannelBox_2.clear()
+                self.titleChannelBox_2.addItem("All Channels")
+                self.colorMoveBox_2.clear()
+                self.colorMoveBox_2.addItem("All Channels")
+
+            else:
+                self.signalNames_1.append(self.signalNames_2[currIdx])
+                self.plotCurves_1.append(self.plotWidget_1.plotItem.plot())
+                self.plotColors_1.append(self.plotColors_2[currIdx])
+                self.hidden_1.append(self.hidden_2[currIdx])
+                self.titleChannelBox_1.addItem(self.signalNames_2[currIdx])
+                self.colorMoveBox_1.addItem(self.signalNames_2[currIdx])
+
+                self.filePaths_1.append(self.filePaths_2[currIdx])
+                self.df_1 = pd.read_csv(self.filePaths_2[currIdx], header=None)
+                self.browsedData_y = [] 
+                self.isPaused_1 = False
+                self.current_index = 0
+
+                # Adding Signal Name To Our Labels List
+                labelItem = CheckableLabelItem(len(self.labelItems_1), self.signalNames_1[-1], self.plotColors_1[-1], self, 1)
+                self.labelItems_1.append(labelItem)
+                listWidgetItem = QtWidgets.QListWidgetItem()
+                listWidgetItem.setSizeHint(labelItem.sizeHint())  # Set the size hint
+                self.listChannelsWidget_1.addItem(listWidgetItem)
+                self.listChannelsWidget_1.setItemWidget(listWidgetItem, labelItem)  # Set the widget
+                self.widgetItems_1.append(listWidgetItem)
+
+                self.plotWidget_2.plotItem.removeItem(self.plotCurves_2[currIdx])
+                self.listChannelsWidget_2.takeItem(self.listChannelsWidget_2.row(self.widgetItems_2[currIdx]))  # Remove it
+                self.titleChannelBox_2.removeItem(currIdx + 1)
+                self.colorMoveBox_2.removeItem(currIdx + 1)
+                
+                for signalIdx in range(currIdx, len(self.pastSignalsY_2) - 1):
+                    self.pastSignalsY_2[signalIdx] = self.pastSignalsY_2[signalIdx + 1]
+                    self.pastSignalsX_2[signalIdx] = self.pastSignalsX_2[signalIdx + 1]
+                    self.signalNames_2[signalIdx] = self.signalNames_2[signalIdx + 1]
+                    self.plotColors_2[signalIdx] = self.plotColors_2[signalIdx + 1]
+                    self.plotCurves_2[signalIdx] = self.plotCurves_2[signalIdx + 1]
+                    self.hidden_2[signalIdx] = self.hidden_2[signalIdx + 1]
+                    self.filePaths_2[signalIdx] = self.filePaths_2[signalIdx + 1]
+                    self.widgetItems_2[signalIdx] = self.widgetItems_2[signalIdx + 1]
+                    self.labelItems_2[signalIdx] = self.labelItems_2[signalIdx + 1]
+                    self.labelItems_2[signalIdx].updateIndex(signalIdx)
+                
+                self.pastSignalsY_2.pop()
+                self.pastSignalsX_2.pop()
+                self.signalNames_2.pop()
+                self.plotColors_2.pop()
+                self.plotCurves_2.pop()
+                self.hidden_2.pop()
+                self.filePaths_2.pop()
+                self.widgetItems_2.pop()
+                self.labelItems_2.pop()
+
+                if(len(self.pastSignalsY_2) == 0):
+                    self.df_2 = None
+                    self.browsedData_y_2 = []
+                    self.current_index_2 = 0
+
+                self.startTheSignal()
 
     def generateRandomColor(self):
         r = np.random.randint(0, 256)
