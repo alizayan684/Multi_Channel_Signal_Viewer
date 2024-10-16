@@ -22,17 +22,22 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         # Create the first PlotWidget
         self.plotWidget_1 = pg.PlotWidget()
         self.plotWidget_1.setTitle(plotNames[0])
+        xData_1, yData_1 = self.plotCurves[0].getData()
+        self.plotWidget_1.setXRange(xData_1[0], xData_1[-1], padding=0)
+        self.plotWidget_1.setYRange(-2, 2, padding=0)
+        self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=xData_1[0], xMax=xData_1[-1], yMin=-2, yMax=2)
         self.layout.addWidget(self.plotWidget_1)
 
         # Plot the data for the first plot
         self.plotWidget_1.addItem(plotCurves[0])
 
         # Create LinearRegionItem for the first plot
-        self.region_1 = pg.LinearRegionItem([100, 200], movable=True)
+        self.region_1 = pg.LinearRegionItem([xData_1[0], xData_1[0] + 150], movable=True)
+        self.region_1.setBounds([int(xData_1[0] + 10), int(xData_1[-1] - 10)])
         self.plotWidget_1.addItem(self.region_1)
 
         # Create a label for the first region
-        self.label_1 = QtWidgets.QLabel("Region 1: [100, 200]")
+        self.label_1 = QtWidgets.QLabel(f"Region 1: [{xData_1[0]}, {xData_1[0] + 150}]")
         self.layout.addWidget(self.label_1)
 
         # Connect the region's signal to a method
@@ -41,17 +46,22 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         # Create the second PlotWidget
         self.plotWidget_2 = pg.PlotWidget()
         self.plotWidget_2.setTitle(plotNames[1])
+        xData_2, yData_2 = self.plotCurves[1].getData()
+        self.plotWidget_2.setXRange(xData_2[0], xData_2[-1], padding=0)
+        self.plotWidget_2.setYRange(-2, 2, padding=0)
+        self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=xData_2[0], xMax=xData_2[-1], yMin=-2, yMax=2)
         self.layout.addWidget(self.plotWidget_2)
 
         # Plot the data for the second plot
         self.plotWidget_2.addItem(plotCurves[1])
 
         # Create LinearRegionItem for the second plot
-        self.region_2 = pg.LinearRegionItem([100, 200], movable=True)
+        self.region_2 = pg.LinearRegionItem([xData_2[0], xData_2[0] + 150], movable=True)
+        self.region_2.setBounds([int(xData_2[0] + 10), int(xData_2[-1] - 10)])
         self.plotWidget_2.addItem(self.region_2)
 
         # Create a label for the second region
-        self.label_2 = QtWidgets.QLabel('Region 2: [100, 200]')
+        self.label_2 = QtWidgets.QLabel(f'Region 2: [{xData_2[0]}, {xData_2[0] + 150}]')
         self.layout.addWidget(self.label_2)
 
         # Connect the region's signal to a method
@@ -178,6 +188,9 @@ class GlueSignalsPopup(QtWidgets.QWidget):
             y_combined = np.concatenate((y2, y_overlap, y1, y_non_overlap))
 
         self.plotWidget_3.plotItem.clear()
+        self.plotWidget_3.setXRange(x_combined[0] - 50, max(x1[-1], x2[-1]) + 50, padding=0)
+        self.plotWidget_3.setYRange(-2, 2, padding=0)
+        self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=x_combined[0]  - 50, xMax=max(x1[-1], x2[-1]) + 50, yMin=-2, yMax=2)
         self.plotWidget_3.plot(x_combined, y_combined, pen='y')
 
 class LiveSignalPopup(QtWidgets.QWidget):
