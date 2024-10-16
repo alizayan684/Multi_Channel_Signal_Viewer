@@ -296,11 +296,11 @@ class CheckableLabelItem(QtWidgets.QWidget):
             self.label.setText(new_text)
             if(self.graphNum == 1):
                 self.graphObj.signalNames_1[self.index] = new_text
-                self.graphObj.listChannelsWidget_1.setItemText(self.index + 1, new_text)
+                #self.graphObj.listChannelsWidget_1.setItemText(self.index + 1, new_text)
                 self.graphObj.colorMoveBox_1.setItemText(self.index + 1, new_text)
             else:
                 self.graphObj.signalNames_2[self.index] = new_text
-                self.graphObj.listChannelsWidget_2.setItemText(self.index + 1, new_text)
+                #self.graphObj.listChannelsWidget_2.setItemText(self.index + 1, new_text)
                 self.graphObj.colorMoveBox_2.setItemText(self.index + 1, new_text)
     
     def onToggle(self):
@@ -324,10 +324,10 @@ class MainWindow(Ui_SignalViewer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        load_dotenv()
         # Coordinates of cairo found by gecoding api provided by openweather map
         self.lat=30.0443879
         self.lon=31.2357257
-        load_dotenv()
         self.API_KEY = os.getenv('API_KEY')
         self.URL = f'https://api.openweathermap.org/data/2.5/weather?lat={self.lat}&lon={self.lon}&appid={self.API_KEY}'
         self.liveSignal = LiveSignalPopup()
@@ -439,7 +439,6 @@ class MainWindow(Ui_SignalViewer):
                 self.plotCurves_1.append(self.plotWidget_1.plotItem.plot())
                 self.plotColors_1.append(currColor)
                 self.hidden_1.append(False)
-                self.listChannelsWidget_1.addItem(currSignalName)
                 self.colorMoveBox_1.addItem(currSignalName)
                 
                 self.filePaths_1.append(filePath)
@@ -462,7 +461,6 @@ class MainWindow(Ui_SignalViewer):
                 self.plotCurves_2.append(self.plotWidget_1.plotItem.plot())
                 self.plotColors_2.append(currColor)
                 self.hidden_2.append(False)
-                self.listChannelsWidget_2.addItem(currSignalName)
                 self.colorMoveBox_2.addItem(currSignalName)
 
                 self.filePaths_2.append(filePath)
@@ -777,7 +775,6 @@ class MainWindow(Ui_SignalViewer):
                     self.plotCurves_2.append(self.plotWidget_2.plotItem.plot())
                     self.plotColors_2.append(self.plotColors_1[signalIdx])
                     self.hidden_2.append(self.hidden_1[signalIdx])
-                    self.listChannelsWidget_2.addItem(self.signalNames_1[signalIdx])
                     self.colorMoveBox_2.addItem(self.signalNames_1[signalIdx])
 
                     self.filePaths_2.append(self.filePaths_1[signalIdx])
@@ -810,8 +807,6 @@ class MainWindow(Ui_SignalViewer):
                 self.filePaths_1 = []
                 self.labelItems_1 = []
                 self.listChannelsWidget_1.clear()
-                self.listChannelsWidget_1.clear()
-                self.listChannelsWidget_1.addItem("All Channels")
                 self.colorMoveBox_1.clear()
                 self.colorMoveBox_1.addItem("All Channels")
 
@@ -820,7 +815,6 @@ class MainWindow(Ui_SignalViewer):
                 self.plotCurves_2.append(self.plotWidget_2.plotItem.plot())
                 self.plotColors_2.append(self.plotColors_1[currIdx])
                 self.hidden_2.append(self.hidden_1[currIdx])
-                self.listChannelsWidget_2.addItem(self.signalNames_1[currIdx])
                 self.colorMoveBox_2.addItem(self.signalNames_1[currIdx])
 
                 self.filePaths_2.append(self.filePaths_1[currIdx])
@@ -881,7 +875,6 @@ class MainWindow(Ui_SignalViewer):
                     self.plotCurves_1.append(self.plotWidget_1.plotItem.plot())
                     self.plotColors_1.append(self.plotColors_2[signalIdx])
                     self.hidden_1.append(self.hidden_2[signalIdx])
-                    self.listChannelsWidget_1.addItem(self.signalNames_2[signalIdx])
                     self.colorMoveBox_1.addItem(self.signalNames_2[signalIdx])
 
                     self.filePaths_1.append(self.filePaths_2[signalIdx])
@@ -914,8 +907,6 @@ class MainWindow(Ui_SignalViewer):
                 self.filePaths_2 = []
                 self.labelItems_2 = []
                 self.listChannelsWidget_2.clear()
-                self.listChannelsWidget_2.clear()
-                self.listChannelsWidget_2.addItem("All Channels")
                 self.colorMoveBox_2.clear()
                 self.colorMoveBox_2.addItem("All Channels")
 
@@ -924,7 +915,6 @@ class MainWindow(Ui_SignalViewer):
                 self.plotCurves_1.append(self.plotWidget_1.plotItem.plot())
                 self.plotColors_1.append(self.plotColors_2[currIdx])
                 self.hidden_1.append(self.hidden_2[currIdx])
-                self.listChannelsWidget_1.addItem(self.signalNames_2[currIdx])
                 self.colorMoveBox_1.addItem(self.signalNames_2[currIdx])
 
                 self.filePaths_1.append(self.filePaths_2[currIdx])
