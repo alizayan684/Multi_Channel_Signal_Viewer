@@ -1,11 +1,324 @@
 import sys
 from   PySide6 import QtWidgets, QtCore, QtGui
 from   PySide6.QtWidgets import QColorDialog, QApplication
+from dotenv import load_dotenv
+import os
+import requests
+from PySide6 import QtWidgets, QtCore
+from PySide6.QtWidgets import QColorDialog, QApplication
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
 import pandas as pd
 from pathlib import Path
+
+class GlueSignalsPopup(QtWidgets.QWidget):
+    def __init__(self, plotNames, plotCurves):
+        super().__init__()
+        self.setWindowTitle("Gluing Two Signals")
+        self.setGeometry(100, 100, 800, 600)
+
+        self.plotCurves = plotCurves
+        self.layout = QtWidgets.QVBoxLayout()
+
+        # Create the first PlotWidget
+        self.plotWidget_1 = pg.PlotWidget()
+        self.plotWidget_1.setTitle(plotNames[0])
+        xData_1, yData_1 = self.plotCurves[0].getData()
+        self.plotWidget_1.setXRange(xData_1[0] - 20, xData_1[-1] + 20, padding=0)
+        self.plotWidget_1.setYRange(-2, 2, padding=0)
+        self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=xData_1[0] - 20, xMax=xData_1[-1] + 20, yMin=-2, yMax=2)
+        self.layout.addWidget(self.plotWidget_1)
+
+        # Plot the data for the first plot
+        self.plotWidget_1.addItem(plotCurves[0])
+
+        # Create LinearRegionItem for the first plot
+        self.region_1 = pg.LinearRegionItem([xData_1[0], xData_1[0] + 150], movable=True)
+        self.region_1.setBounds([int(xData_1[0] + 10), int(xData_1[-1] - 10)])
+        self.plotWidget_1.addItem(self.region_1)
+
+        # Create a label for the first region
+        self.label_1 = QtWidgets.QLabel(f"Region 1: [{xData_1[0]}, {xData_1[0] + 150}]")
+        self.layout.addWidget(self.label_1)
+
+        # Connect the region's signal to a method
+        self.region_1.sigRegionChanged.connect(self.updateRegion_1)
+
+        # Create the second PlotWidget
+        self.plotWidget_2 = pg.PlotWidget()
+        self.plotWidget_2.setTitle(plotNames[1])
+        xData_2, yData_2 = self.plotCurves[1].getData()
+        self.plotWidget_2.setXRange(xData_2[0] - 20, xData_2[-1] + 20, padding=0)
+        self.plotWidget_2.setYRange(-2, 2, padding=0)
+        self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=xData_2[0] - 20, xMax=xData_2[-1] + 20, yMin=-2, yMax=2)
+        self.layout.addWidget(self.plotWidget_2)
+
+        # Plot the data for the second plot
+        self.plotWidget_2.addItem(plotCurves[1])
+
+        # Create LinearRegionItem for the second plot
+        self.region_2 = pg.LinearRegionItem([xData_2[0], xData_2[0] + 150], movable=True)
+        self.region_2.setBounds([int(xData_2[0] + 10), int(xData_2[-1] - 10)])
+        self.plotWidget_2.addItem(self.region_2)
+
+        # Create a label for the second region
+        self.label_2 = QtWidgets.QLabel(f'Region 2: [{xData_2[0]}, {xData_2[0] + 150}]')
+        self.layout.addWidget(self.label_2)
+
+        # Connect the region's signal to a method
+        self.region_2.sigRegionChanged.connect(self.updateRegion_2)
+
+        # Create a button and add it to the layout
+        self.button = QtWidgets.QPushButton("Glue")
+        self.button.clicked.connect(self.onGlue)
+        self.button.setStyleSheet(u"QPushButton {\n"
+        "	background-color: #5e80ad;\n"
+        "\n"
+        "   color: #d9dee8; /* Light text color */\n"
+        "   font-size: 16px; /* Font size */\n"
+        "   padding: 10px 20px; /* Padding around the text */\n"
+        "	border-top-color: transparent;\n"
+        "	border-right-color: transparent;\n"
+        "	border-left-color: transparent;\n"
+        "	border-bottom-color: transparent;\n"
+        "	border-width: 1px;\n"
+        "	border-style: solid;\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:hover {\n"
+        "	background-color: #89dcff;\n"
+        "	color: #010100;\n"
+        "    border: 3px solid #81A1C1; /* Border color on hover */\n"
+        "\n"
+        "    font-size: 16px; /* Font size */\n"
+        "    padding: 10px 20px; /* Padding around the text */\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:pressed {\n"
+        "    background-color: #3B4252; /* Background color when pressed */\n"
+        "    border: 2px solid #4C566A; /* Border color when pressed */\n"
+        "}\n"
+        "")
+        self.layout.addWidget(self.button)
+
+        self.plotWidget_3 = pg.PlotWidget()
+        self.plotWidget_3.setTitle("Result")
+        self.layout.addWidget(self.plotWidget_3)
+
+        self.setLayout(self.layout)
+
+    def updateRegion_1(self):
+        # Get the current range of region 1
+        regionRange = self.region_1.getRegion()
+        self.label_1.setText(f'Region 1: {regionRange}')
+
+    def updateRegion_2(self):
+        # Get the current range of region 2
+        regionRange = self.region_2.getRegion()
+        self.label_2.setText(f'Region 2: {regionRange}')
+
+    def onGlue(self):
+        # Get the x and y data from the plot item
+        xData_1, yData_1 = self.plotCurves[0].getData()
+        xData_2, yData_2 = self.plotCurves[1].getData()
+
+        x1 = np.linspace(self.region_1.getRegion()[0], self.region_1.getRegion()[1], int(self.region_1.getRegion()[1] - self.region_1.getRegion()[0]))
+        x2 = np.linspace(self.region_2.getRegion()[0], self.region_2.getRegion()[1], int(self.region_2.getRegion()[1] - self.region_2.getRegion()[0]))
+
+        y1 = []
+        y2 = []
+
+        for x in x1:
+            # Find the index of the closest x value
+            index = (np.abs(xData_1 - x)).argmin()
+            # Retrieve the corresponding y value
+            y1.append(yData_1[index])
+
+        for x in x2:
+            # Find the index of the closest x value
+            index = (np.abs(xData_2 - x)).argmin()
+            # Retrieve the corresponding y value
+            y2.append(yData_2[index])
+
+        # Interpolation for overlapping region (we will get the average value for each y in the overlapping region)
+        x_overlap = []
+        y_overlap = []
+        # If there is an overlapping part, its starting point will be the bigger starting index between the two ranges, while its end is the smaller ending
+        x_overlap_start = max(x1[0], x2[0])
+        x_overlap_end = min(x1[-1], x2[-1])
+
+        if x_overlap_start < x_overlap_end:
+            x_overlap = np.linspace(x_overlap_start, x_overlap_end, int(x_overlap_end - x_overlap_start))
+            
+            y_overlap = []
+            for x in x_overlap:
+                index1 = (np.abs(xData_1 - x)).argmin()
+                index2 = (np.abs(xData_2 - x)).argmin()
+                y_overlap.append((yData_1[index1] + yData_2[index2]) / 2)  # Average of both y values
+
+        # Interpolation for the gap between the two ranges
+        x_non_overlap = []
+        y_non_overlap = []
+
+        x_non_overlap_start = x1[-1]
+        x_non_overlap_end = x2[0]
+        if(x2[-1] < x1[0]):
+            x_non_overlap_start = x2[-1]
+            x_non_overlap_end = x1[0]
+    
+        if x_non_overlap_start < x_non_overlap_end:
+            x_non_overlap = np.linspace(x_non_overlap_start, x_non_overlap_end, num=100)
+
+            if(x1[-1] <= x2[0]):
+                y_non_overlap = np.interp(x_non_overlap, [x1[-1], x2[0]], [y1[-1], y2[0]])
+            
+            else:
+                y_non_overlap = np.interp(x_non_overlap, [x2[-1], x1[0]], [y2[-1], y1[0]])
+
+        x_combined = []
+        y_combined = []
+        if(x1[0] <= x2[0]):
+            x_combined = np.concatenate((x1, x_overlap, x2, x_non_overlap))
+            y_combined = np.concatenate((y1, y_overlap, y2, y_non_overlap))
+        else:
+            x_combined = np.concatenate((x2, x_overlap, x1, x_non_overlap))
+            y_combined = np.concatenate((y2, y_overlap, y1, y_non_overlap))
+
+        self.plotWidget_3.plotItem.clear()
+        self.plotWidget_3.setXRange(x_combined[0] - 50, max(x1[-1], x2[-1]) + 50, padding=0)
+        self.plotWidget_3.setYRange(-2, 2, padding=0)
+        self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=x_combined[0]  - 50, xMax=max(x1[-1], x2[-1]) + 50, yMin=-2, yMax=2)
+        self.plotWidget_3.plot(x_combined, y_combined, pen='y')
+
+class LiveSignalPopup(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Temperature In Cairo")
+        self.setGeometry(100, 100, 800, 600)
+
+        self.plotWidget = pg.PlotWidget()
+        self.plotWidget.setTitle("Temperature In Cairo")
+        self.plotWidget.setLabel('left', 'Temperature (Kelvin)')
+        self.plotWidget.setLabel('bottom', 'Time (s)')
+
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.plotWidget)
+        self.setLayout(layout)
+
+        # Create a button and add it to the layout
+        self.isPaused = False
+        
+        horizontalLayout = QtWidgets.QHBoxLayout()
+
+        self.resumeButton = QtWidgets.QPushButton("Resume")
+        self.resumeButton.clicked.connect(self.onResume)
+        self.resumeButton.setStyleSheet(u"QPushButton {\n"
+        "	background-color: #5e80ad;\n"
+        "\n"
+        "   color: #d9dee8; /* Light text color */\n"
+        "   font-size: 16px; /* Font size */\n"
+        "   padding: 10px 20px; /* Padding around the text */\n"
+        "	border-top-color: transparent;\n"
+        "	border-right-color: transparent;\n"
+        "	border-left-color: transparent;\n"
+        "	border-bottom-color: transparent;\n"
+        "	border-width: 1px;\n"
+        "	border-style: solid;\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:hover {\n"
+        "	background-color: #89dcff;\n"
+        "	color: #010100;\n"
+        "    border: 3px solid #81A1C1; /* Border color on hover */\n"
+        "\n"
+        "    font-size: 16px; /* Font size */\n"
+        "    padding: 10px 20px; /* Padding around the text */\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:pressed {\n"
+        "    background-color: #3B4252; /* Background color when pressed */\n"
+        "    border: 2px solid #4C566A; /* Border color when pressed */\n"
+        "}\n"
+        "")
+
+        self.pauseButton = QtWidgets.QPushButton("Pause")
+        self.pauseButton.clicked.connect(self.onPause)
+        self.pauseButton.setStyleSheet(u"QPushButton {\n"
+        "	background-color: #5e80ad;\n"
+        "\n"
+        "   color: #d9dee8; /* Light text color */\n"
+        "   font-size: 16px; /* Font size */\n"
+        "   padding: 10px 20px; /* Padding around the text */\n"
+        "	border-top-color: transparent;\n"
+        "	border-right-color: transparent;\n"
+        "	border-left-color: transparent;\n"
+        "	border-bottom-color: transparent;\n"
+        "	border-width: 1px;\n"
+        "	border-style: solid;\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:hover {\n"
+        "	background-color: #89dcff;\n"
+        "	color: #010100;\n"
+        "    border: 3px solid #81A1C1; /* Border color on hover */\n"
+        "\n"
+        "    font-size: 16px; /* Font size */\n"
+        "    padding: 10px 20px; /* Padding around the text */\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:pressed {\n"
+        "    background-color: #3B4252; /* Background color when pressed */\n"
+        "    border: 2px solid #4C566A; /* Border color when pressed */\n"
+        "}\n"
+        "")
+
+        horizontalLayout.addWidget(self.pauseButton)
+        horizontalLayout.addWidget(self.resumeButton)
+        layout.addLayout(horizontalLayout)
+
+        self.temperatures = []
+        self.timePoints = []
+
+        # Needed For Boundaries Of The Plot
+        self.minTemp = 999999999
+        self.maxTemp = -99999999
+
+    def updatePlot(self, temperature):
+        # Update the data lists
+        if(temperature < self.minTemp):
+            self.minTemp = temperature
+        
+        if(temperature > self.maxTemp):
+            self.maxTemp = temperature
+
+        self.temperatures.append(temperature)
+        self.timePoints.append(len(self.temperatures))
+
+        # Update the plot
+        self.plotWidget.clear()
+        self.plotWidget.setXRange(0, self.timePoints[-1] + 3, padding=0)
+        self.plotWidget.setYRange(self.minTemp - 20, self.maxTemp + 20, padding=0)
+        self.plotWidget.plotItem.getViewBox().setLimits(xMin=0, xMax=self.timePoints[-1] + 3, yMin=self.minTemp - 20, yMax=self.maxTemp + 20)
+        self.plotWidget.plot(self.timePoints, self.temperatures, pen='r')
+    
+    def onPause(self):
+        self.isPaused = True
+    
+    def onResume(self):
+        self.isPaused = False
 
 class CheckableLabelItem(QtWidgets.QWidget):
     def __init__(self, index, text, color, graphObj, graphNum, parent=None):
@@ -75,11 +388,11 @@ class CheckableLabelItem(QtWidgets.QWidget):
             self.label.setText(new_text)
             if(self.graphNum == 1):
                 self.graphObj.signalNames_1[self.index] = new_text
-                self.graphObj.titleChannelBox_1.setItemText(self.index + 1, new_text)
+                #self.graphObj.listChannelsWidget_1.setItemText(self.index + 1, new_text)
                 self.graphObj.colorMoveBox_1.setItemText(self.index + 1, new_text)
             else:
                 self.graphObj.signalNames_2[self.index] = new_text
-                self.graphObj.titleChannelBox_2.setItemText(self.index + 1, new_text)
+                #self.graphObj.listChannelsWidget_2.setItemText(self.index + 1, new_text)
                 self.graphObj.colorMoveBox_2.setItemText(self.index + 1, new_text)
     
     def onToggle(self):
@@ -103,6 +416,13 @@ class MainWindow(Ui_SignalViewer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        load_dotenv()
+        # Coordinates of cairo found by gecoding api provided by openweather map
+        self.lat=30.0443879
+        self.lon=31.2357257
+        self.API_KEY = os.getenv('API_KEY')
+        self.URL = f'https://api.openweathermap.org/data/2.5/weather?lat={self.lat}&lon={self.lon}&appid={self.API_KEY}'
+        self.liveSignal = LiveSignalPopup()
         self.df_1 = None  # No data initially
         self.df_2 = None
         self.filePaths_1 = []
@@ -147,6 +467,8 @@ class MainWindow(Ui_SignalViewer):
         self.nonRectGraphButton.clicked.connect(self.openNonRectGraph)
         # Applying button functionalities for first graph #############################
         self.addFileButton.clicked.connect(self.browseTheSignal)
+        self.connectOnlineButton.clicked.connect(self.openLiveSignal)
+        self.glueButton.clicked.connect(self.glueSignals)
 
         # Applying button functionalities for first graph
         self.startButton_1.clicked.connect(self.startTheSignal)
@@ -209,7 +531,6 @@ class MainWindow(Ui_SignalViewer):
                 self.plotCurves_1.append(self.plotWidget_1.plotItem.plot())
                 self.plotColors_1.append(currColor)
                 self.hidden_1.append(False)
-                self.titleChannelBox_1.addItem(currSignalName)
                 self.colorMoveBox_1.addItem(currSignalName)
                 
                 self.filePaths_1.append(filePath)
@@ -232,7 +553,6 @@ class MainWindow(Ui_SignalViewer):
                 self.plotCurves_2.append(self.plotWidget_1.plotItem.plot())
                 self.plotColors_2.append(currColor)
                 self.hidden_2.append(False)
-                self.titleChannelBox_2.addItem(currSignalName)
                 self.colorMoveBox_2.addItem(currSignalName)
 
                 self.filePaths_2.append(filePath)
@@ -261,10 +581,12 @@ class MainWindow(Ui_SignalViewer):
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.pastSignalsX_1.append(self.data_x)            
+                    self.pastSignalsX_1.append(self.data_x)
+                    self.maxPanningValue_1 = max(self.current_index + self.chunk_size, self.maxPanningValue_1)
                     self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.maxPanningValue_1 = max(self.current_index + self.chunk_size, self.maxPanningValue_1)
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_1 + 50, yMin=-2, yMax=2)
                 # Start the timer with a 100 ms interval (Note: the timer times out every 100ms(as given in the argument) and starts another 100ms, which leads to invoking the "updatePlot" every timeout until the timer stops "self.timer.stop()")
                 self.timer.start(100)
             
@@ -275,10 +597,12 @@ class MainWindow(Ui_SignalViewer):
                     self.chunk_size = int(len(self.browsedData_y_2)/3.0)
                     data_x_2 = np.arange(len(self.browsedData_y_2))
                     self.data_x_2 = data_x_2
-                    self.pastSignalsX_2.append(self.data_x_2)            
+                    self.pastSignalsX_2.append(self.data_x_2)        
+                    self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2)    
                     self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2)
                     self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_2 + 50, yMin=-2, yMax=2)
                 self.timer_2.start(100)
         
         # graphs are linked:  
@@ -297,19 +621,23 @@ class MainWindow(Ui_SignalViewer):
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
                     self.pastSignalsX_1.append(self.data_x)             
+                    self.maxPanningValue_1 = max(self.current_index + self.chunk_size, self.maxPanningValue_1)
                     self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.maxPanningValue_1 = max(self.current_index + self.chunk_size, self.maxPanningValue_1)
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_1 + 50, yMin=-2, yMax=2)
                 if self.df_2 is not None and not self.df_2.empty:  # if dataframe of first graph contains data:
                     if not len(self.browsedData_y_2) and not self.isPaused_2:
                         self.browsedData_y_2 = self.df_2.to_numpy().flatten()
                         self.pastSignalsY_2.append(self.browsedData_y_2)
                         data_x_2 = np.arange(len(self.browsedData_y_2))
                         self.data_x_2 = data_x_2
-                        self.pastSignalsX_2.append(self.data_x_2)            
+                        self.pastSignalsX_2.append(self.data_x_2)           
+                        self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2) 
                         self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
                         self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2)
                         self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
+                        self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_2 + 50, yMin=-2, yMax=2)
             self.timer.start(100)
             self.timer_2.start(100)
             
@@ -323,7 +651,7 @@ class MainWindow(Ui_SignalViewer):
             
         if self.current_index < maxLength:
             end_index = min(self.current_index + self.chunk_size, maxLength) # Determine the range of data to plot in this frame
-            self.maxPanningValue_1 = max(end_index, self.maxPanningValue_1)  
+            self.maxPanningValue_1 = max(end_index, self.maxPanningValue_1)
             self.plotWidget_1.clear() # Clear the graph first so that the widget only contains the latest plots (needed for show and hide functionality)
 
             for signalIdx in range (len(self.pastSignalsY_1)):  # Plotting all stored signals on the graph
@@ -350,8 +678,9 @@ class MainWindow(Ui_SignalViewer):
         else:
             self.timer.stop()  # Stop the timer when the end is reached
             self.current_index = 0  # resetting the starting index
-            self.maxPanningValue_1 = max(maxLength, self.maxPanningValue_1)  
-
+            self.maxPanningValue_1 = max(maxLength, self.maxPanningValue_1) 
+             
+        self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_1 + 50, yMin=-2, yMax=2)
         self.horizontalScrollBar_1.setRange(0, self.maxPanningValue_1)  # Scroll range based on data
 
     # for updating the second graph for the cine mode.     
@@ -394,6 +723,7 @@ class MainWindow(Ui_SignalViewer):
             self.current_index_2 = 0
             self.maxPanningValue_2 = max(maxLength, self.maxPanningValue_2)
         
+        self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_2 + 50, yMin=-2, yMax=2)
         self.horizontalScrollBar_2.setRange(0, self.maxPanningValue_2)  # Scroll range based on data
                   
     def pauseTheSignal(self):
@@ -435,6 +765,31 @@ class MainWindow(Ui_SignalViewer):
             self.maxPanningValue_1 = 0
             self.maxPanningValue_2 = 0
             self.startTheSignal()
+    
+    def openLiveSignal(self):
+        self.liveTimer = QtCore.QTimer()
+        self.liveTimer.timeout.connect(self.fetchLiveData)
+        self.liveTimer.start(3000) # Every 3 Seconds we fetch from the API
+        self.fetchLiveData() # Initial Fetch
+        self.liveSignal.show()
+    
+    def fetchLiveData(self):
+        if not self.liveSignal.isPaused:
+            try:
+                response = requests.get(self.URL)
+                data = response.json()
+                temperature = data['main']['temp']
+                self.liveSignal.updatePlot(temperature)
+            except Exception as e:
+                print(f"Error fetching data: {e}")
+    
+    def glueSignals(self):
+        firstSignalIdx = self.colorMoveBox_1.currentIndex() - 1
+        secondSignalIdx = self.colorMoveBox_2.currentIndex() - 1
+        if(firstSignalIdx > -1 and secondSignalIdx > -1):
+            self.glueSignal = GlueSignalsPopup([self.signalNames_1[firstSignalIdx], self.signalNames_2[secondSignalIdx]], 
+                                               [self.plotCurves_1[firstSignalIdx], self.plotCurves_2[secondSignalIdx]])
+            self.glueSignal.show()
             
     def linkGraphs(self):
         if self.isLinked == True:
@@ -517,7 +872,6 @@ class MainWindow(Ui_SignalViewer):
                     self.plotCurves_2.append(self.plotWidget_2.plotItem.plot())
                     self.plotColors_2.append(self.plotColors_1[signalIdx])
                     self.hidden_2.append(self.hidden_1[signalIdx])
-                    self.titleChannelBox_2.addItem(self.signalNames_1[signalIdx])
                     self.colorMoveBox_2.addItem(self.signalNames_1[signalIdx])
 
                     self.filePaths_2.append(self.filePaths_1[signalIdx])
@@ -550,8 +904,6 @@ class MainWindow(Ui_SignalViewer):
                 self.filePaths_1 = []
                 self.labelItems_1 = []
                 self.listChannelsWidget_1.clear()
-                self.titleChannelBox_1.clear()
-                self.titleChannelBox_1.addItem("All Channels")
                 self.colorMoveBox_1.clear()
                 self.colorMoveBox_1.addItem("All Channels")
 
@@ -560,7 +912,6 @@ class MainWindow(Ui_SignalViewer):
                 self.plotCurves_2.append(self.plotWidget_2.plotItem.plot())
                 self.plotColors_2.append(self.plotColors_1[currIdx])
                 self.hidden_2.append(self.hidden_1[currIdx])
-                self.titleChannelBox_2.addItem(self.signalNames_1[currIdx])
                 self.colorMoveBox_2.addItem(self.signalNames_1[currIdx])
 
                 self.filePaths_2.append(self.filePaths_1[currIdx])
@@ -580,7 +931,6 @@ class MainWindow(Ui_SignalViewer):
 
                 self.plotWidget_1.plotItem.removeItem(self.plotCurves_1[currIdx])
                 self.listChannelsWidget_1.takeItem(self.listChannelsWidget_1.row(self.widgetItems_1[currIdx]))  # Remove it
-                self.titleChannelBox_1.removeItem(currIdx + 1)
                 self.colorMoveBox_1.removeItem(currIdx + 1)
                 
                 for signalIdx in range(currIdx, len(self.pastSignalsY_1) - 1):
@@ -622,7 +972,6 @@ class MainWindow(Ui_SignalViewer):
                     self.plotCurves_1.append(self.plotWidget_1.plotItem.plot())
                     self.plotColors_1.append(self.plotColors_2[signalIdx])
                     self.hidden_1.append(self.hidden_2[signalIdx])
-                    self.titleChannelBox_1.addItem(self.signalNames_2[signalIdx])
                     self.colorMoveBox_1.addItem(self.signalNames_2[signalIdx])
 
                     self.filePaths_1.append(self.filePaths_2[signalIdx])
@@ -655,8 +1004,6 @@ class MainWindow(Ui_SignalViewer):
                 self.filePaths_2 = []
                 self.labelItems_2 = []
                 self.listChannelsWidget_2.clear()
-                self.titleChannelBox_2.clear()
-                self.titleChannelBox_2.addItem("All Channels")
                 self.colorMoveBox_2.clear()
                 self.colorMoveBox_2.addItem("All Channels")
 
@@ -665,7 +1012,6 @@ class MainWindow(Ui_SignalViewer):
                 self.plotCurves_1.append(self.plotWidget_1.plotItem.plot())
                 self.plotColors_1.append(self.plotColors_2[currIdx])
                 self.hidden_1.append(self.hidden_2[currIdx])
-                self.titleChannelBox_1.addItem(self.signalNames_2[currIdx])
                 self.colorMoveBox_1.addItem(self.signalNames_2[currIdx])
 
                 self.filePaths_1.append(self.filePaths_2[currIdx])
@@ -685,7 +1031,6 @@ class MainWindow(Ui_SignalViewer):
 
                 self.plotWidget_2.plotItem.removeItem(self.plotCurves_2[currIdx])
                 self.listChannelsWidget_2.takeItem(self.listChannelsWidget_2.row(self.widgetItems_2[currIdx]))  # Remove it
-                self.titleChannelBox_2.removeItem(currIdx + 1)
                 self.colorMoveBox_2.removeItem(currIdx + 1)
                 
                 for signalIdx in range(currIdx, len(self.pastSignalsY_2) - 1):
