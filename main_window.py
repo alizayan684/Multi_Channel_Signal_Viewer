@@ -510,7 +510,6 @@ class Ui_SignalViewer(QMainWindow):
         self.plotWidget_1.setStyleSheet(u"    background-color: #000000; /* Dark background */\n"
 "    color: #D8DEE9; /* Light text color */\n"
 "    font-size: 16px; /* Font size */\n"
-"    padding: 5px; /* Padding around the text */\n"
 "    border: 2px solid #4C566A; /* Border color */\n"
 "    border-radius: 5px; /* Rounded corners */\n"
 "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
@@ -607,13 +606,13 @@ class Ui_SignalViewer(QMainWindow):
 
         self.horizontalLayout_5.addWidget(self.colorButton_1)
 
-        self.moveBox_1 = QPushButton(self.centralwidget)
-        self.moveBox_1.setObjectName(u"moveBox_1")
-        sizePolicy2.setHeightForWidth(self.moveBox_1.sizePolicy().hasHeightForWidth())
-        self.moveBox_1.setSizePolicy(sizePolicy2)
-        self.moveBox_1.setMaximumSize(QSize(200, 40))
+        self.moveButton_1 = QPushButton(self.centralwidget)
+        self.moveButton_1.setObjectName(u"moveButton_1")
+        sizePolicy2.setHeightForWidth(self.moveButton_1.sizePolicy().hasHeightForWidth())
+        self.moveButton_1.setSizePolicy(sizePolicy2)
+        self.moveButton_1.setMaximumSize(QSize(200, 40))
 
-        self.horizontalLayout_5.addWidget(self.moveBox_1)
+        self.horizontalLayout_5.addWidget(self.moveButton_1)
 
         self.colorMoveBox_1 = QComboBox(self.centralwidget)
         self.colorMoveBox_1.addItem("")
@@ -699,7 +698,6 @@ class Ui_SignalViewer(QMainWindow):
         self.plotWidget_2.setStyleSheet(u"    background-color: #000000; /* Dark background */\n"
 "    color: #D8DEE9; /* Light text color */\n"
 "    font-size: 16px; /* Font size */\n"
-"    padding: 5px; /* Padding around the text */\n"
 "    border: 2px solid #4C566A; /* Border color */\n"
 "    border-radius: 5px; /* Rounded corners */\n"
 "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
@@ -913,46 +911,14 @@ class Ui_SignalViewer(QMainWindow):
 
         self.verticalLayout_13.addWidget(self.graphLabel_1)
 
-        self.titleChannelBox_1 = QComboBox(self.centralwidget)
-        self.titleChannelBox_1.addItem("")
-        self.titleChannelBox_1.setObjectName(u"titleChannelBox_1")
-        self.titleChannelBox_1.setMinimumSize(QSize(0, 40))
-        self.titleChannelBox_1.setMaximumSize(QSize(200, 40))
-        self.titleChannelBox_1.setStyleSheet(u"QComboBox{\n"
-" font-size: 16px; /* Font size */\n"
-"   padding: 2px; /* Padding around the text */\n"
-"    border: 2px solid; /* Border color */\n"
-"    border-radius: 5px; /* Rounded corners */\n"
-"    font-family: \"Segoe UI\"\n"
-"}")
 
-        self.verticalLayout_13.addWidget(self.titleChannelBox_1)
 
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.titleButton_1 = QPushButton(self.centralwidget)
-        self.titleButton_1.setObjectName(u"title")
-        self.titleButton_1.setMaximumSize(QSize(100, 100))
-        self.titleButton_1.setStyleSheet(u"QLabel {\n"
-"    background-color: #2E3440; /* Dark background */\n"
-"    color: #D8DEE9; /* Light text color */\n"
-"    font-size: 16px; /* Font size */\n"
-"    padding: 2px; /* Padding around the text */\n"
-"    border: 2px solid #4C566A; /* Border color */\n"
-"    border-radius: 5px; /* Rounded corners */\n"
-"    font-family: \"Segoe UI\"\n"
-"}")
+        
 
-        self.horizontalLayout_12.addWidget(self.titleButton_1)
 
-        self.titleEdit_1 = QLineEdit(self.centralwidget)
-        self.titleEdit_1.setObjectName(u"titleEdit_1")
-        sizePolicy2.setHeightForWidth(self.titleEdit_1.sizePolicy().hasHeightForWidth())
-        self.titleEdit_1.setSizePolicy(sizePolicy2)
-        self.titleEdit_1.setMaximumSize(QSize(200, 50))
-        self.titleEdit_1.setStyleSheet(u"border-color: rgb(0, 255, 0);")
-
-        self.horizontalLayout_12.addWidget(self.titleEdit_1)
+       
 
 
         self.verticalLayout_13.addLayout(self.horizontalLayout_12)
@@ -1019,49 +985,19 @@ class Ui_SignalViewer(QMainWindow):
 
         self.verticalLayout_13.addWidget(self.graphLabel_2)
 
-        self.titleChannelBox_2 = QComboBox(self.centralwidget)
-        self.titleChannelBox_2.addItem("")
-        self.titleChannelBox_2.setObjectName(u"titleChannelBox_2")
-        self.titleChannelBox_2.setMinimumSize(QSize(0, 40))
-        self.titleChannelBox_2.setMaximumSize(QSize(200, 40))
-        self.titleChannelBox_2.setStyleSheet(u" font-size: 16px; /* Font size */\n"
-"    padding: 2px; /* Padding around the text */\n"
-"    border: 2px solid; /* Border color */\n"
-"    border-radius: 5px; /* Rounded corners */\n"
-"    font-family: \"Segoe UI\"")
+       
 
-        self.verticalLayout_13.addWidget(self.titleChannelBox_2)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.titleButton_2 = QPushButton(self.centralwidget)
-        self.titleButton_2.setObjectName(u"title")
-        sizePolicy2.setHeightForWidth(self.titleButton_2.sizePolicy().hasHeightForWidth())
-        self.titleButton_2.setSizePolicy(sizePolicy2)
-        self.titleButton_2.setMaximumSize(QSize(100, 100))
-        self.titleButton_2.setStyleSheet(u"QLabel {\n"
-"    background-color: #2E3440; /* Dark background */\n"
-"    color: #D8DEE9; /* Light text color */\n"
-"    font-size: 16px; /* Font size */\n"
-"    padding: 2px; /* Padding around the text */\n"
-"    border: 2px solid #4C566A; /* Border color */\n"
-"    border-radius: 5px; /* Rounded corners */\n"
-"    font-family: \"Segoe UI\"\n"
-"}")
+        
 
-        self.horizontalLayout_4.addWidget(self.titleButton_2)
 
-        self.titleEdit_2 = QLineEdit(self.centralwidget)
-        self.titleEdit_2.setObjectName(u"titleEdit_2")
-        sizePolicy2.setHeightForWidth(self.titleEdit_2.sizePolicy().hasHeightForWidth())
-        self.titleEdit_2.setSizePolicy(sizePolicy2)
-        self.titleEdit_2.setMaximumSize(QSize(200, 50))
-        self.titleEdit_2.setStyleSheet(u"border-color: rgb(0, 255, 0);")
+        
 
-        self.horizontalLayout_4.addWidget(self.titleEdit_2)
 
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)
@@ -1267,7 +1203,7 @@ class Ui_SignalViewer(QMainWindow):
         self.actionDelete.setText(QCoreApplication.translate("SignalViewer", u"Delete", None))
         self.speedLabel_1.setText(QCoreApplication.translate("SignalViewer", u"Speed", None))
         self.colorButton_1.setText(QCoreApplication.translate("SignalViewer", u"Color", None))
-        self.moveBox_1.setText(QCoreApplication.translate("SignalViewer", u"Move", None))
+        self.moveButton_1.setText(QCoreApplication.translate("SignalViewer", u"Move", None))
         self.colorMoveBox_1.setItemText(0, QCoreApplication.translate("SignalViewer", u"All Channels", None))
 
         self.rewindButton_1.setText(QCoreApplication.translate("SignalViewer", u"Rewind", None))
@@ -1277,14 +1213,10 @@ class Ui_SignalViewer(QMainWindow):
         self.startButton_1.setText(QCoreApplication.translate("SignalViewer", u"Start", None))
         self.speedLabel_2.setText(QCoreApplication.translate("SignalViewer", u"Speed", None))
         self.graphLabel_1.setText(QCoreApplication.translate("SignalViewer", u"Graph 1", None))
-        self.titleChannelBox_1.setItemText(0, QCoreApplication.translate("SignalViewer", u"All Channels", None))
 
-        self.titleButton_1.setText(QCoreApplication.translate("SignalViewer", u"Title", None))
         self.linkButton.setText(QCoreApplication.translate("SignalViewer", u"Link", None))
         self.graphLabel_2.setText(QCoreApplication.translate("SignalViewer", u"Graph 2", None))
-        self.titleChannelBox_2.setItemText(0, QCoreApplication.translate("SignalViewer", u"All Channels", None))
 
-        self.titleButton_2.setText(QCoreApplication.translate("SignalViewer", u"Title", None))
         self.glueButton.setText(QCoreApplication.translate("SignalViewer", u"Glue", None))
         self.colorButton_2.setText(QCoreApplication.translate("SignalViewer", u"Color", None))
         self.moveButton_2.setText(QCoreApplication.translate("SignalViewer", u"Move", None))
