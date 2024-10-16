@@ -94,6 +94,10 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         "")
         self.layout.addWidget(self.button)
 
+        self.plotWidget_3 = pg.PlotWidget()
+        self.plotWidget_3.setTitle("Result")
+        self.layout.addWidget(self.plotWidget_3)
+
         self.setLayout(self.layout)
 
     def updateRegion_1(self):
@@ -151,7 +155,7 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         # If there is an gap, its starting point will be the smaller ending index between the two ranges, while its end is the big starting index
         x_non_overlap_start = x1[-1]
         x_non_overlap_end = x2[0]
-        if(x1[-1] > x2[0]):
+        if(x1[0] > x2[-1]):
             x_non_overlap_start = x2[-1]
             x_non_overlap_end = x1[0]
     
@@ -172,11 +176,8 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         else:
             x_combined = np.concatenate((x2, x_overlap, x1, x_non_overlap))
             y_combined = np.concatenate((y2, y_overlap, y1, y_non_overlap))
-         
-        self.plotWidget_3 = pg.PlotWidget()
-        self.plotWidget_3.setTitle("Result")
-        self.layout.addWidget(self.plotWidget_3)
 
+        self.plotWidget_3.plotItem.clear()
         self.plotWidget_3.plot(x_combined, y_combined, pen='y')
 
 class LiveSignalPopup(QtWidgets.QWidget):
