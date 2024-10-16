@@ -23,9 +23,9 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         self.plotWidget_1 = pg.PlotWidget()
         self.plotWidget_1.setTitle(plotNames[0])
         xData_1, yData_1 = self.plotCurves[0].getData()
-        self.plotWidget_1.setXRange(xData_1[0], xData_1[-1], padding=0)
+        self.plotWidget_1.setXRange(xData_1[0] - 20, xData_1[-1] + 20, padding=0)
         self.plotWidget_1.setYRange(-2, 2, padding=0)
-        self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=xData_1[0], xMax=xData_1[-1], yMin=-2, yMax=2)
+        self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=xData_1[0] - 20, xMax=xData_1[-1] + 20, yMin=-2, yMax=2)
         self.layout.addWidget(self.plotWidget_1)
 
         # Plot the data for the first plot
@@ -47,9 +47,9 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         self.plotWidget_2 = pg.PlotWidget()
         self.plotWidget_2.setTitle(plotNames[1])
         xData_2, yData_2 = self.plotCurves[1].getData()
-        self.plotWidget_2.setXRange(xData_2[0], xData_2[-1], padding=0)
+        self.plotWidget_2.setXRange(xData_2[0] - 20, xData_2[-1] + 20, padding=0)
         self.plotWidget_2.setYRange(-2, 2, padding=0)
-        self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=xData_2[0], xMax=xData_2[-1], yMin=-2, yMax=2)
+        self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=xData_2[0] - 20, xMax=xData_2[-1] + 20, yMin=-2, yMax=2)
         self.layout.addWidget(self.plotWidget_2)
 
         # Plot the data for the second plot
@@ -491,10 +491,11 @@ class MainWindow(Ui_SignalViewer):
                     self.chunk_size = int(len(self.browsedData_y)/3.0)
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
-                    self.pastSignalsX_1.append(self.data_x)            
-                    self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
+                    self.pastSignalsX_1.append(self.data_x)
                     self.maxPanningValue_1 = max(self.current_index + self.chunk_size, self.maxPanningValue_1)
+                    self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_1 + 50, yMin=-2, yMax=2)
                 # Start the timer with a 100 ms interval (Note: the timer times out every 100ms(as given in the argument) and starts another 100ms, which leads to invoking the "updatePlot" every timeout until the timer stops "self.timer.stop()")
                 self.timer.start(100)
             
@@ -505,10 +506,11 @@ class MainWindow(Ui_SignalViewer):
                     self.chunk_size = int(len(self.browsedData_y_2)/3.0)
                     data_x_2 = np.arange(len(self.browsedData_y_2))
                     self.data_x_2 = data_x_2
-                    self.pastSignalsX_2.append(self.data_x_2)            
+                    self.pastSignalsX_2.append(self.data_x_2)        
+                    self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2)    
                     self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
-                    self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2)
                     self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_2 + 50, yMin=-2, yMax=2)
                 self.timer_2.start(100)
         
         # graphs are linked:  
@@ -527,19 +529,21 @@ class MainWindow(Ui_SignalViewer):
                     data_x = np.arange(len(self.browsedData_y))
                     self.data_x = data_x
                     self.pastSignalsX_1.append(self.data_x)             
-                    self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.maxPanningValue_1 = max(self.current_index + self.chunk_size, self.maxPanningValue_1)
+                    self.plotWidget_1.plotItem.setXRange(self.current_index, self.current_index + self.chunk_size , padding=0)  # Set initial x-axis range
                     self.plotWidget_1.plotItem.setYRange(-2, 2, padding = 0)
+                    self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_1 + 50, yMin=-2, yMax=2)
                 if self.df_2 is not None and not self.df_2.empty:  # if dataframe of first graph contains data:
                     if not len(self.browsedData_y_2) and not self.isPaused_2:
                         self.browsedData_y_2 = self.df_2.to_numpy().flatten()
                         self.pastSignalsY_2.append(self.browsedData_y_2)
                         data_x_2 = np.arange(len(self.browsedData_y_2))
                         self.data_x_2 = data_x_2
-                        self.pastSignalsX_2.append(self.data_x_2)            
+                        self.pastSignalsX_2.append(self.data_x_2)           
+                        self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2) 
                         self.plotWidget_2.plotItem.setXRange(self.current_index_2, self.current_index_2 + self.chunk_size , padding=0)  # Set initial x-axis range
-                        self.maxPanningValue_2 = max(self.current_index_2 + self.chunk_size, self.maxPanningValue_2)
                         self.plotWidget_2.plotItem.setYRange(-2, 2, padding = 0)   
+                        self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_2 + 50, yMin=-2, yMax=2)
             self.timer.start(100)
             self.timer_2.start(100)
             
@@ -553,7 +557,7 @@ class MainWindow(Ui_SignalViewer):
             
         if self.current_index < maxLength:
             end_index = min(self.current_index + self.chunk_size, maxLength) # Determine the range of data to plot in this frame
-            self.maxPanningValue_1 = max(end_index, self.maxPanningValue_1)  
+            self.maxPanningValue_1 = max(end_index, self.maxPanningValue_1)
             self.plotWidget_1.clear() # Clear the graph first so that the widget only contains the latest plots (needed for show and hide functionality)
 
             for signalIdx in range (len(self.pastSignalsY_1)):  # Plotting all stored signals on the graph
@@ -580,8 +584,9 @@ class MainWindow(Ui_SignalViewer):
         else:
             self.timer.stop()  # Stop the timer when the end is reached
             self.current_index = 0  # resetting the starting index
-            self.maxPanningValue_1 = max(maxLength, self.maxPanningValue_1)  
-
+            self.maxPanningValue_1 = max(maxLength, self.maxPanningValue_1) 
+             
+        self.plotWidget_1.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_1 + 50, yMin=-2, yMax=2)
         self.horizontalScrollBar_1.setRange(0, self.maxPanningValue_1)  # Scroll range based on data
 
     # for updating the second graph for the cine mode.     
@@ -624,6 +629,7 @@ class MainWindow(Ui_SignalViewer):
             self.current_index_2 = 0
             self.maxPanningValue_2 = max(maxLength, self.maxPanningValue_2)
         
+        self.plotWidget_2.plotItem.getViewBox().setLimits(xMin=0, xMax=self.maxPanningValue_2 + 50, yMin=-2, yMax=2)
         self.horizontalScrollBar_2.setRange(0, self.maxPanningValue_2)  # Scroll range based on data
                   
     def pauseTheSignal(self):
