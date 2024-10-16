@@ -208,6 +208,44 @@ class LiveSignalPopup(QtWidgets.QWidget):
         layout.addWidget(self.plotWidget)
         self.setLayout(layout)
 
+        # Create a button and add it to the layout
+        self.isPaused = False
+        self.button = QtWidgets.QPushButton("Pause")
+        self.button.clicked.connect(self.onPause)
+        self.button.setStyleSheet(u"QPushButton {\n"
+        "	background-color: #5e80ad;\n"
+        "\n"
+        "   color: #d9dee8; /* Light text color */\n"
+        "   font-size: 16px; /* Font size */\n"
+        "   padding: 10px 20px; /* Padding around the text */\n"
+        "	border-top-color: transparent;\n"
+        "	border-right-color: transparent;\n"
+        "	border-left-color: transparent;\n"
+        "	border-bottom-color: transparent;\n"
+        "	border-width: 1px;\n"
+        "	border-style: solid;\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:hover {\n"
+        "	background-color: #89dcff;\n"
+        "	color: #010100;\n"
+        "    border: 3px solid #81A1C1; /* Border color on hover */\n"
+        "\n"
+        "    font-size: 16px; /* Font size */\n"
+        "    padding: 10px 20px; /* Padding around the text */\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:pressed {\n"
+        "    background-color: #3B4252; /* Background color when pressed */\n"
+        "    border: 2px solid #4C566A; /* Border color when pressed */\n"
+        "}\n"
+        "")
+        layout.addWidget(self.button)
+
         self.temperatures = []
         self.timePoints = []
 
@@ -232,6 +270,9 @@ class LiveSignalPopup(QtWidgets.QWidget):
         self.plotWidget.setYRange(self.minTemp - 20, self.maxTemp + 20, padding=0)
         self.plotWidget.plotItem.getViewBox().setLimits(xMin=0, xMax=self.timePoints[-1] + 3, yMin=self.minTemp - 20, yMax=self.maxTemp + 20)
         self.plotWidget.plot(self.timePoints, self.temperatures, pen='r')
+    
+    def onPause(self):
+        self.isPaused = True
 
 class CheckableLabelItem(QtWidgets.QWidget):
     def __init__(self, index, text, color, graphObj, graphNum, parent=None):
@@ -678,13 +719,14 @@ class MainWindow(Ui_SignalViewer):
         self.liveSignal.show()
     
     def fetchLiveData(self):
-        try:
-            response = requests.get(self.URL)
-            data = response.json()
-            temperature = data['main']['temp']
-            self.liveSignal.updatePlot(temperature)
-        except Exception as e:
-            print(f"Error fetching data: {e}")
+        if not self.liveSignal.isPaused:
+            try:
+                response = requests.get(self.URL)
+                data = response.json()
+                temperature = data['main']['temp']
+                self.liveSignal.updatePlot(temperature)
+            except Exception as e:
+                print(f"Error fetching data: {e}")
     
     def glueSignals(self):
         firstSignalIdx = self.colorMoveBox_1.currentIndex() - 1
