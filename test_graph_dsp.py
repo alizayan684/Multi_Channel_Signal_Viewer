@@ -152,10 +152,10 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         # Interpolation for the gap between the two ranges
         x_non_overlap = []
         y_non_overlap = []
-        # If there is an gap, its starting point will be the smaller ending index between the two ranges, while its end is the big starting index
+
         x_non_overlap_start = x1[-1]
         x_non_overlap_end = x2[0]
-        if(x1[0] > x2[-1]):
+        if(x2[-1] < x1[0]):
             x_non_overlap_start = x2[-1]
             x_non_overlap_end = x1[0]
     
