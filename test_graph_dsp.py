@@ -211,13 +211,26 @@ class LiveSignalPopup(QtWidgets.QWidget):
         self.temperatures = []
         self.timePoints = []
 
+        # Needed For Boundaries Of The Plot
+        self.minTemp = 999999999
+        self.maxTemp = -99999999
+
     def updatePlot(self, temperature):
         # Update the data lists
+        if(temperature < self.minTemp):
+            self.minTemp = temperature
+        
+        if(temperature > self.maxTemp):
+            self.maxTemp = temperature
+
         self.temperatures.append(temperature)
         self.timePoints.append(len(self.temperatures))
 
         # Update the plot
         self.plotWidget.clear()
+        self.plotWidget.setXRange(0, self.timePoints[-1] + 3, padding=0)
+        self.plotWidget.setYRange(self.minTemp - 20, self.maxTemp + 20, padding=0)
+        self.plotWidget.plotItem.getViewBox().setLimits(xMin=0, xMax=self.timePoints[-1] + 3, yMin=self.minTemp - 20, yMax=self.maxTemp + 20)
         self.plotWidget.plot(self.timePoints, self.temperatures, pen='r')
 
 class CheckableLabelItem(QtWidgets.QWidget):
