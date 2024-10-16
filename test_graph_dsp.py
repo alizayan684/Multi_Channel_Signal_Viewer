@@ -210,9 +210,12 @@ class LiveSignalPopup(QtWidgets.QWidget):
 
         # Create a button and add it to the layout
         self.isPaused = False
-        self.button = QtWidgets.QPushButton("Pause")
-        self.button.clicked.connect(self.onPause)
-        self.button.setStyleSheet(u"QPushButton {\n"
+        
+        horizontalLayout = QtWidgets.QHBoxLayout()
+
+        self.resumeButton = QtWidgets.QPushButton("Resume")
+        self.resumeButton.clicked.connect(self.onResume)
+        self.resumeButton.setStyleSheet(u"QPushButton {\n"
         "	background-color: #5e80ad;\n"
         "\n"
         "   color: #d9dee8; /* Light text color */\n"
@@ -244,7 +247,45 @@ class LiveSignalPopup(QtWidgets.QWidget):
         "    border: 2px solid #4C566A; /* Border color when pressed */\n"
         "}\n"
         "")
-        layout.addWidget(self.button)
+
+        self.pauseButton = QtWidgets.QPushButton("Pause")
+        self.pauseButton.clicked.connect(self.onPause)
+        self.pauseButton.setStyleSheet(u"QPushButton {\n"
+        "	background-color: #5e80ad;\n"
+        "\n"
+        "   color: #d9dee8; /* Light text color */\n"
+        "   font-size: 16px; /* Font size */\n"
+        "   padding: 10px 20px; /* Padding around the text */\n"
+        "	border-top-color: transparent;\n"
+        "	border-right-color: transparent;\n"
+        "	border-left-color: transparent;\n"
+        "	border-bottom-color: transparent;\n"
+        "	border-width: 1px;\n"
+        "	border-style: solid;\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:hover {\n"
+        "	background-color: #89dcff;\n"
+        "	color: #010100;\n"
+        "    border: 3px solid #81A1C1; /* Border color on hover */\n"
+        "\n"
+        "    font-size: 16px; /* Font size */\n"
+        "    padding: 10px 20px; /* Padding around the text */\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:pressed {\n"
+        "    background-color: #3B4252; /* Background color when pressed */\n"
+        "    border: 2px solid #4C566A; /* Border color when pressed */\n"
+        "}\n"
+        "")
+
+        horizontalLayout.addWidget(self.pauseButton)
+        horizontalLayout.addWidget(self.resumeButton)
+        layout.addLayout(horizontalLayout)
 
         self.temperatures = []
         self.timePoints = []
@@ -273,6 +314,9 @@ class LiveSignalPopup(QtWidgets.QWidget):
     
     def onPause(self):
         self.isPaused = True
+    
+    def onResume(self):
+        self.isPaused = False
 
 class CheckableLabelItem(QtWidgets.QWidget):
     def __init__(self, index, text, color, graphObj, graphNum, parent=None):
