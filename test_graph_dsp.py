@@ -210,7 +210,7 @@ class LiveSignalPopup(QtWidgets.QWidget):
 
         # Create a button and add it to the layout
         self.isPaused = False
-        
+
         horizontalLayout = QtWidgets.QHBoxLayout()
 
         self.resumeButton = QtWidgets.QPushButton("Resume")
@@ -785,6 +785,10 @@ class MainWindow(Ui_SignalViewer):
             self.isLinked = False
         else:
             self.isLinked = True
+            self.zoom_level = 0  # Default zoom level
+            self.zoom_level_2 = 0
+            self.speedSlider_1.setValue(0)
+            self.speedSlider_2.setValue(0)
             # at linking if the first is moving and the second is paused, change them to be both moving and from the smaller time frame without needing to press start:
             if not self.isPaused and self.isPaused_2:
                 self.isPaused_2 = False
@@ -919,7 +923,7 @@ class MainWindow(Ui_SignalViewer):
                 self.widgetItems_2.append(listWidgetItem)
 
                 self.plotWidget_1.plotItem.removeItem(self.plotCurves_1[currIdx])
-                self.listChannelsWidget_1.takeItem(self.listChannelsWidget_1.row(self.widgetItems_1[currIdx]))  # Remove it
+                self.listChannelsWidget_1.takeItem(currIdx)
                 self.colorMoveBox_1.removeItem(currIdx + 1)
                 
                 for signalIdx in range(currIdx, len(self.pastSignalsY_1) - 1):
@@ -1019,7 +1023,7 @@ class MainWindow(Ui_SignalViewer):
                 self.widgetItems_1.append(listWidgetItem)
 
                 self.plotWidget_2.plotItem.removeItem(self.plotCurves_2[currIdx])
-                self.listChannelsWidget_2.takeItem(self.listChannelsWidget_2.row(self.widgetItems_2[currIdx]))  # Remove it
+                self.listChannelsWidget_2.takeItem(currIdx)
                 self.colorMoveBox_2.removeItem(currIdx + 1)
                 
                 for signalIdx in range(currIdx, len(self.pastSignalsY_2) - 1):
@@ -1060,14 +1064,19 @@ class MainWindow(Ui_SignalViewer):
     def updateSpeed_1(self):
         """ Adjust the speed of the signal based on the slider value and update the label. """
         speed = self.speedSlider_1.value()
-     
+        if(self.isLinked):
+            self.speedSlider_2.setValue(speed)
+            self.timer_2.start(101 - speed)
         # Adjust the timer interval based on the slider value
-        self.timer.start(101 - speed)  # Reverse the speed so a higher slider value means faster updates
+        self.timer.start(101 - speed)  # Reverse the speed so a higher slider value means faster etes
     #################################################################################################
     
     def updateSpeed_2(self):
         """ Adjust the speed of the signal based on the slider value and update the label. """
         speed = self.speedSlider_2.value()
+        if(self.isLinked):
+            self.speedSlider_1.setValue(speed)
+            self.timer.start(101 - speed)
      
         # Adjust the timer interval based on the slider value
         self.timer_2.start(101 - speed)  # Reverse the speed so a higher slider value means faster updates
@@ -1077,6 +1086,9 @@ class MainWindow(Ui_SignalViewer):
         """ Zoom in on the plot by 10%."""
         if self.zoom_level < self.max_zoom_level:
             self.zoom_level += 10  # Increase zoom level by 10%
+            if(self.isLinked):
+                self.zoom_level_2 = self.zoom_level
+                self.plotWidget_2.getViewBox().scaleBy((0.9, 0.9))
             self.plotWidget_1.getViewBox().scaleBy((0.9, 0.9))
     #################################################################################################
     
@@ -1084,18 +1096,27 @@ class MainWindow(Ui_SignalViewer):
         """ Zoom in on the plot by 10%."""
         if self.zoom_level_2 < self.max_zoom_level:
             self.zoom_level_2 += 10  # Increase zoom level by 10%
+            if(self.isLinked):
+                self.zoom_level = self.zoom_level_2
+                self.plotWidget_1.getViewBox().scaleBy((0.9, 0.9))
             self.plotWidget_2.getViewBox().scaleBy((0.9, 0.9))
     #################################################################################################
     def zoom_out_1(self):
         """ Zoom out of the plot by 10%. """
         if self.zoom_level > self.min_zoom_level:
             self.zoom_level -= 10  # Decrease zoom level by 10%
+            if(self.isLinked):
+                self.zoom_level_2 = self.zoom_level
+                self.plotWidget_2.getViewBox().scaleBy((1.1, 1.1))
             self.plotWidget_1.getViewBox().scaleBy((1.1, 1.1))  # Scale the plot by 110%
     #################################################################################################
     def zoom_out_2(self):
         """ Zoom out of the plot by 10%. """
         if self.zoom_level_2 > self.min_zoom_level:
             self.zoom_level_2 -= 10  # Decrease zoom level by 10%
+            if(self.isLinked):
+                self.zoom_level = self.zoom_level_2
+                self.plotWidget_1.getViewBox().scaleBy((1.1, 1.1))
             self.plotWidget_2.getViewBox().scaleBy((1.1, 1.1))  # Scale the plot by 110%
     #################################################################################################
     def openNonRectGraph(self):
