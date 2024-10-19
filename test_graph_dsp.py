@@ -2,7 +2,7 @@ import sys
 from dotenv import load_dotenv
 import os
 import requests
-from PySide6 import QtWidgets, QtCore
+from PySide6 import QtWidgets, QtCore, QtGui
 from PySide6.QtWidgets import QColorDialog, QApplication
 from main_window import Ui_SignalViewer
 import pyqtgraph as pg
@@ -354,7 +354,11 @@ class CheckableLabelItem(QtWidgets.QWidget):
         self.checkbox.stateChanged.connect(self.onToggle)
     
     def setCheckboxColor(self, color):
-        formattedColor = f"#{color[0]:02X}{color[1]:02X}{color[2]:02X}" # Format the rgb tuple into a hex string so that stylesheet can read their properties
+        formattedColor = ""
+        if isinstance(color, QtGui.QPen):
+            formattedColor = f"#{color.color().red():02X}{color.color().green():02X}{color.color().blue():02X}" 
+        else:
+            formattedColor = f"#{color[0]:02X}{color[1]:02X}{color[2]:02X}" # Format the rgb tuple into a hex string so that stylesheet can read their properties
         self.checkbox.setStyleSheet(f"""
             QCheckBox {{
                 spacing: 5px;
@@ -381,11 +385,9 @@ class CheckableLabelItem(QtWidgets.QWidget):
             self.label.setText(new_text)
             if(self.graphNum == 1):
                 self.graphObj.signalNames_1[self.index] = new_text
-                #self.graphObj.listChannelsWidget_1.setItemText(self.index + 1, new_text)
                 self.graphObj.colorMoveBox_1.setItemText(self.index + 1, new_text)
             else:
                 self.graphObj.signalNames_2[self.index] = new_text
-                #self.graphObj.listChannelsWidget_2.setItemText(self.index + 1, new_text)
                 self.graphObj.colorMoveBox_2.setItemText(self.index + 1, new_text)
     
     def onToggle(self):
@@ -970,7 +972,7 @@ class MainWindow(Ui_SignalViewer):
                     self.filePaths_1.append(self.filePaths_2[signalIdx])
                     self.df_1 = pd.read_csv(self.filePaths_2[signalIdx], header=None)
                     self.browsedData_y = [] 
-                    self.isPaused_1 = False
+                    self.isPaused = False
                     self.current_index = 0
 
                     # Adding Signal Name To Our Labels List
@@ -1010,7 +1012,7 @@ class MainWindow(Ui_SignalViewer):
                 self.filePaths_1.append(self.filePaths_2[currIdx])
                 self.df_1 = pd.read_csv(self.filePaths_2[currIdx], header=None)
                 self.browsedData_y = [] 
-                self.isPaused_1 = False
+                self.isPaused = False
                 self.current_index = 0
 
                 # Adding Signal Name To Our Labels List
