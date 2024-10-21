@@ -1,1 +1,1 @@
-self.plotWidget_1.clear()
+plotWidget_1 = pg.PlotWidget()
