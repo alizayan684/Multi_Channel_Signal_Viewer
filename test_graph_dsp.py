@@ -8,6 +8,7 @@ from main_window import Ui_SignalViewer
 import pyqtgraph as pg
 import numpy as np
 import pandas as pd
+from scipy.interpolate import interp1d
 from pathlib import Path
 
 class GlueSignalsPopup(QtWidgets.QWidget):
@@ -18,6 +19,7 @@ class GlueSignalsPopup(QtWidgets.QWidget):
 
         self.plotCurves = plotCurves
         self.layout = QtWidgets.QVBoxLayout()
+        self.alreadyGlued = False
 
         # Create the first PlotWidget
         self.plotWidget_1 = pg.PlotWidget()
@@ -66,6 +68,28 @@ class GlueSignalsPopup(QtWidgets.QWidget):
 
         # Connect the region's signal to a method
         self.region_2.sigRegionChanged.connect(self.updateRegion_2)
+
+        # Create radio buttons
+        self.radio_linear = QtWidgets.QRadioButton("Linear")
+        self.radio_quadratic = QtWidgets.QRadioButton("Quadratic")
+        self.radio_cubic = QtWidgets.QRadioButton("Cubic")
+        
+        # Set default selection
+        self.radio_linear.setChecked(True)
+
+        # Connect the toggled signal to the event handler
+        self.radio_linear.toggled.connect(self.updateResult)
+        self.radio_quadratic.toggled.connect(self.updateResult)
+        self.radio_cubic.toggled.connect(self.updateResult)
+
+        # Create button group for radio buttons
+        self.button_group = QtWidgets.QHBoxLayout()
+        self.button_group.addWidget(self.radio_linear)
+        self.button_group.addWidget(self.radio_quadratic)
+        self.button_group.addWidget(self.radio_cubic)
+
+        # Add radio buttons to layout
+        self.layout.addLayout(self.button_group)
 
         # Create a button and add it to the layout
         self.button = QtWidgets.QPushButton("Glue")
@@ -142,10 +166,25 @@ class GlueSignalsPopup(QtWidgets.QWidget):
             index = (np.abs(xData_2 - x)).argmin()
             # Retrieve the corresponding y value
             y2.append(yData_2[index])
+        
+        # Create interpolation functions
+        LinearInterp_1 = interp1d(x1, y1, kind="linear", fill_value="extrapolate")
+        LinearInterp_2 = interp1d(x2, y2, kind="linear", fill_value="extrapolate")
+        
+        QuadraticInterp_1 = interp1d(x1, y1, kind="quadratic", fill_value="extrapolate")
+        QuadraticInterp_2 = interp1d(x2, y2, kind="quadratic", fill_value="extrapolate")
+        
+        CubicInterp_1 = interp1d(x1, y1, kind="cubic", fill_value="extrapolate")
+        CubicInterp_2 = interp1d(x2, y2, kind="cubic", fill_value="extrapolate")
 
         # Interpolation for overlapping region (we will get the average value for each y in the overlapping region)
         x_overlap = []
         y_overlap = []
+        # Initialize lists to hold non-overlapping points
+        non_overlap_x1 = []
+        non_overlap_y1 = []
+        non_overlap_x2 = []
+        non_overlap_y2 = []
         # If there is an overlapping part, its starting point will be the bigger starting index between the two ranges, while its end is the smaller ending
         x_overlap_start = max(x1[0], x2[0])
         x_overlap_end = min(x1[-1], x2[-1])
@@ -159,39 +198,98 @@ class GlueSignalsPopup(QtWidgets.QWidget):
                 index2 = (np.abs(xData_2 - x)).argmin()
                 y_overlap.append((yData_1[index1] + yData_2[index2]) / 2)  # Average of both y values
 
+            # Identify non-overlapping points for the first dataset
+            for x, y in zip(x1, y1):
+                if not (x_overlap_start <= x <= x_overlap_end):
+                    non_overlap_x1.append(x)
+                    non_overlap_y1.append(y)
+
+            # Identify non-overlapping points for the second dataset
+            for x, y in zip(x2, y2):
+                if not (x_overlap_start <= x <= x_overlap_end):
+                    non_overlap_x2.append(x)
+                    non_overlap_y2.append(y)
+            
+            non_overlap_x1 = np.array(non_overlap_x1)
+            non_overlap_y1 = np.array(non_overlap_y1)
+            non_overlap_x2 = np.array(non_overlap_x2)
+            non_overlap_y2 = np.array(non_overlap_y2)
+        
+        else:
+            non_overlap_x1 = x1
+            non_overlap_y1 = y1
+            non_overlap_x2 = x2
+            non_overlap_y2 = y2
+
         # Interpolation for the gap between the two ranges
         x_non_overlap = []
-        y_non_overlap = []
+        y_non_overlap_linear = []
+        y_non_overlap_quadratic = []
+        y_non_overlap_cubic = []
 
         x_non_overlap_start = x1[-1]
         x_non_overlap_end = x2[0]
-        if(x2[-1] < x1[0]):
+        if(x2[-1] <= x1[0]):
             x_non_overlap_start = x2[-1]
             x_non_overlap_end = x1[0]
     
         if x_non_overlap_start < x_non_overlap_end:
-            x_non_overlap = np.linspace(x_non_overlap_start, x_non_overlap_end, num=100)
+            x_non_overlap = np.linspace(x_non_overlap_start, x_non_overlap_end, int(x_non_overlap_end - x_non_overlap_start))
 
-            if(x1[-1] <= x2[0]):
-                y_non_overlap = np.interp(x_non_overlap, [x1[-1], x2[0]], [y1[-1], y2[0]])
-            
-            else:
-                y_non_overlap = np.interp(x_non_overlap, [x2[-1], x1[0]], [y2[-1], y1[0]])
+            y_non_overlap_linear_1 = LinearInterp_1(x_non_overlap)
+            y_non_overlap_linear_2 = LinearInterp_2(x_non_overlap)
 
-        x_combined = []
-        y_combined = []
+            y_non_overlap_quadratic_1 = QuadraticInterp_1(x_non_overlap)
+            y_non_overlap_quadratic_2 = QuadraticInterp_2(x_non_overlap)
+
+            y_non_overlap_cubic_1 = CubicInterp_1(x_non_overlap)
+            y_non_overlap_cubic_2 = CubicInterp_2(x_non_overlap)
+
+            # Average the results or choose a method that suits your needs
+            y_non_overlap_linear = (y_non_overlap_linear_1 + y_non_overlap_linear_2) / 2
+            y_non_overlap_quadratic = (y_non_overlap_quadratic_1 + y_non_overlap_quadratic_2) / 2
+            y_non_overlap_cubic = (y_non_overlap_cubic_1 + y_non_overlap_cubic_2) / 2
+
+        self.x_combined = []
+        self.y_combined_linear = []
+        self.y_combined_quadratic = []
+        self.y_combined_cubic = []
         if(x1[0] <= x2[0]):
-            x_combined = np.concatenate((x1, x_overlap, x2, x_non_overlap))
-            y_combined = np.concatenate((y1, y_overlap, y2, y_non_overlap))
+            self.x_combined = np.concatenate((non_overlap_x1, x_overlap, x_non_overlap, non_overlap_x2))
+            self.y_combined_linear = np.concatenate((non_overlap_y1, y_overlap, y_non_overlap_linear, non_overlap_y2))
+            self.y_combined_quadratic = np.concatenate((non_overlap_y1, y_overlap, y_non_overlap_quadratic, non_overlap_y2))
+            self.y_combined_cubic = np.concatenate((non_overlap_y1, y_overlap, y_non_overlap_cubic, non_overlap_y2))
         else:
-            x_combined = np.concatenate((x2, x_overlap, x1, x_non_overlap))
-            y_combined = np.concatenate((y2, y_overlap, y1, y_non_overlap))
+            self.x_combined = np.concatenate((non_overlap_x2, x_overlap, x_non_overlap, non_overlap_x1))
+            self.y_combined_linear = np.concatenate((non_overlap_y2, y_overlap, y_non_overlap_linear, non_overlap_y1))
+            self.y_combined_quadratic = np.concatenate((non_overlap_y2, y_overlap, y_non_overlap_quadratic, non_overlap_y1))
+            self.y_combined_cubic = np.concatenate((non_overlap_y2, y_overlap, y_non_overlap_cubic, non_overlap_y1))
 
-        self.plotWidget_3.plotItem.clear()
-        self.plotWidget_3.setXRange(x_combined[0] - 50, max(x1[-1], x2[-1]) + 50, padding=0)
-        self.plotWidget_3.setYRange(-2, 2, padding=0)
-        self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=x_combined[0]  - 50, xMax=max(x1[-1], x2[-1]) + 50, yMin=-2, yMax=2)
-        self.plotWidget_3.plot(x_combined, y_combined, pen='y')
+        self.alreadyGlued = True
+        self.updateResult()
+    
+    def updateResult(self):
+        if self.alreadyGlued:
+            self.plotWidget_3.plotItem.clear()
+            self.plotWidget_3.setXRange(self.x_combined[0] - 50, self.x_combined[-1] + 50, padding=0)
+
+            if(self.radio_linear.isChecked()):
+                self.plotWidget_3.setYRange(min(self.y_combined_linear) - 5, max(self.y_combined_linear) + 5, padding=0)
+                self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=self.x_combined[0] - 50, xMax=self.x_combined[-1] + 50, 
+                                                                yMin=min(self.y_combined_linear) - 5, yMax=max(self.y_combined_linear) + 5)
+                self.plotWidget_3.plot(self.x_combined, self.y_combined_linear, pen='y')
+
+            elif(self.radio_quadratic.isChecked()):
+                self.plotWidget_3.setYRange(min(self.y_combined_quadratic) - 5, max(self.y_combined_quadratic) + 5, padding=0)
+                self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=self.x_combined[0] - 50, xMax=self.x_combined[-1] + 50, 
+                                                                yMin=min(self.y_combined_quadratic) - 5, yMax=max(self.y_combined_quadratic) + 5)
+                self.plotWidget_3.plot(self.x_combined, self.y_combined_quadratic, pen='y')
+
+            elif(self.radio_cubic.isChecked()):
+                self.plotWidget_3.setYRange(min(self.y_combined_cubic) - 5, max(self.y_combined_cubic) + 5, padding=0)
+                self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=self.x_combined[0] - 50, xMax=self.x_combined[-1] + 50, 
+                                                                yMin=min(self.y_combined_cubic) - 5, yMax=max(self.y_combined_cubic) + 5)
+                self.plotWidget_3.plot(self.x_combined, self.y_combined_cubic, pen='y')
 
 class LiveSignalPopup(QtWidgets.QWidget):
     def __init__(self):
@@ -777,6 +875,7 @@ class MainWindow(Ui_SignalViewer):
     def glueSignals(self):
         firstSignalIdx = self.colorMoveBox_1.currentIndex() - 1
         secondSignalIdx = self.colorMoveBox_2.currentIndex() - 1
+        
         if(firstSignalIdx > -1 and secondSignalIdx > -1):
             self.glueSignal = GlueSignalsPopup([self.signalNames_1[firstSignalIdx], self.signalNames_2[secondSignalIdx]], 
                                                [self.plotCurves_1[firstSignalIdx], self.plotCurves_2[secondSignalIdx]])
