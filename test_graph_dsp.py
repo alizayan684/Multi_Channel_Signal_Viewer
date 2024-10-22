@@ -94,43 +94,6 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         # Add radio buttons to layout
         self.layout.addLayout(self.button_group)
 
-        # Create a button and add it to the layout
-        self.button = QtWidgets.QPushButton("Glue")
-        self.button.clicked.connect(self.onGlue)
-        self.button.setStyleSheet(u"QPushButton {\n"
-        "	background-color: #5e80ad;\n"
-        "\n"
-        "   color: #d9dee8; /* Light text color */\n"
-        "   font-size: 16px; /* Font size */\n"
-        "   padding: 10px 20px; /* Padding around the text */\n"
-        "	border-top-color: transparent;\n"
-        "	border-right-color: transparent;\n"
-        "	border-left-color: transparent;\n"
-        "	border-bottom-color: transparent;\n"
-        "	border-width: 1px;\n"
-        "	border-style: solid;\n"
-        "    border-radius: 5px; /* Rounded corners */\n"
-        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
-        "}\n"
-        "\n"
-        "QPushButton:hover {\n"
-        "	background-color: #89dcff;\n"
-        "	color: #010100;\n"
-        "    border: 3px solid #81A1C1; /* Border color on hover */\n"
-        "\n"
-        "    font-size: 16px; /* Font size */\n"
-        "    padding: 10px 20px; /* Padding around the text */\n"
-        "    border-radius: 5px; /* Rounded corners */\n"
-        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
-        "}\n"
-        "\n"
-        "QPushButton:pressed {\n"
-        "    background-color: #3B4252; /* Background color when pressed */\n"
-        "    border: 2px solid #4C566A; /* Border color when pressed */\n"
-        "}\n"
-        "")
-        self.layout.addWidget(self.button)
-
         self.plotWidget_3 = pg.PlotWidget()
         self.plotWidget_3.setTitle("Result")
         self.layout.addWidget(self.plotWidget_3)
@@ -173,16 +136,19 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         self.layout.addWidget(self.exportBtn)
 
         self.setLayout(self.layout)
+        self.onGlue()
 
     def updateRegion_1(self):
         # Get the current range of region 1
         regionRange = self.region_1.getRegion()
         self.label_1.setText(f'Region 1: {regionRange}')
+        self.onGlue()
 
     def updateRegion_2(self):
         # Get the current range of region 2
         regionRange = self.region_2.getRegion()
         self.label_2.setText(f'Region 2: {regionRange}')
+        self.onGlue()
 
     def onGlue(self):
         # Get the x and y data from the plot item
