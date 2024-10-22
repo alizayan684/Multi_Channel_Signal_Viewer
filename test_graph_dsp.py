@@ -10,6 +10,9 @@ import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
 from pathlib import Path
+from reportlab.lib import pagesizes
+from reportlab.pdfgen import canvas
+
 
 class GlueSignalsPopup(QtWidgets.QWidget):
     def __init__(self, plotNames, plotCurves):
@@ -131,6 +134,43 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         self.plotWidget_3 = pg.PlotWidget()
         self.plotWidget_3.setTitle("Result")
         self.layout.addWidget(self.plotWidget_3)
+        
+        # adding the "export pdf" button to the layout
+        self.exportBtn = QtWidgets.QPushButton("export PDF")
+        self.exportBtn.clicked.connect(self.exportPDF)
+        self.exportBtn.setStyleSheet(u"QPushButton {\n"
+        "	background-color: #5e80ad;\n"
+        "\n"
+        "   color: #d9dee8; /* Light text color */\n"
+        "   font-size: 16px; /* Font size */\n"
+        "   padding: 10px 20px; /* Padding around the text */\n"
+        "	border-top-color: transparent;\n"
+        "	border-right-color: transparent;\n"
+        "	border-left-color: transparent;\n"
+        "	border-bottom-color: transparent;\n"
+        "	border-width: 1px;\n"
+        "	border-style: solid;\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:hover {\n"
+        "	background-color: #89dcff;\n"
+        "	color: #010100;\n"
+        "    border: 3px solid #81A1C1; /* Border color on hover */\n"
+        "\n"
+        "    font-size: 16px; /* Font size */\n"
+        "    padding: 10px 20px; /* Padding around the text */\n"
+        "    border-radius: 5px; /* Rounded corners */\n"
+        "    font-family: \"Segoe UI\", \"Helvetica Neue\", \"Arial\", sans-serif; /* Font family */\n"
+        "}\n"
+        "\n"
+        "QPushButton:pressed {\n"
+        "    background-color: #3B4252; /* Background color when pressed */\n"
+        "    border: 2px solid #4C566A; /* Border color when pressed */\n"
+        "}\n"
+        "")
+        self.layout.addWidget(self.exportBtn)
 
         self.setLayout(self.layout)
 
@@ -279,17 +319,48 @@ class GlueSignalsPopup(QtWidgets.QWidget):
                                                                 yMin=min(self.y_combined_linear) - 5, yMax=max(self.y_combined_linear) + 5)
                 self.plotWidget_3.plot(self.x_combined, self.y_combined_linear, pen='y')
 
+                self.glueMean = np.mean(self.y_combined_linear)
+                self.glueStdDeviation = np.std(self.y_combined_linear)
+
             elif(self.radio_quadratic.isChecked()):
                 self.plotWidget_3.setYRange(min(self.y_combined_quadratic) - 5, max(self.y_combined_quadratic) + 5, padding=0)
                 self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=self.x_combined[0] - 50, xMax=self.x_combined[-1] + 50, 
                                                                 yMin=min(self.y_combined_quadratic) - 5, yMax=max(self.y_combined_quadratic) + 5)
                 self.plotWidget_3.plot(self.x_combined, self.y_combined_quadratic, pen='y')
 
+                self.glueMean = np.mean(self.y_combined_quadratic)
+                self.glueStdDeviation = np.std(self.y_combined_quadratic)
+
             elif(self.radio_cubic.isChecked()):
                 self.plotWidget_3.setYRange(min(self.y_combined_cubic) - 5, max(self.y_combined_cubic) + 5, padding=0)
                 self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=self.x_combined[0] - 50, xMax=self.x_combined[-1] + 50, 
                                                                 yMin=min(self.y_combined_cubic) - 5, yMax=max(self.y_combined_cubic) + 5)
                 self.plotWidget_3.plot(self.x_combined, self.y_combined_cubic, pen='y')
+
+                self.glueMean = np.mean(self.y_combined_cubic)
+                self.glueStdDeviation = np.std(self.y_combined_cubic)
+    
+    # exporting the pdf method ///////////////////////////////////////////////////
+    def exportPDF(self):
+        
+        # Take a screenshot of the glued signal
+        screenshot_filename = "glued_signal_screenshot.png"
+        screenshot = self.plotWidget_3.grab()  # Capture the plot as an image
+        screenshot.save(screenshot_filename)  # Save the screenshot
+        
+        # Export results to PDF
+        pdf_filename = "glued_signal_results.pdf"
+        c = canvas.Canvas(pdf_filename, pagesize=pagesizes.letter)
+        c.drawString(100, 700, f"Screenshot: {screenshot_filename}")
+        c.drawImage(screenshot_filename, 100, 490, width=400, height=200)  # putting the taken screenshot in the pdf
+        c.drawString(100, 470, "Glued Signal Analysis Results")
+        c.drawString(100, 450, f"Mean: {self.glueMean:.2f}")
+        c.drawString(100, 430, f"Standard Deviation: {self.glueStdDeviation:.2f}")
+        
+        
+        c.save()
+        os.startfile(pdf_filename)
+        print(f"Results exported to {pdf_filename}")
 
 class LiveSignalPopup(QtWidgets.QWidget):
     def __init__(self):
