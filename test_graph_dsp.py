@@ -788,7 +788,7 @@ class MainWindow(Ui_SignalViewer):
         if self.current_index < maxLength:
             end_index = min(self.current_index + self.chunk_size, maxLength) # Determine the range of data to plot in this frame
             self.maxPanningValue_1 = max(end_index, self.maxPanningValue_1)
-            self.plotWidget_1.clear() # Clear the graph first so that the widget only contains the latest plots (needed for show and hide functionality)
+            #self.plotWidget_1.clear() # Clear the graph first so that the widget only contains the latest plots (needed for show and hide functionality)
 
             for signalIdx in range (len(self.pastSignalsY_1)):  # Plotting all stored signals on the graph
                 if not self.hidden_1[signalIdx]:
@@ -831,7 +831,7 @@ class MainWindow(Ui_SignalViewer):
             # Determine the range of data to plot in this frame
             end_index_2 = min(self.current_index_2 + self.chunk_size, maxLength)
             self.maxPanningValue_2 = max(end_index_2, self.maxPanningValue_2)
-            self.plotWidget_2.clear()
+            #self.plotWidget_2.clear()
             
             for signalIdx in range (len(self.pastSignalsY_2)):  # plotting all stored signals on the graph
                 if not self.hidden_2[signalIdx]:
