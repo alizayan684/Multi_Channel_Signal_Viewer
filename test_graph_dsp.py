@@ -98,21 +98,21 @@ class GlueSignalsPopup(QtWidgets.QWidget):
         self.region_2.sigRegionChanged.connect(self.updateRegion_2)
 
         # Create radio buttons
-        self.radio_linear = QtWidgets.QRadioButton("Linear")
+        self.radio_nearest = QtWidgets.QRadioButton("Nearest")
         self.radio_quadratic = QtWidgets.QRadioButton("Quadratic")
         self.radio_cubic = QtWidgets.QRadioButton("Cubic")
         
         # Set default selection
-        self.radio_linear.setChecked(True)
+        self.radio_nearest.setChecked(True)
 
         # Connect the toggled signal to the event handler
-        self.radio_linear.toggled.connect(self.updateResult)
+        self.radio_nearest.toggled.connect(self.updateResult)
         self.radio_quadratic.toggled.connect(self.updateResult)
         self.radio_cubic.toggled.connect(self.updateResult)
 
         # Create button group for radio buttons
         self.button_group = QtWidgets.QHBoxLayout()
-        self.button_group.addWidget(self.radio_linear)
+        self.button_group.addWidget(self.radio_nearest)
         self.button_group.addWidget(self.radio_quadratic)
         self.button_group.addWidget(self.radio_cubic)
 
@@ -344,9 +344,14 @@ class GlueSignalsPopup(QtWidgets.QWidget):
             # Average the results or choose a method that suits your needs
             weights_1 = (x_gap_end - self.x_gap) / (x_gap_end - x_gap_start)
             weights_2 = (self.x_gap - x_gap_start) / (x_gap_end - x_gap_start)
-            self.y_gap_linear = weights_1 * y_gap_linear_1 + weights_2 * y_gap_linear_2
-            self.y_gap_quadratic = weights_1 * y_gap_quadratic_1 + weights_2 * y_gap_quadratic_2
-            self.y_gap_cubic = weights_1 * y_gap_cubic_1 + weights_2 * y_gap_cubic_2
+            if(x_gap_start == x1[-1]):
+                self.y_gap_linear = weights_1 * y_gap_linear_1 + weights_2 * y_gap_linear_2
+                self.y_gap_quadratic = weights_1 * y_gap_quadratic_1 + weights_2 * y_gap_quadratic_2
+                self.y_gap_cubic = weights_1 * y_gap_cubic_1 + weights_2 * y_gap_cubic_2
+            else:
+                self.y_gap_linear = weights_2 * y_gap_linear_1 + weights_1 * y_gap_linear_2
+                self.y_gap_quadratic = weights_2 * y_gap_quadratic_1 + weights_1 * y_gap_quadratic_2
+                self.y_gap_cubic = weights_2 * y_gap_cubic_1 + weights_1 * y_gap_cubic_2
 
         self.x_combined = []
         self.y_combined_linear = []
@@ -371,7 +376,7 @@ class GlueSignalsPopup(QtWidgets.QWidget):
             self.plotWidget_3.plotItem.clear()
             self.plotWidget_3.setXRange(self.x_combined[0] - 50, self.x_combined[-1] + 50, padding=0)
 
-            if(self.radio_linear.isChecked()):
+            if(self.radio_nearest.isChecked()):
                 self.plotWidget_3.setYRange(min(self.y_combined_linear) - 5, max(self.y_combined_linear) + 5, padding=0)
                 self.plotWidget_3.plotItem.getViewBox().setLimits(xMin=self.x_combined[0] - 50, xMax=self.x_combined[-1] + 50, 
                                                                 yMin=min(self.y_combined_linear) - 5, yMax=max(self.y_combined_linear) + 5)

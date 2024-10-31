@@ -1136,11 +1136,6 @@ class Ui_SignalViewer(QMainWindow):
 
         self.horizontalLayout_6.addWidget(self.connectOnlineButton)
 
-        self.screenShotButton = QPushButton(self.centralwidget)
-        self.screenShotButton.setObjectName(u"screenShotButton")
-        self.screenShotButton.setMaximumSize(QSize(200, 40))
-
-        self.horizontalLayout_6.addWidget(self.screenShotButton)
 
         self.graphSelectBox = QComboBox(self.centralwidget)
         self.graphSelectBox.addItem("")
@@ -1229,7 +1224,6 @@ class Ui_SignalViewer(QMainWindow):
         self.startButton_2.setText(QCoreApplication.translate("SignalViewer", u"Start", None))
         self.addFileButton.setText(QCoreApplication.translate("SignalViewer", u"Add File", None))
         self.connectOnlineButton.setText(QCoreApplication.translate("SignalViewer", u"Connnect Online", None))
-        self.screenShotButton.setText(QCoreApplication.translate("SignalViewer", u"ScreenShot", None))
         self.graphSelectBox.setItemText(0, QCoreApplication.translate("SignalViewer", u"Graph 1", None))
         self.graphSelectBox.setItemText(1, QCoreApplication.translate("SignalViewer", u"Graph 2", None))
 
