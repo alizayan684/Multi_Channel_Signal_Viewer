@@ -17,15 +17,18 @@
 |**Styling** | [![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=fff)](#)|
 
 ## Features
+### 1. Browsing
 
 - Browse & View A Signal File (Make Sure Its Format & Extension Are The Same As The Files Inside `signals` Directory)
+
+### 2. Signal Manipulation
    
 - Play, Pause & Rewind The Signal
 
 ![alt text](screenshots/playback.gif)
 &nbsp;
 - Change The Color Of The Signal
-   
+  
 ![alt text](screenshots/color.gif)
 &nbsp;
 - Change The Name Of The Signal
@@ -43,17 +46,18 @@
 - Link The Two Graphs Together, Ensuring Synchronized Control
    
 ![alt text](screenshots/link.gif)
-&nbsp;
-- Other Signal Manipulation Features Like Changing The Zoom & Pan Level, Moving The Signal Between The Two Graphs
-  
+- Other Features Like Changing The Zoom & Pan Level, Moving The Signal Between The Two Graphs
+
+### 3. Real Time Signal
 - View A Real Time Signal Showcasing The Current Temperature In Cairo, Egypt Using `OpenWeather` API
 
 ![alt text](screenshots/live.gif)
-&nbsp;
+### 4. Signal Gluing
+
 - Glue Two Signal Together With Different Interpolation Orders Of The Gap
   
 ![alt text](screenshots/glue.gif)
-&nbsp;
+
 - Export The Gluing Results As A PDF
 ![alt text](screenshots/report.png)
 
