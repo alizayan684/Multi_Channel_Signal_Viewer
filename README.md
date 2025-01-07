@@ -18,7 +18,7 @@
 
 ## Features
 
-- Browse & View A Signal File (Make Sure Its Format & Extension Are The Same As The Files Inside `signal` Directory)
+- Browse & View A Signal File (Make Sure Its Format & Extension Are The Same As The Files Inside `signals` Directory)
    
 - Play, Pause & Rewind The Signal
 
