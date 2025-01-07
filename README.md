@@ -17,7 +17,7 @@
 |**Styling** | [![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=fff)](#)|
 
 ## Features
-### 1. Browsing
+### 1. Signal Browsing
 
 - Browse & View A Signal File (Make Sure Its Format & Extension Are The Same As The Files Inside `signals` Directory)
 
