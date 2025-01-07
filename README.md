@@ -1,5 +1,5 @@
 # Signal Viewer
-![alt text](screenshots/home.png)
+![Main Picture](screenshots/home.png)
 
 
 ## Description
@@ -25,41 +25,41 @@
    
 - Play, Pause & Rewind The Signal
 
-![alt text](screenshots/playback.gif)
+![Playback GIF](screenshots/playback.gif)
 &nbsp;
 - Change The Color Of The Signal
   
-![alt text](screenshots/color.gif)
+![Change Color GIF](screenshots/color.gif)
 &nbsp;
 - Change The Name Of The Signal
    
-![alt text](screenshots/name.gif)
+![Change Name GIF](screenshots/name.gif)
 &nbsp;
 - Show & Hide The Signal
 
-![alt text](screenshots/visibility.gif)
+![Show & Hide GIF](screenshots/visibility.gif)
 &nbsp;
 - Control The Speed Of The Signal Plotting
    
-![alt text](screenshots/speed.gif)
+![Adjust Speed GIF](screenshots/speed.gif)
 &nbsp;
 - Link The Two Graphs Together, Ensuring Synchronized Control
    
-![alt text](screenshots/link.gif)
+![Link GIF](screenshots/link.gif)
 - Other Features Like Changing The Zoom & Pan Level, Moving The Signal Between The Two Graphs
 
 ### 3. Real Time Signal
 - View A Real Time Signal Showcasing The Current Temperature In Cairo, Egypt Using `OpenWeather` API
 
-![alt text](screenshots/live.gif)
+![Live Signal GIF](screenshots/live.gif)
 ### 4. Signal Gluing
 
 - Glue Two Signal Together With Different Interpolation Orders Of The Gap
   
-![alt text](screenshots/glue.gif)
+![Gluing Signal GIF](screenshots/glue.gif)
 
 - Export The Gluing Results As A PDF
-![alt text](screenshots/report.png)
+![PDF Report Picture](screenshots/report.png)
 
 ## Installation
 
@@ -89,5 +89,4 @@
 | Mostafa Ayman | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/mostafa-aboelmagd) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mostafa--aboelmagd/) |
 | Ali Zayan | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/alizayan684) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/%D8%B9%D9%84%D9%8A-%D8%B2%D9%8A%D8%A7%D9%86-%F0%9F%94%BB%F0%9F%87%B5%F0%9F%87%B8-b98239264/) |
 | Zeyad Amr | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/Zisco2002)| [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/zeyad-amr-3506b225b/) |
-| Mostafa Mousa | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/MostafaMousaaa) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mostafa-mousa-b81b8322a/) |
 | Omar Khaled | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](#)| [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/omar-khaled-064b7930a/) |
