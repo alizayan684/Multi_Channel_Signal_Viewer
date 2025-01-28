@@ -1,1 +1,0 @@
-self.plotWidget_1.clear()
